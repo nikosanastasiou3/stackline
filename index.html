@@ -286,6 +286,15 @@ label.f:first-child{margin-top:0}
 .acct .bd b{display:block;font-size:.86rem}
 .acct .bd span{font-size:.7rem;color:var(--muted);word-break:break-all}
 
+.swapgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:4px}
+.swaplbl{text-align:center;font-size:.63rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.swapopt{background:var(--surface2);border:2px solid var(--line);border-radius:12px;padding:11px 8px;cursor:pointer;text-align:center;min-height:70px;
+  display:flex;flex-direction:column;justify-content:center;gap:3px;transition:all .15s}
+.swapopt.on{border-color:var(--teal);background:var(--teal-soft)}
+.swapopt.empty{opacity:.45;cursor:default;border-style:dashed}
+.swapopt .nm{font-size:.75rem;font-weight:600;line-height:1.25}
+.swapopt .lv{font-size:.58rem;color:var(--faint);font-weight:700}
+
 .musclebox{background:var(--surface2);border:1px solid var(--line);border-radius:14px;padding:10px}
 .mmviews{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .mmviews>div{background:var(--surface);border-radius:11px;padding:6px;min-height:150px}
@@ -1625,6 +1634,7 @@ let state = {
   routines: seedRoutines(),
   customDrills: [],
   deskLogs: [],
+  daySwaps: {},   // {"YYYY-MM-DD": {originalExId: replacementExId}} — today only, never edits the routine
   logs: [],            // {date, routineId, done:[exIds], dosage:{}, line, mob, energy, tight:[], pain, notes, mediaNote}
   milestones: [],      // {date, text}
   prefs: { theme:"dark", media:{}, customMedia:{}, favs:[], upgradesInUse:{} },
@@ -1640,6 +1650,7 @@ async function loadState(){
     state.meta_routinesU = d.meta_routinesU||0; state.meta_milestonesU = d.meta_milestonesU||0;
     state.customDrills = d.customDrills||[]; state.meta_drillsU = d.meta_drillsU||0;
     state.deskLogs = d.deskLogs||[]; state.meta_deskU = d.meta_deskU||0;
+    state.daySwaps = d.daySwaps||{};
     state.prefs = Object.assign(state.prefs, d.prefs||{});
     if(Array.isArray(d.routines)){
       // keep seeds fresh but preserve user edits/custom routines
@@ -1655,7 +1666,7 @@ async function loadState(){
 // (only present inside Claude's own preview) is best-effort and fire-and-forget on top.
 function saveLocalOnly(){
   const raw = JSON.stringify({routines:state.routines, logs:state.logs, milestones:state.milestones,
-                              prefs:state.prefs, customDrills:state.customDrills, deskLogs:state.deskLogs, meta_deskU:state.meta_deskU,
+                              prefs:state.prefs, customDrills:state.customDrills, deskLogs:state.deskLogs, meta_deskU:state.meta_deskU, daySwaps:state.daySwaps,
                               meta_routinesU:state.meta_routinesU, meta_milestonesU:state.meta_milestonesU, meta_drillsU:state.meta_drillsU});
   try{ localStorage.setItem(SKEY, raw); }catch(e){}
   try{ if(window.storage && window.storage.set){ window.storage.set(SKEY, raw).catch(()=>{}); } }catch(e){}
@@ -1704,7 +1715,8 @@ function metaBlob(){
     routines:   {data: state.routines,   u: state.meta_routinesU || Date.now()},
     milestones: {data: state.milestones, u: state.meta_milestonesU || Date.now()},
     customDrills:{data: state.customDrills, u: state.meta_drillsU || Date.now()},
-    deskLogs:   {data: state.deskLogs,    u: state.meta_deskU   || Date.now()}
+    deskLogs:   {data: state.deskLogs,    u: state.meta_deskU   || Date.now()},
+    daySwaps:   {data: state.daySwaps,    u: state.meta_deskU   || Date.now()}
   };
 }
 async function syncPush(){
@@ -1747,6 +1759,7 @@ async function syncPull(){
       if(cloud.deskLogs && (cloud.deskLogs.u||0) > (state.meta_deskU||0)){
         state.deskLogs = cloud.deskLogs.data||[]; state.meta_deskU = cloud.deskLogs.u;
       }
+      if(cloud.daySwaps) state.daySwaps = Object.assign({}, cloud.daySwaps.data||{}, state.daySwaps||{});
       saveLocalOnly(); takeSnapshot(); applyTheme(); render(curView);
     }
     SYNC.last=Date.now(); SYNC.err=null;
@@ -1816,7 +1829,16 @@ function gauge(score, size=120){
 }
 
 /* ---------- sheet modal ---------- */
-function openSheet(title, bodyHTML, footHTML){
+let sheetBack = null;
+function openSheet(title, bodyHTML, footHTML, backFn){
+  sheetBack = backFn || null;
+  const hd = $("#sheet-close");
+  if(hd){
+    hd.innerHTML = sheetBack
+      ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" width="17" height="17"><path d="M15 5l-7 7 7 7"/></svg>'
+      : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" width="17" height="17"><path d="M6 6l12 12M18 6 6 18"/></svg>';
+    hd.setAttribute("aria-label", sheetBack ? "Back" : "Close");
+  }
   $("#sheet-title").textContent = title;
   $("#sheet-body").innerHTML = bodyHTML;
   const f=$("#sheet-foot");
@@ -1825,11 +1847,12 @@ function openSheet(title, bodyHTML, footHTML){
   document.body.style.overflow="hidden";
 }
 function closeSheet(){
+  sheetBack = null;
   $("#scrim").classList.remove("on"); $("#sheet").classList.remove("on");
   document.body.style.overflow="";
 }
-$("#sheet-close").onclick = closeSheet;
-$("#scrim").onclick = closeSheet;
+$("#sheet-close").onclick = ()=>{ const b=sheetBack; if(b){ sheetBack=null; b(); } else closeSheet(); };
+$("#scrim").onclick = ()=>{ sheetBack=null; closeSheet(); };
 
 /* ---------- theme + nav ---------- */
 function applyTheme(){
@@ -1901,11 +1924,11 @@ function renderToday(){
   const recent = state.logs.filter(l=>l.date>=todayISO(-6));
   const line7 = avg(recent.map(l=>l.line).filter(v=>v!=null));
   const mob7  = avg(recent.map(l=>l.mob).filter(v=>v!=null));
-  const items = routine.items.map((it,i)=>{
+  const items = applySwaps(routine.items, todayISO()).map((it,i)=>{
     const ex = exById(it.ex); if(!ex) return "";
     return `<div class="exi" data-open-ex="${ex.id}">
       <div class="ic">${String(i+1).padStart(2,"0")}</div>
-      <div class="bd"><div class="nm">${esc(ex.name)}</div>
+      <div class="bd"><div class="nm">${esc(ex.name)}${it._swappedFrom?' <span class="tag teal">swapped</span>':''}</div>
       <div class="mt">${it.sets}× ${it.hold&&it.hold!=="—"?esc(it.hold):esc(it.reps)}${it.note?" · "+esc(it.note):""}</div></div>
       <span class="tag">${catAb(ex.cats[0])}</span>
     </div>`;
@@ -2017,7 +2040,7 @@ function openSkillPicker(skillId){
       <div class="wrap">${[1,2,3,4].map(n=>`<button class="chip ${n===lvl?"on":""}" data-setlvl="${n}">Level ${n}</button>`).join("")}</div>
     </div>`);
   $$("#sheet-body [data-preset]").forEach(el=> el.onclick=()=> startSkillSession(skillId, el.dataset.preset));
-  $$("#sheet-body [data-open-ex]").forEach(el=> el.onclick=()=> openExercise(el.dataset.openEx, true));
+  $$("#sheet-body [data-open-ex]").forEach(el=> el.onclick=()=> openExercise(el.dataset.openEx, ()=>openSkillPicker(skillId)));
   $$("#sheet-body [data-setlvl]").forEach(b=> b.onclick=()=>{
     state.prefs.skillLevels = state.prefs.skillLevels||{};
     state.prefs.skillLevels[skillId] = +b.dataset.setlvl;
@@ -2051,7 +2074,7 @@ function startSkillSession(skillId, presetId){
     c.classList.toggle("on"); c.closest(".exi").classList.toggle("done");
     $("#sk-count").textContent = skillRun.done.size+" / "+s.drills.length;
   });
-  $$("#sheet-body [data-open-ex]").forEach(el=> el.onclick=()=> openExercise(el.dataset.openEx, true));
+  $$("#sheet-body [data-open-ex]").forEach(el=> el.onclick=()=> openExercise(el.dataset.openEx, ()=>startSkillSession(skillId, presetId)));
   $("#sk-cancel").onclick = closeSheet;
   $("#sk-finish").onclick = ()=>{
     const doneEx = [...skillRun.done].map(i=> s.drills[i].ex);
@@ -2059,42 +2082,115 @@ function startSkillSession(skillId, presetId){
   };
 }
 
+
+/* ============================================================
+   Per-day swaps. Swapping affects TODAY only — the saved routine
+   is never modified, so tomorrow is unchanged.
+============================================================ */
+function swapsFor(date){ return (state.daySwaps||{})[date||todayISO()] || {}; }
+function applySwaps(items, date){
+  const sw = swapsFor(date);
+  return items.map(it=> sw[it.ex] ? Object.assign({}, it, {ex:sw[it.ex], _swappedFrom:it.ex}) : it);
+}
+function setSwap(date, fromId, toId){
+  state.daySwaps = state.daySwaps || {};
+  const d = state.daySwaps[date] = state.daySwaps[date] || {};
+  if(toId && toId!==fromId) d[fromId] = toId; else delete d[fromId];
+  if(!Object.keys(d).length) delete state.daySwaps[date];
+  save();
+}
+/* Easier / Harder / Alternative, derived from the progression chains */
+function swapOptions(exId){
+  const ex = exById(exId); if(!ex) return {easier:null, harder:null, alts:[]};
+  const chain = catProgression(ex.cats[0]);
+  const i = chain.findIndex(x=>x.id===exId);
+  const easier = i>0 ? chain[i-1] : null;
+  const harder = i>=0 && i<chain.length-1 ? chain[i+1] : null;
+  const alts = chain.filter(x=> x.id!==exId && x.level===ex.level
+                && (!easier||x.id!==easier.id) && (!harder||x.id!==harder.id));
+  return {easier, harder, alts};
+}
+function openSwapSheet(origId, date, back){
+  const cur = exById(origId); if(!cur) return;
+  const sw = swapsFor(date);
+  const activeId = sw[origId] || origId;
+  const {easier, harder, alts} = swapOptions(origId);
+  const card = (e, label) => !e ? `<div class="swapcol"><div class="swaplbl">${label}</div>
+      <div class="swapopt empty"><span class="tiny">None</span></div></div>`
+    : `<div class="swapcol"><div class="swaplbl">${label}</div>
+       <div class="swapopt ${activeId===e.id?"on":""}" data-swap="${e.id}">
+         <div class="nm">${esc(e.name)}</div><span class="lv">${LEVELS[e.level].split(" · ")[0]}</span>
+       </div></div>`;
+  openSheet("Swap for today?",
+   `<p class="sub" style="margin-bottom:4px">${esc(cur.name)}</p>
+    <p class="tiny" style="margin-bottom:12px">${fmtDate(date)} only — your saved routine stays as it is.</p>
+    <div class="swapgrid">
+      ${card(easier,"Easier")}${card(harder,"Harder")}
+      ${alts.length? card(alts[0],"Alternative") : card(null,"Alternative")}
+    </div>
+    ${alts.length>1? `<div class="wrap" style="margin-top:10px">${alts.slice(1).map(a=>`<button class="chip ${activeId===a.id?"on":""}" data-swap="${a.id}">${esc(a.name)}</button>`).join("")}</div>`:""}
+    <label class="f">Or pick any drill</label>
+    <select id="swap-any"><option value="">— search all ${EX_ALL().length} drills —</option>
+      ${EX_ALL().filter(e=>!e.desk).map(e=>`<option value="${e.id}" ${activeId===e.id?"selected":""}>${esc(e.name)} · ${LEVELS[e.level].split(" · ")[0]}</option>`).join("")}
+    </select>
+    ${sw[origId]? `<div class="notice teal" style="margin-top:12px">${ICONS.info}<span>Currently swapped to <b>${esc((exById(sw[origId])||{}).name||"?")}</b> for today.</span></div>`:""}`,
+   `${sw[origId]? '<button class="btn" id="swap-reset">Undo swap</button>':''}
+    <button class="btn primary" style="flex:1" id="swap-keep">${sw[origId]?"Done":"Keep original"}</button>`,
+   back);
+  const choose = id=>{ setSwap(date, origId, id); closeSheet(); if(back) back(); else render(curView); toast("Swapped for today"); };
+  $$("#sheet-body [data-swap]").forEach(b=> b.onclick=()=> choose(b.dataset.swap));
+  $("#swap-any").onchange = e=>{ if(e.target.value) choose(e.target.value); };
+  const rs=$("#swap-reset");
+  if(rs) rs.onclick=()=>{ setSwap(date, origId, null); closeSheet(); if(back) back(); else render(curView); toast("Swap removed"); };
+  $("#swap-keep").onclick=()=>{ closeSheet(); if(back) back(); };
+}
+
 /* ============================================================
    Routine runner + logging
 ============================================================ */
 let run = null;
-function startRoutine(id){
+function startRoutine(id, date){
   const r = routineById(id); if(!r) return;
-  run = {rid:id, done:new Set()};
-  const body = r.items.map((it,i)=>{
+  date = date || todayISO();
+  if(!run || run.rid!==id || run.date!==date) run = {rid:id, date:date, done:new Set()};
+  renderRunner();
+}
+/* Re-rendered rather than rebuilt, so ticks survive opening a drill and coming back. */
+function renderRunner(){
+  if(!run) return;
+  const r = routineById(run.rid); if(!r) return;
+  const items = applySwaps(r.items, run.date);
+  const body = items.map((it,i)=>{
     const ex=exById(it.ex); if(!ex) return "";
-    return `<div class="exi" data-i="${i}">
-      <div class="check" data-chk="${i}">${ICONS.check}</div>
-      <div class="bd" data-open-ex="${ex.id}"><div class="nm">${esc(ex.name)}</div>
+    const done = run.done.has(i);
+    return `<div class="exi ${done?"done":""}" data-i="${i}">
+      <div class="check ${done?"on":""}" data-chk="${i}">${ICONS.check}</div>
+      <div class="bd" data-open-ex="${ex.id}"><div class="nm">${esc(ex.name)}${it._swappedFrom?' <span class="tag teal">swapped</span>':''}</div>
         <div class="mt">${it.sets} set${it.sets>1?"s":""} · ${it.hold&&it.hold!=="—"?esc(it.hold)+" hold":esc(it.reps)+" reps"}${it.note?" · "+esc(it.note):""}</div>
-        <div class="tiny" style="margin-top:3px">${esc(ex.cues.split(".")[0])}.</div></div>
-      <span class="tag">${catAb(ex.cats[0])}</span>
+        <div class="tiny" style="margin-top:3px">${esc((ex.cues||"").split(".")[0])}.</div></div>
+      <button class="iconbtn" style="width:32px;height:32px" data-swapbtn="${it._swappedFrom||it.ex}" aria-label="Swap this drill">⇄</button>
     </div>`;
   }).join("");
   openSheet(r.name,
     `<div class="row between" style="margin-bottom:12px">
        <span class="sub">${r.minutes} min · ${FATIGUE_LBL[r.fatigue]||r.fatigue}</span>
-       <span class="tag teal" id="run-count">0 / ${r.items.length}</span></div>
+       <span class="tag teal" id="run-count">${run.done.size} / ${items.length}</span></div>
      <div class="exl">${body}</div>
-     <div class="notice teal" style="margin-top:14px">${ICONS.info}<span>Tick each drill as you finish. Tap a name for cues, media and dosage.</span></div>`,
+     <div class="notice teal" style="margin-top:14px">${ICONS.info}<span>Tap a name for cues and video. Tap ⇄ to swap a drill for today only.</span></div>`,
     `<button class="btn ghost" id="run-cancel">Close</button>
      <button class="btn primary" style="flex:1" id="run-finish">Finish & log</button>`);
-  $$("#sheet-body [data-chk]").forEach(c=> c.onclick=()=>{
-    const i=+c.dataset.chk;
+  $$("#sheet-body [data-chk]").forEach(cb=> cb.onclick=()=>{
+    const i=+cb.dataset.chk;
     run.done.has(i)?run.done.delete(i):run.done.add(i);
-    c.classList.toggle("on"); c.closest(".exi").classList.toggle("done");
-    $("#run-count").textContent = run.done.size+" / "+r.items.length;
+    cb.classList.toggle("on"); cb.closest(".exi").classList.toggle("done");
+    $("#run-count").textContent = run.done.size+" / "+items.length;
   });
-  $$("#sheet-body [data-open-ex]").forEach(el=> el.onclick=()=> openExercise(el.dataset.openEx, true));
-  $("#run-cancel").onclick = closeSheet;
+  $$("#sheet-body [data-open-ex]").forEach(el=> el.onclick=()=> openExercise(el.dataset.openEx, renderRunner));
+  $$("#sheet-body [data-swapbtn]").forEach(b=> b.onclick=()=> openSwapSheet(b.dataset.swapbtn, run.date, renderRunner));
+  $("#run-cancel").onclick = ()=>{ run=null; closeSheet(); };
   $("#run-finish").onclick = ()=>{
-    const doneEx = [...run.done].map(i=> r.items[i].ex);
-    openLogForm(todayISO(), {routineId:r.id, done:doneEx});
+    const doneEx = [...run.done].map(i=> items[i] && items[i].ex).filter(Boolean);
+    openLogForm(run.date, {routineId:run.rid, done:doneEx});
   };
 }
 
@@ -2198,17 +2294,23 @@ function renderWeek(){
          <div class="kv" style="margin-top:9px;border:none;padding-bottom:0"><b>Key goal</b><span>${esc(p.goal)}</span></div>
        </div></div>`;
    }).join("")}`;
-  $$("#view-week [data-day]").forEach(c=> c.onclick=()=>{
-    const p=planFor(+c.dataset.day); const r=routineById(p.routine);
-    if(!r) return;
-    openSheet(p.day+" — recommended block",
-      `<p class="sub" style="margin-bottom:12px">${esc(p.why)}</p>
-       <div class="eyebrow teal" style="margin-bottom:10px">${esc(r.name)} · ${r.minutes} min · ${FATIGUE_LBL[r.fatigue]}</div>
-       <div class="exl">${r.items.map((it,ix)=>{const e=exById(it.ex);return e?`<div class="exi" data-open-ex="${e.id}"><div class="ic">${String(ix+1).padStart(2,"0")}</div><div class="bd"><div class="nm">${esc(e.name)}</div><div class="mt">${it.sets}× ${it.hold&&it.hold!=="—"?esc(it.hold):esc(it.reps)}</div></div><span class="tag">${catAb(e.cats[0])}</span></div>`:""}).join("")}</div>`,
-      `<button class="btn primary block" id="wk-start">${ICONS.play}Start this block</button>`);
-    $("#wk-start").onclick=()=> startRoutine(r.id);
-    $$("#sheet-body [data-open-ex]").forEach(el=> el.onclick=()=> openExercise(el.dataset.openEx, true));
-  });
+  $$("#view-week [data-day]").forEach(el=> el.onclick=()=> openWeekDay(+el.dataset.day));
+}
+function openWeekDay(dow){
+  const p = planFor(dow), r = routineById(p.routine);
+  if(!r) return;
+  openSheet(p.day+" — recommended block",
+    `<p class="sub" style="margin-bottom:12px">${esc(p.why)}</p>
+     <div class="eyebrow teal" style="margin-bottom:10px">${esc(r.name)} · ${r.minutes} min · ${FATIGUE_LBL[r.fatigue]}</div>
+     <div class="exl">${r.items.map((it,ix)=>{
+       const e=exById(it.ex); if(!e) return "";
+       return `<div class="exi" data-open-ex="${e.id}"><div class="ic">${String(ix+1).padStart(2,"0")}</div>
+         <div class="bd"><div class="nm">${esc(e.name)}</div>
+         <div class="mt">${it.sets}× ${it.hold&&it.hold!=="—"?esc(it.hold):esc(it.reps)}</div></div>
+         <span class="tag">${catAb(e.cats[0])}</span></div>`;}).join("")}</div>`,
+    `<button class="btn primary block" id="wk-start">${ICONS.play}Start this block</button>`);
+  $("#wk-start").onclick=()=> startRoutine(r.id);
+  $$("#sheet-body [data-open-ex]").forEach(el=> el.onclick=()=> openExercise(el.dataset.openEx, ()=>openWeekDay(dow)));
 }
 /* ============================================================
    LIBRARY view — exercise cards, filters, favorites, media prefs
@@ -2309,7 +2411,8 @@ function mediaList(e){
   if(custom) list.push({t:"custom", label:"My saved resource", src:"Custom link", url:custom});
   return list;
 }
-function openExercise(id, nested){
+function openSheetEx(t,b,f,back){ openSheet(t,b,f,back); }
+function openExercise(id, back){
   const e = exById(id); if(!e) return;
   const prefIx = state.prefs.media[id] ?? 0;
   const media = mediaList(e);
@@ -2350,7 +2453,7 @@ function openExercise(id, nested){
         <button class="btn small" id="v-save">Swap</button>
       </div>
     </div>`);
-  openSheet(e.name,
+  openSheetEx(e.name,
    vidHTML +
    `<div class="wrap" style="margin-bottom:12px">
       <span class="tag teal">${LEVELS[e.level]}</span>
@@ -2413,7 +2516,7 @@ function openExercise(id, nested){
     </div>`,
    `<button class="btn ${state.prefs.favs.includes(id)?"":"ghost"}" id="ex-fav">★</button>
     ${e.custom?'<button class="btn" id="ex-edit">Edit</button>':""}
-    <button class="btn primary" style="flex:1" id="ex-add">${ICONS.build}Add to routine draft</button>`);
+    <button class="btn primary" style="flex:1" id="ex-add">${ICONS.build}Add to routine draft</button>`, back);
   const eed=$("#ex-edit"); if(eed) eed.onclick=()=> openDrillEditor(id);
   if(musclesFor(id)) setTimeout(()=>renderMuscleMap("mm-"+id, id), 30);
   // ---- video block wiring ----
@@ -2433,12 +2536,12 @@ function openExercise(id, nested){
     state.prefs.videoStart = state.prefs.videoStart||{};
     const secs = parseTime($("#v-time").value);
     if(secs) state.prefs.videoStart[id]=secs; else delete state.prefs.videoStart[id];
-    save(); openExercise(id,nested); toast(secs?("Starts at "+mmss(secs)):"Start time cleared");
+    save(); openExercise(id, back); toast(secs?("Starts at "+mmss(secs)):"Start time cleared");
   };
   const vc=$("#v-confirm");
   if(vc) vc.onclick=()=>{
     state.prefs.videoConfirmed = state.prefs.videoConfirmed||{};
-    state.prefs.videoConfirmed[id]=true; save(); openExercise(id,nested); toast("Marked as confirmed ✓");
+    state.prefs.videoConfirmed[id]=true; save(); openExercise(id, back); toast("Marked as confirmed ✓");
   };
   const vs=$("#v-save");
   if(vs) vs.onclick=()=>{
@@ -2449,18 +2552,18 @@ function openExercise(id, nested){
     state.prefs.videoOverride[id]=m[1];
     const ts=raw.match(/[?&]t=(\d+)/); 
     if(ts){ state.prefs.videoStart=state.prefs.videoStart||{}; state.prefs.videoStart[id]=+ts[1]; }
-    save(); openExercise(id,nested); toast("Video swapped ✓");
+    save(); openExercise(id, back); toast("Video swapped ✓");
   };
-  $$("#sheet-body [data-pref]").forEach(b=> b.onclick=()=>{ state.prefs.media[id]=+b.dataset.pref; save(); openExercise(id, nested); toast("Preferred media set"); });
+  $$("#sheet-body [data-pref]").forEach(b=> b.onclick=()=>{ state.prefs.media[id]=+b.dataset.pref; save(); openExercise(id, back); toast("Preferred media set"); });
   $$("#sheet-body [data-upg]").forEach(b=> b.onclick=()=>{
     const i=+b.dataset.upg; const arr = state.prefs.upgradesInUse[id] = state.prefs.upgradesInUse[id]||[];
     const at = arr.indexOf(i);
     at>-1 ? arr.splice(at,1) : arr.push(i);
-    save(); openExercise(id, nested); toast(at>-1?"Removed from your setup":"Marked as in use");
+    save(); openExercise(id, back); toast(at>-1?"Removed from your setup":"Marked as in use");
   });
-  $$("#sheet-body [data-nav-ex]").forEach(b=> b.onclick=()=> openExercise(b.dataset.navEx, nested));
-  $("#ex-custom-save").onclick=()=>{ const v=$("#ex-custom").value.trim(); if(v) state.prefs.customMedia[id]=v; else delete state.prefs.customMedia[id]; save(); openExercise(id,nested); toast(v?"Custom link saved":"Custom link removed"); };
-  $("#ex-fav").onclick=()=>{ const f=state.prefs.favs; f.includes(id)?state.prefs.favs=f.filter(x=>x!==id):f.push(id); save(); openExercise(id,nested); };
+  $$("#sheet-body [data-nav-ex]").forEach(b=> b.onclick=()=> openExercise(b.dataset.navEx, back));
+  $("#ex-custom-save").onclick=()=>{ const v=$("#ex-custom").value.trim(); if(v) state.prefs.customMedia[id]=v; else delete state.prefs.customMedia[id]; save(); openExercise(id, back); toast(v?"Custom link saved":"Custom link removed"); };
+  $("#ex-fav").onclick=()=>{ const f=state.prefs.favs; f.includes(id)?state.prefs.favs=f.filter(x=>x!==id):f.push(id); save(); openExercise(id, back); };
   $("#ex-add").onclick=()=>{ addToDraft(id); closeSheet(); show("builder"); };
 }
 
@@ -2588,7 +2691,7 @@ function openDeskSet(setId){
     const i=+b.dataset.dk; done.has(i)?done.delete(i):done.add(i);
     b.classList.toggle("on"); b.closest(".exi").classList.toggle("done");
   });
-  $$("#sheet-body [data-open-ex]").forEach(el=> el.onclick=()=> openExercise(el.dataset.openEx, true));
+  $$("#sheet-body [data-open-ex]").forEach(el=> el.onclick=()=> openExercise(el.dataset.openEx, ()=>openDeskSet(setId)));
   $("#dk-close").onclick=closeSheet;
   $("#dk-done").onclick=()=>{
     state.deskLogs = (state.deskLogs||[]).concat([{date:todayISO(), set:setId, n:done.size||drills.length, t:Date.now()}]);
@@ -3222,7 +3325,7 @@ window.SL_FB = {
     const batch = writeBatch(db);
     (payload.logs||[]).forEach(l=> batch.set(doc(db,"users",uid,"logs",l.date), l));
     (payload.deletes||[]).forEach(dt=> batch.delete(doc(db,"users",uid,"logs",dt)));
-    ["prefs","routines","milestones","customDrills","deskLogs"].forEach(k=>{
+    ["prefs","routines","milestones","customDrills","deskLogs","daySwaps"].forEach(k=>{
       if(payload[k]) batch.set(doc(db,"users",uid,"meta",k), {data:payload[k].data, u:payload[k].u||Date.now()});
     });
     await batch.commit();
