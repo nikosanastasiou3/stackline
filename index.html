@@ -331,6 +331,7 @@ ul.bul{padding-left:18px;font-size:.85rem;line-height:1.6}
 .navrow svg{width:15px;height:15px;color:var(--faint);flex:none}
 .navrow[data-go="none"]{opacity:.6;cursor:default}
 
+
 .musclebox{background:var(--surface2);border:1px solid var(--line);border-radius:14px;padding:10px}
 .mmviews{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .mmviews>div{background:var(--surface);border-radius:11px;padding:6px;min-height:150px}
@@ -1286,6 +1287,7 @@ const EXERCISES = [
          {t:"article",label:"Wrist Strengthening",src:"GMB Fitness",url:"https://gmb.io/wrists/"}]},
 
 { id:"ball-tspine-drape", name:"Ball thoracic drape", cats:["thoracic","pecs"], fatigue:"low", level:1, desk:true, deskType:"ball",
+  discreet:"obvious", discreetNote:"You'll be lying back over a ball — do this somewhere private, or at home.",
   targets:"Thoracic extension and chest opening over the ball.",
   why:"The best thing your yoga ball does. Draping backward over it gives a bigger, better-supported extension than any chair can — effectively your foam-roller drill with more range.",
   when:["recovery","after"], dosage:"2–3 × 20–30 s. Walk the feet out, let the upper back drape over, arms wide or overhead.",
@@ -1342,6 +1344,7 @@ const EXERCISES = [
          {t:"article",label:"Ball seat exercises",src:"Bloon Paris",url:"https://bloon-paris.com/blogs/active/easy-ball-seat-exercices"}]},
 
 { id:"desk-standing-hipflexor", name:"Standing hip flexor (lunge)", cats:["hips"], fatigue:"low", level:1, desk:true, deskType:"stand",
+  discreet:"obvious", discreetNote:"This is a visible lunge. Best in a corridor, empty room, or at home.",
   targets:"Hip flexors and quads, standing.",
   why:"A deeper version of the seated stretch when you can step away from the desk. Named across desk-mobility sources as one of the three highest-value office drills.",
   when:["recovery"], dosage:"20–30 s per side. Split stance, tuck the tailbone, press the hips forward.",
@@ -1527,6 +1530,18 @@ const VIDEO = {
   "wrist-prep":           {yt:"mSZWSQSSEjE", title:"Wrist Prep Routine — Handstand Warm-Up", src:"GMB Fitness", status:"ok"},
   "reverse-wrist-pushups":{yt:"SAQgs_HnoIE", title:"Full Wrist Warmup For Handstands", src:"YouTube", status:"review", why:"Chaptered compilation — the reverse wrist push-up section starts partway in. Needs its start time."},
   "straddle-liftoffs":    {yt:"rBT4ziR4TC4", title:"Press drills (related)", src:"YouTube", status:"review", why:"No dedicated straddle lift-off clip found. Placeholder — worth replacing with a better one."},
+  "desk-chair-tspine":    {yt:"kdLSJuzRNUw", title:"5 Minute Desk Stretches — Without Getting Up", src:"YouTube", status:"review", why:"Compilation covering several desk stretches — set the start time where the back extension begins."},
+  "desk-hipflexor-seated":{yt:"U5VtjFywhIA", title:"5 Stretches That Instantly Undo Sitting", src:"YouTube", status:"review", why:"Compilation — find the hip flexor section and set the start time."},
+  "desk-fig4":            {yt:"kdLSJuzRNUw", title:"5 Minute Desk Stretches — Without Getting Up", src:"YouTube", status:"review", why:"Compilation — set the start time at the figure-4 section."},
+  "desk-twist":           {yt:"xRH1To_xyr8", title:"5 min Seated Stretch — chair yoga work break", src:"YouTube", status:"review", why:"Compilation — set the start time at the seated twist."},
+  "desk-chest-opener":    {yt:"kdLSJuzRNUw", title:"5 Minute Desk Stretches — Without Getting Up", src:"YouTube", status:"review", why:"Compilation — set the start time at the chest opener."},
+  "desk-chin-tucks":      {yt:"BdfTuxdfIE8", title:"Quick and Easy Stretches While Sitting at Your Desk", src:"YouTube", status:"review", why:"Compilation — set the start time at the neck retraction."},
+  "desk-wrist-reset":     {yt:"BdfTuxdfIE8", title:"Quick and Easy Stretches While Sitting at Your Desk", src:"YouTube", status:"review", why:"Compilation — set the start time at the wrist section."},
+  "desk-standing-hipflexor":{yt:"U5VtjFywhIA", title:"5 Stretches That Instantly Undo Sitting", src:"YouTube", status:"review", why:"Compilation — set the start time at the standing lunge stretch."},
+  "ball-pelvic-tilts":    {yt:"Y2TLxsGVcU4", title:"How to do a pelvic tilt sitting on a Swiss ball", src:"YouTube", status:"ok"},
+  "ball-tspine-drape":    {yt:"j4YjiFdRtGw", title:"Stability ball — spinal work", src:"YouTube", status:"review", why:"Not specific to the backward drape. Worth swapping for a dedicated clip."},
+  "ball-side-bend":       {yt:"", title:"", src:"", status:"missing", why:"No dedicated clip found for the seated overhead side bend on a ball."},
+  "ball-marching":        {yt:"", title:"", src:"", status:"missing", why:"No dedicated clip found for seated ball marching."},
   "press-walks":          {yt:"", title:"", src:"", status:"missing", why:"No good dedicated clip found for the press walk / weight-shift drill. Needs one picking."},
   "kickup-practice":      {yt:"mfHcZQ-H_W4", title:"Nail Your Kick Up To Handstand! (Simple Drill)", src:"Bodyweight Warrior", status:"ok"},
   "finger-balance":       {yt:"OYehg2ruMN0", title:"How to Balance a Handstand: Heel pulls", src:"YouTube", status:"ok"},
@@ -2514,6 +2529,7 @@ function openExercise(id, back){
       <span class="tag">${FATIGUE_LBL[e.fatigue]}</span>
       ${e.when.map(w=>`<span class="tag amber">${WHEN[w]}</span>`).join("")}
     </div>
+    ${e.discreet==="obvious"?`<div class="notice" style="margin-bottom:2px">${ICONS.info}<span>${esc(e.discreetNote)}</span></div>`:""}
 
     <div class="keybox">
       <p class="desc">${esc(HT? HT.desc : e.targets)}</p>
@@ -2737,7 +2753,7 @@ function openDeskSet(setId){
          <div class="check" data-dk="${i}">${ICONS.check}</div>
          <div class="bd" data-open-ex="${e.id}"><div class="nm">${esc(e.name)}</div>
            <div class="mt">${esc(e.dosage)}</div>
-           <div class="tiny" style="margin-top:3px">${esc((e.cues||"").split(".")[0])}.</div></div>
+           <div class="tiny" style="margin-top:3px">${e.discreet==="obvious"?'<span style="color:var(--amber)">Needs a private spot</span>':esc((e.cues||"").split(".")[0])+"."}</div></div>
        </div>`).join("")}</div>
      <div class="notice teal" style="margin-top:14px">${ICONS.info}<span>Desk resets are tracked separately — they never affect your training adherence.</span></div>`,
     `<button class="btn ghost" id="dk-close">Close</button>
@@ -2982,7 +2998,151 @@ const HOWTO = {
   "Exhale and pull your ribs down toward your hips — do not let your lower back sag.",
   "Let your chest melt down between your arms. Breathe slowly and sink a little further on each exhale.",
   "Hold for the set time, then come up gently."],
- check:"The stretch should be felt in your armpits and upper back. If you feel it pinching in your lower back, tuck your hips more and lift the surface higher."}
+ check:"The stretch should be felt in your armpits and upper back. If you feel it pinching in your lower back, tuck your hips more and lift the surface higher."},
+
+"oh-lat-stretch":{desc:"You put one hand high on a wall or doorframe, then sink your armpit down and away. It lengthens the lat, which is usually what pulls your arms forward in a handstand.",
+ steps:["Stand facing a wall, an arm's length away.","Place one hand flat on the wall well above head height, thumb pointing up.","Step the same-side foot back and bend slightly at the hips so your torso lowers.","Exhale and pull your ribs down toward your hips — do not let them flare forward.","Sink your armpit toward the floor. You should feel it along the side of your ribs, from armpit to hip.","Hold, breathing into your side ribs, then swap sides."],
+ check:"If you feel it in your lower back rather than your side, your ribs are flared. Tuck them down and reduce the lean until the stretch moves back into the armpit."},
+
+"lat-pnf":{desc:"The overhead lat stretch with a short push-then-relax cycle added. The brief contraction lets you sink noticeably deeper on the release.",
+ steps:["Set up in the overhead lat stretch with your hand high on a wall.","Sink into the stretch and hold for 20 seconds, breathing normally.","Press your hand down into the wall at about 20–30% of your strength, as if trying to pull your arm back down. Hold 5–6 seconds.","Stop pushing and relax completely for a breath.","Sink further into the stretch — you should find noticeably more range. Hold 10–15 seconds.","Repeat for 3 rounds, then swap sides."],
+ check:"The push should be gentle. If you are straining, gripping or holding your breath, you are pushing far too hard — drop the effort by half."},
+
+"lat-pails-rails":{desc:"The lat stretch taken to its loaded end: you contract into the stretch, then contract to pull yourself deeper. It builds strength at the range you have, not just the range itself.",
+ steps:["Warm up first — never do this cold.","Get into a deep overhead lat stretch, hand high on a wall or elbows on a bench.","Relax into the position for 20–30 seconds.","PAIL: press your arm into the surface at about 20–30% effort, as if pushing out of the stretch. Hold 10 seconds, breathing.","RAIL: without changing position, switch to actively pulling yourself deeper using your lat and shoulder. Hold 10 seconds.","Relax, sink slightly deeper, repeat 2–3 rounds per side."],
+ check:"You should be able to talk through both contractions. Shaking or breath-holding means too much force — this is control work, not a max effort."},
+
+"pec-doorway":{desc:"You place a forearm on a doorframe and step through until you feel your chest open. It counters the rounded-shoulder position that blocks the final part of your handstand stack.",
+ steps:["Stand in a doorway. Place one forearm flat on the frame, elbow bent 90°, upper arm level with your shoulder.","Keep your ribs down and your torso upright — do not lean forward from the waist.","Step the same-side foot through the doorway until you feel a stretch across your chest.","Gently draw that shoulder blade back and down to deepen it.","Hold, then repeat with the elbow higher, above shoulder height, to catch a different part of the muscle.","Swap sides."],
+ check:"You should feel this across the chest. If it pinches at the front of the shoulder joint, step back, lower the elbow, and reduce the range."},
+
+"pec-doorway-upgraded":{desc:"The doorway stretch with a push-and-release cycle. The contraction makes the new range stick for longer than a plain hold.",
+ steps:["Set up in the doorway pec stretch and lean in until you feel a comfortable stretch.","Hold for 20 seconds, breathing steadily.","Press your forearm into the doorframe at about 20–30% effort, as if trying to close your arm across your chest. Hold 5 seconds.","Release the push completely and take one breath.","Step slightly further through the doorway — you should find more range.","Repeat for 2–3 rounds per side."],
+ check:"If your torso rotates away from the working arm to fake depth, reset. Chest stays square, only the stretch deepens."},
+
+"tspine-ext":{desc:"You lie back over a foam roller placed across your mid-back and extend over it, moving up one segment at a time. It restores extension in the upper back so the lower back does not arch instead.",
+ steps:["Lie on your back with a foam roller across your mid-back, knees bent, feet flat.","Support your head with both hands, elbows pointing forward — this stops your neck straining.","Lift your hips slightly off the floor so your weight is on the roller.","Exhale and drape your upper back backward over the roller, letting your chest open. Keep your ribs down.","Return to neutral. Do 6–8 slow extensions here.","Roll the foam roller 2–3 cm higher up your back and repeat. Cover 3–4 positions in total."],
+ check:"If your lower back is doing the arching, your ribs are flaring. Keep them pulled down and let the movement come only from where the roller touches."},
+
+"wall-angels":{desc:"Standing with your back against a wall, you slide your arms up and down while keeping head, back and arms in contact. It trains upper-back extension and shoulder blade movement at the same time.",
+ steps:["Stand with your back against a wall, feet 15–20 cm out from it.","Press your lower back, upper back and the back of your head flat to the wall.","Put your arms against the wall in a goalpost shape — elbows bent 90°, at shoulder height.","Keeping every point in contact, slide your arms slowly up until your elbows are almost straight.","Slide back down until your elbows are level with your ribs, squeezing the shoulder blades.","Move slowly — 3 seconds up, 3 seconds down."],
+ check:"Contact is the whole point. The moment your wrists, head, or lower back leave the wall, that is your limit — work only within that range."},
+
+"wf-shrugs":{desc:"In a chest-to-wall handstand you shrug your shoulders up and down while keeping your elbows locked. This is the strength that keeps your shoulders stacked upside down.",
+ steps:["Walk up into a chest-to-wall handstand as usual.","Lock your elbows straight and keep them straight throughout.","Let your shoulders sink slowly toward your ears by relaxing the shoulder blades. Do not bend the arms.","Push the floor away hard and lift your shoulders as far from your ears as you can.","Pause 2 seconds at the top, staying tall.","Lower slowly. That is one rep — do 5–8 before coming down."],
+ check:"If your elbows bend or your body sways away from the wall, stop the set. Quality here matters far more than the rep count."},
+
+"free-handstand-shrug":{desc:"The same shrug, done in a freestanding handstand with no wall. It is the final test of whether your shoulder elevation holds up when you also have to balance.",
+ steps:["Only attempt this once you can hold a freestanding handstand for 20–30 seconds consistently.","Kick up to a freestanding handstand and find your balance first.","With balance settled and elbows locked, let your shoulders sink slightly toward your ears.","Push tall again, lifting your shoulders away from your ears.","Keep the range small — much smaller than the wall version. Balance comes first.","Do 3–5 controlled reps, then bail with a cartwheel."],
+ check:"If shrugging makes you lose balance every time, go back to wall shrugs. This drill assumes balance is already reliable."},
+
+"bodyline-drill":{desc:"You hold a straight body shape on the floor, first face-down and then face-up, to find which end of your line breaks. It is the handstand shape practised where you can actually see it.",
+ steps:["Front line: get into a forearm plank with elbows under shoulders.","Squeeze your glutes, pull your ribs down and tuck your hips slightly so your body is one straight line. Hold 15–20 seconds.","Rest fully.","Back line: lie face-down with arms stretched overhead beside your ears.","Lift your arms, chest and legs just off the floor, keeping your ribs down and neck long. Hold 15–20 seconds.","Alternate the two for 2–3 rounds each."],
+ check:"Whichever of the two shakes or sags first is your weak line — and it is the same one that breaks in your handstand. Give it the extra set."},
+
+"wall-toe-finger-pulls":{desc:"From a wall handstand you pull your toes off the wall using your fingers, hold, then let them back. It is the first taste of real balance without leaving the wall behind.",
+ steps:["Chest-to-wall: walk up until your body is vertical and close to the wall.","Press hard through your fingertips to shift your weight slightly toward your hands.","As you press, let one or both toes leave the wall. Hold 2–3 seconds.","Ease the finger pressure and let the toes drift back to the wall.","Repeat 5–8 times.","Back-to-wall version: kick up with your back to the wall, then press the fingers to pull the heels away and hold."],
+ check:"Pull with your fingers, not by kicking off the wall with your feet. If your shoulders drift past your hands, you have gone too far — reduce the shift."},
+
+"kickup-practice":{desc:"You practise the entry into a handstand on its own, treating each attempt as a rep rather than a failed handstand. Consistent entry means you spend your session actually handstanding.",
+ steps:["Face a wall about 30 cm away, or work in open space if you have a reliable bail.","Place your hands shoulder-width apart, fingers spread, arms locked straight.","Put your stronger leg forward in a lunge and lift your hips over your shoulders before you kick.","Kick the back leg up gently — use far less force than feels natural — and bring the other leg to meet it.","Try to arrive balanced rather than crashing into the wall. Hold whatever you catch for a moment.","Come down under control. Rest a few seconds, then repeat. Do 8–10 deliberate attempts."],
+ check:"Count how many out of ten you catch. If you are consistently overshooting into the wall, you are kicking two or three times harder than you need to."},
+
+"finger-balance":{desc:"You learn the two corrections that keep a handstand alive: press the fingertips when you tip forward, press the palm when you tip back. It is the actual mechanism of balancing.",
+ steps:["Kick up with your back to the wall, hands about one hand's length from it.","Find a tall, stacked position with your heels resting lightly on the wall.","Squeeze your fingertips into the floor. Feel your weight shift and your heels lift away from the wall.","Hold that hover for as long as you can — start with 2–3 seconds.","Ease the fingertip pressure and let your heels return gently to the wall.","Repeat 5–8 times per set."],
+ check:"Set up too far from the wall and you will arch into a banana and overload your wrists. If your back is arching, move your hands closer to the wall."},
+
+"freestanding-holds":{desc:"Unsupported handstand holds, accumulated across many short attempts. There is no substitute for time spent actually balancing.",
+ steps:["Warm your wrists thoroughly first.","Work in open space with room to bail — know your cartwheel exit before you start.","Kick up gently and aim to arrive stacked: fingers gripping, ribs closed, glutes on, toes reaching up.","Balance with small finger and palm pressure changes. Do not try to correct with your hips.","Hold until you lose it, then bail cleanly rather than collapsing.","Rest 30–60 seconds and go again. Do 8–10 attempts."],
+ check:"Add up your total seconds across all attempts, not just your best hold. Total time is what drives progress, and it is far less frustrating to track."},
+
+"first-knuckle-pushups":{desc:"Push-ups performed on the first knuckles with the palm lifted, building the wrist strength that absorbs balance corrections.",
+ steps:["Start on hands and knees with palms flat on the floor.","Press through the index and middle finger knuckles and lift your palm slightly off the floor.","Hold that lifted position and take your weight onto the knuckles.","Lower the palm back toward the floor slowly, under control.","Push back up to the lifted position. That is one rep.","Do 8–10 reps. Progress from knees to a full plank position as it gets easier."],
+ check:"Keep the weight on the index and middle knuckles. If it rolls to the pinky side, reduce the load and reset your hand position."},
+
+"reverse-wrist-pushups":{desc:"The opposite of the first-knuckle push-up: you load the back of the hand to build extensor strength and balance out all the flexion handstands demand.",
+ steps:["Kneel and place the backs of your hands on the floor, fingers pointing toward each other or toward your knees.","Start with very little weight over the hands — this position is unfamiliar.","Press the backs of your hands into the floor and lift your wrists slightly upward.","Lower slowly back down under control.","Do 8–10 slow reps.","If both hands at once is too much, work one hand at a time."],
+ check:"Go gently. Wrist extensors are usually undertrained, so early sessions should feel easy. Never force the range."},
+
+"pancake":{desc:"You sit with your legs wide apart and fold forward with a flat back. It opens the hamstrings and inner thighs, which is where the press handstand starts from.",
+ steps:["Sit on the floor and take your legs as wide as is comfortable, kneecaps pointing at the ceiling.","Sit up tall on your sit bones. If you are rolling backward, sit on a folded towel or cushion.","Place your hands on the floor in front of you.","Keeping your back flat, hinge forward from the hips — imagine leading with your chest, not your head.","Walk your hands forward only as far as you can go without your lower back rounding.","Hold, breathing steadily, then walk back up."],
+ check:"Flat back beats depth every time. If your lower back is rounding, you have gone too far — come back up until it is flat again."},
+
+"seated-pike-lifts":{desc:"Sitting with legs straight, you lift them off the floor using only your hip flexors. This is the engine that gets your feet off the ground in a press.",
+ steps:["Sit on the floor with your legs straight out in front and your back as upright as you can manage.","Place your hands lightly on the floor beside your hips — for balance only, not to push.","Point your toes and tighten your thighs so the legs are rigid.","Pull your legs up toward your chest, lifting the heels off the floor. Keep the knees locked.","Hold at the top for a second, then lower slowly without letting the legs drop.","Do 8–10 reps."],
+ check:"If your torso rocks backward to help the legs up, you are cheating. Keep your chest still — only the legs move, even if that means barely lifting."},
+
+"straddle-liftoffs":{desc:"With hands on parallettes and legs straddled wide, you lean forward until your feet lift off the floor. This is the takeoff of the press, isolated and held.",
+ steps:["Place your low parallettes about shoulder-width apart and stand between them with your legs straddled wide.","Bend forward and grip the parallettes, arms locked straight.","Round your upper back slightly and pull your hips up toward your hands.","Lean your shoulders forward past your hands — this is what makes your feet feel light.","Keep leaning and lifting until your toes leave the floor. Hold 3–5 seconds.","Lower under control. Do 5 lifts per set."],
+ check:"If you are jumping rather than lifting, you are leaning too little. The forward shoulder lean does the work — the legs only follow."},
+
+"lsit-parallettes":{desc:"Supporting yourself on parallettes with straight legs held out in front. It builds the straight-arm support and compression the press needs.",
+ steps:["Sit between your parallettes with legs straight out in front of you.","Grip the bars and press down hard, locking your elbows straight.","Push your shoulders down away from your ears — do not let yourself sink into a shrug.","Lift your hips off the floor, then lift your heels until your legs are level.","Point your toes and keep the knees locked. Hold.","Lower under control before your form breaks."],
+ check:"Stop the clock the moment your knees bend or hips sag. A strict 10 seconds is worth more than a sloppy 25."},
+
+"press-walks":{desc:"From a wide stand with hands on the floor, you shift your shoulders forward until your feet get light, then rock back. It teaches the weight shift that makes a press possible.",
+ steps:["Stand with your legs in a wide straddle and place both hands flat on the floor in front of you.","Lock your elbows straight and keep them straight throughout.","Slowly shift your shoulders forward so they travel past your hands.","Keep shifting until your heels get light and most of your weight is over your hands.","Pause there for a moment, then rock back to the start.","Repeat 5–8 times."],
+ check:"Film it from the side once. Almost everyone believes their shoulders pass their hands when they do not — that shift is the whole drill."},
+
+"straddle-negatives":{desc:"From a handstand you straddle your legs and lower them slowly to the floor with straight arms. It is the press performed backwards, and it is the strongest single press builder.",
+ steps:["Kick up to a handstand — against a wall at first, freestanding once controlled.","Straddle your legs wide.","Lean your shoulders slightly forward and begin lowering your legs toward the floor.","Keep pushing the floor away the entire time — your arms stay locked and your shoulders stay tall.","Take at least 4 seconds to reach the floor. Slower is better.","Stand up, reset, and repeat for 3–5 reps."],
+ check:"If you drop through the middle rather than controlling it, the drill is too hard right now. Use the wall and shorten the range you control."},
+
+"elevated-press":{desc:"You press to a handstand starting with your feet on a raised surface, removing the hardest few centimetres. Lowering that height over months is how the full press is built.",
+ steps:["Place your hands on the floor and your feet on a box, chair or your parallettes.","Straddle your legs wide and keep your arms locked straight.","Lift your hips up over your shoulders first — hips lead, not legs.","Lean your shoulders forward past your hands so your feet become light.","Let your feet float off the surface and bring your legs up and together into the handstand.","Come down slowly and reset. Do 4–6 quality attempts."],
+ check:"If you are jumping off the box, the height is too low for now. Raise it until you can press smoothly, then lower it again over weeks."},
+
+"full-straddle-press":{desc:"The complete skill: from standing, hands to the floor, straddle up to a handstand with straight arms and no jump.",
+ steps:["Do this at the start of a session while you are fresh.","Stand with legs in a wide straddle and place your hands flat on the floor.","Lock your elbows and keep them locked throughout.","Round your upper back slightly and pull your hips up over your shoulders.","Lean your shoulders forward past your hands — your feet will get light on their own.","Lift the legs, bring them together overhead and hold the handstand. Come down slowly."],
+ check:"If it feels like a leg lift, the lean came too late. Slow the whole thing down and get the hips over the shoulders before anything leaves the floor."},
+
+"desk-chair-tspine":{desc:"You lean back over the top of your chair to extend your upper back. It is the direct counter to hours of rounding forward at a screen.",
+ steps:["Sit toward the front of your chair so the backrest sits at the level of your shoulder blades.","Put your hands behind your head with your elbows pointing outward.","Pull your ribs down and keep your lower back neutral.","Exhale and lean your upper back backward over the top of the backrest, opening your chest.","Hold 20–30 seconds, or repeat 8 slow extensions.","Come up gently."],
+ check:"The bend should happen where the chair touches your back. If you feel it in your lower back, sit further forward and keep the ribs down."},
+
+"desk-hipflexor-seated":{desc:"You slide one leg back beside your chair and press the hip forward. It targets the muscle that hours of sitting shortens most — and that shortening is what tilts your pelvis in a handstand.",
+ steps:["Scoot to the front edge of your chair, sitting on one side of it.","Let the outside leg slide back and down so the knee is behind your hip.","Sit tall and tuck your tailbone under — this is what makes the stretch work.","Squeeze the glute of the back leg and press that hip gently forward.","Hold 20–30 seconds, breathing.","Swap sides."],
+ check:"If you feel it in your lower back instead of the front of your hip, you are arching. Tuck the tailbone harder and reduce the forward press."},
+
+"desk-fig4":{desc:"Ankle crossed over the opposite knee, then a fold forward. It opens the glutes and hip rotators that stiffen from sitting.",
+ steps:["Sit upright in your chair with both feet flat on the floor.","Cross one ankle over the opposite knee so your shin is roughly parallel to the floor.","Let the raised knee relax outward.","Keeping your back flat, hinge forward from the hips until you feel a stretch in the glute.","Hold 30 seconds, breathing.","Come up slowly and swap sides."],
+ check:"You should feel this in the glute, not the knee. If your knee complains, do not press down on it — just let it fall open on its own."},
+
+"desk-twist":{desc:"A seated rotation with the hips kept square. It keeps the mid-back rotating rather than stiffening into one fixed screen posture.",
+ steps:["Sit tall with both feet flat on the floor and knees pointing forward.","Grow taller through the spine before you rotate.","Turn your chest to one side, keeping your hips square and facing forward.","Use the chair arm or the seat back for light leverage at the end of the range.","Hold 20 seconds, breathing — exhale to find a little more rotation.","Return to centre and swap sides."],
+ check:"If your knees or hips turn with you, the rotation is coming from the wrong place. Lock the hips forward and rotate from the ribs up."},
+
+"desk-chest-opener":{desc:"Hands behind your head, elbows wide, leaning back over the chair. It undoes the rounded-shoulder position directly.",
+ steps:["Sit upright with your feet flat on the floor.","Place both hands behind your head, fingers loosely interlocked.","Open your elbows out wide to the sides.","Squeeze your shoulder blades together and lift your chest toward the ceiling.","Hold 10–15 seconds, breathing into your chest.","Release and repeat once more."],
+ check:"Watch that your elbows stay wide. The moment they drift forward, the stretch disappears — even if you still feel like you are doing it."},
+
+"desk-chin-tucks":{desc:"You glide your head straight backward over your shoulders. It counters the forward head position that screens create and that drags the upper back with it.",
+ steps:["Sit or stand tall with your shoulders relaxed.","Look straight ahead — keep your eyes level throughout.","Glide your head straight back over your shoulders, making a double chin.","Do not tilt your head down. The movement is backward, not downward.","Hold 3 seconds, then release.","Repeat 10 times."],
+ check:"If your chin is dipping toward your chest, you are nodding instead of gliding. Keep your gaze level and move the head straight back."},
+
+"desk-wrist-reset":{desc:"A quick circuit of circles, spreads and stretches for wrists that have been typing for hours. Cheap insurance for the joints that take your bodyweight in training.",
+ steps:["Drop your hands off the edge of the desk and shake them out loosely.","Make 10 slow wrist circles in each direction.","Spread your fingers as wide as you can for 5 seconds, then make a fist for 5 seconds. Repeat 5 times.","Press your palms together in front of your chest and lower the hands until you feel a forearm stretch. Hold 15 seconds.","Turn the hands so the fingertips point down, backs of hands together, and hold 15 seconds.","Shake the hands out again."],
+ check:"This should feel like relief, not a stretch you have to endure. Back off anything that tingles or goes numb."},
+
+"ball-tspine-drape":{desc:"You lie back over a yoga ball and let your upper back open across it. It gives more extension than any chair can, and it is the single best desk-adjacent drill for your line.",
+ steps:["Sit on the ball, then walk your feet forward so the ball rolls up your back.","Stop when the ball sits under your mid-back and your hips are supported.","Support your head with your hands at first.","Slowly let your upper back drape backward over the ball, opening your chest.","Once comfortable, take your arms out wide or overhead for more.","Hold 20–30 seconds, breathing. Walk your feet back to come up."],
+ check:"Come up slowly and never let your head hang unsupported if you feel dizzy. Build the range over sessions rather than forcing it on day one."},
+
+"ball-pelvic-tilts":{desc:"Sitting on the ball, you tilt your pelvis forward and back and circle it. It trains the exact pelvic control that shuts down a banana back.",
+ steps:["Sit tall on the ball with feet flat on the floor, knees at about 90°.","Place your hands on your hips so you can feel what moves.","Tilt your pelvis forward, arching your lower back slightly.","Tilt it backward, tucking your tailbone under and flattening your lower back. Exhale into this one.","Alternate slowly for 10–15 tilts.","Then circle the pelvis 10 times in each direction."],
+ check:"Only the pelvis should move. If your head and shoulders are swaying, make the movement smaller until everything above the waist stays still."},
+
+"ball-side-bend":{desc:"Seated on the ball, you reach one arm overhead and bend to the side. It reaches the lats — one of your main bottlenecks — without leaving your desk.",
+ steps:["Sit tall on the ball with both feet planted firmly.","Reach one arm straight up overhead.","Grow taller through that side first, lengthening out of the armpit.","Bend sideways over the opposite side, keeping your chest facing forward.","Feel it along the side of your ribs and armpit. Hold 15 seconds or pulse gently 8–10 times.","Return upright and swap sides."],
+ check:"Keep both sit bones on the ball. If the opposite hip lifts, you are bending too far — shorten the range."},
+
+"ball-marching":{desc:"Seated on the ball, you lift alternate knees and circle the hips. It keeps your hips moving through the workday rather than locked at ninety degrees.",
+ steps:["Sit tall on the ball, feet flat, hands resting lightly on your hips.","Lift one knee a few centimetres, hold a moment, and lower it.","Alternate legs at a slow, controlled pace for 30–60 seconds.","Keep the ball still underneath you — do not bounce.","Then plant both feet and circle your hips 10 times in each direction.","Progress by taking your hands off your hips entirely."],
+ check:"If the ball is rolling around under you, you are moving too fast. Slow down until the ball stays put and your trunk does the stabilising."},
+
+"desk-standing-hipflexor":{desc:"A split-stance lunge stretch done standing beside your desk. The deeper version of the seated hip flexor stretch, for when you can step away.",
+ steps:["Stand beside your desk and take a long step back with one foot.","Bend both knees slightly and keep your torso upright.","Tuck your tailbone under so your pelvis rotates backward — do this before anything else.","Squeeze the glute of the back leg and press your hips gently forward.","Hold 20–30 seconds, breathing.","Swap sides. For more, reach the same-side arm overhead and slightly across."],
+ check:"If you cannot feel anything, you are almost certainly arching your lower back instead of tucking. Tuck the tailbone first, then press forward."}
 };
 function howTo(id){
   const cd=(state.customDrills||[]).find(d=>d.id===id);
