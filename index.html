@@ -336,6 +336,59 @@ ul.bul{padding-left:18px;font-size:.85rem;line-height:1.6}
 .clitem{background:var(--surface2);border:1px solid var(--line);border-radius:12px;padding:11px 12px}
 .clitem .nm{font-weight:600;font-size:.87rem}
 
+.thead{background:linear-gradient(150deg,var(--surface) 0%,var(--surface2) 100%);border:1px solid var(--line);
+  border-radius:20px;padding:18px;box-shadow:var(--shadow-lg);position:relative;overflow:hidden}
+.thead .day{font-size:.63rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--teal)}
+.thead h2{font-family:"Archivo";font-size:1.45rem;font-weight:800;line-height:1.15;margin:5px 0 3px;padding-right:72px}
+.whybtn{display:inline-flex;align-items:center;gap:5px;background:none;border:0;color:var(--muted);font:inherit;
+  font-size:.8rem;cursor:pointer;padding:0;margin-top:2px;text-align:left}
+.whybtn svg{width:14px;height:14px;flex:none}
+.whybox{display:none;margin-top:10px;padding:11px 13px;border-radius:11px;background:var(--teal-soft);
+  border:1px solid var(--teal-mid);color:var(--teal);font-size:.81rem}
+.whybox.on{display:block}
+.tring{position:absolute;right:16px;top:16px;width:62px;height:62px}
+.tring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.tring .lbl{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.tring b{font-family:"Archivo";font-size:.98rem;font-weight:800;line-height:1}
+.tring span{font-size:.48rem;color:var(--faint);font-weight:700;letter-spacing:.06em}
+.streakpill{display:inline-flex;align-items:center;gap:6px;background:var(--surface);border:1px solid var(--line);
+  border-radius:999px;padding:5px 12px;font-size:.74rem;font-weight:600;color:var(--ink);font-family:inherit}
+.streakpill b{font-family:"Archivo";font-weight:800;color:var(--teal)}
+.tlist{display:flex;flex-direction:column;gap:9px}
+.trow{display:flex;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--line);
+  border-radius:14px;padding:13px 14px;cursor:pointer;transition:transform .12s;box-shadow:var(--shadow);
+  width:100%;font:inherit;color:var(--ink);text-align:left}
+.trow:active{transform:scale(.99)}
+.trow.done{background:var(--surface2);box-shadow:none}
+.trow.done .nm{color:var(--muted)}
+.trow.primary{border-color:var(--teal);background:linear-gradient(140deg,var(--teal-soft),var(--surface))}
+.trow .mark{width:30px;height:30px;border-radius:10px;flex:none;display:grid;place-items:center;
+  border:2px solid var(--line2);color:var(--teal)}
+.trow .mark.on{background:var(--teal);border-color:var(--teal);color:#fff}
+[data-theme="dark"] .trow .mark.on{color:#0E1B18}
+.trow .mark svg{width:15px;height:15px}
+.trow .mark.opt{border-style:dashed;color:var(--faint)}
+.trow .bd{flex:1;min-width:0}
+.trow .bd .nm{font-weight:600;font-size:.91rem}
+.trow .bd .mt{font-size:.74rem;color:var(--muted);margin-top:1px}
+.trow .go{font-size:.72rem;font-weight:700;color:var(--teal);flex:none;display:flex;align-items:center;gap:3px}
+.trow .go svg{width:13px;height:13px}
+.trow.done .go{color:var(--faint)}
+.ladder{display:flex;gap:5px;margin-top:11px}
+.ladder i{flex:1;height:6px;border-radius:3px;background:var(--line)}
+.ladder i.done{background:var(--teal);opacity:.55}
+.ladder i.now{background:var(--teal)}
+.stg{display:flex;gap:12px;padding:12px 0;border-bottom:1px dashed var(--line)}
+.stg:last-child{border-bottom:none}
+.stgn{width:26px;height:26px;border-radius:9px;flex:none;display:grid;place-items:center;
+  font-family:"Archivo";font-weight:800;font-size:.76rem;background:var(--surface2);color:var(--faint)}
+.stg.done .stgn{background:var(--teal-soft);color:var(--teal)}
+.stg.now .stgn{background:var(--teal);color:#fff}
+[data-theme="dark"] .stg.now .stgn{color:#0E1B18}
+.stg.todo{opacity:.6}
+.stgb{flex:1;min-width:0}
+.stgb b{font-size:.89rem}
+
 .musclebox{background:var(--surface2);border:1px solid var(--line);border-radius:14px;padding:10px}
 .mmviews{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .mmviews>div{background:var(--surface);border-radius:11px;padding:6px;min-height:150px}
@@ -438,6 +491,7 @@ ul.bul{padding-left:18px;font-size:.85rem;line-height:1.6}
 <main>
   <section id="view-today" class="view on"></section>
   <section id="view-week" class="view"></section>
+  <section id="view-skills" class="view"></section>
   <section id="view-builder" class="view"></section>
   <section id="view-library" class="view"></section>
   <section id="view-progress" class="view"></section>
@@ -446,7 +500,7 @@ ul.bul{padding-left:18px;font-size:.85rem;line-height:1.6}
 <nav class="tabs" aria-label="Main navigation">
   <button data-v="today" class="on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Today</button>
   <button data-v="week"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M8 3v4m8-4v4M3 10h18"/></svg>Week</button>
-  <button data-v="builder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/><rect x="3" y="3" width="18" height="18" rx="5"/></svg>Builder</button>
+  <button data-v="skills"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 20v-6M12 20V8M18 20v-9"/><path d="m3 10 3-3 3 3M9 6l3-3 3 3M15 8l3-3 3 3"/></svg>Skills</button>
   <button data-v="library"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5a2 2 0 0 1 2-2h4v18H6a2 2 0 0 1-2-2V5Z"/><path d="M14 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/></svg>Library</button>
   <button data-v="progress"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V5"/><path d="M4 19h16"/><path d="M7 15l4-5 3 3 5-7"/></svg>Progress</button>
 </nav>
@@ -1617,6 +1671,13 @@ const CATALOG = {
 "Legs & glutes":[["Bodyweight squat",1],["Split squat",2],["Bulgarian split squat",3],["Pistol squat negative",3],["Pistol squat",4],["Shrimp squat",4],["Glute bridge",1],["Single-leg glute bridge",2],["Hip thrust",2],["Weighted hip thrust",3],["Nordic curl negative",4],["Nordic curl",5],["Reverse lunge",2],["Walking lunge",2],["Step-up",2],["Calf raise",1],["Single-leg deadlift",2],["Frog pump",1],["Fire hydrant",1],["Clamshell",1],["Kickback",1],["Banded lateral walk",1],["Curtsy lunge",2],["Sumo squat",1],["Jump squat",3],["Wall sit",1]],
 "Rings":[["Ring support hold",2],["Ring row",2],["Ring push-up",3],["Ring dip",4],["Ring L-sit",4],["Skin the cat",2],["German hang",2],["Ring turned-out support",4],["Ring flye",4],["Ring archer row",4]],
 "Warm-up & prep":[["Band pull-apart",1],["Band dislocate",1],["Shoulder dislocate (stick)",1],["Arm circles",1],["Wrist circles",1],["Scapular push-up",1],["Scapular pull-up",1],["Cat-cow",1],["Jumping jacks",1],["Bodyweight squat",1],["Hip circles",1],["Leg swings",1],["Inchworm",1],["World's greatest stretch",1],["Band face pull",1],["Ring support scap work",2]],
+"Grip & hangs":[["Passive hang",1],["Active hang",1],["One-arm hang",3],["Towel hang",3],["Fingertip hang",4],["Rope climb (legs)",3],["Rope climb (legless)",5],["Plate pinch",2],["Bar hang shrug",2]],
+"Bridging":[["Glute bridge",1],["Table top bridge",1],["Bridge (short)",2],["Full bridge",3],["Bridge push-up",4],["Wall walk down",3],["Stand-to-bridge",5],["One-arm bridge",5]],
+"Explosive":[["Clap push-up",4],["Explosive push-up",3],["Bar pop-up",3],["Muscle-up pop",4],["Jump squat",2],["Box jump",2],["Broad jump",2],["Burpee",2],["Kip swing",2],["Plyo pull-up",4]],
+"Rings — extra":[["Inverted hang",2],["Ring support hold",2],["Ring roll",4],["Ring shoulder stand",4],["Ring hollow hold",3],["Bulgarian ring dip",5],["Ring handstand",5],["False grip row",3]],
+"Weighted":[["Weighted pull-up",4],["Weighted dip",4],["Weighted push-up",3],["Weighted hip thrust",3],["Weighted L-sit",4],["Vest hold",3]],
+"Neck & forearm":[["Neck bridge",3],["Chin tuck",1],["Wrist curl",1],["Reverse wrist curl",1],["Forearm plank",1],["Wrist rotation",1],["First knuckle push-up",2],["Reverse wrist push-up",2]],
+"Handstand entries":[["Kick-up",2],["Tuck-up to handstand",4],["Straddle-up to handstand",4],["Pike-up to handstand",5],["Frog stand to handstand",4],["Crow to handstand",4]],
 "Mobility & stretch":[["Pancake",2],["Pike fold",1],["Couch stretch",2],["Pigeon pose",2],["Downward dog",1],["Puppy pose",1],["Thoracic extension",1],["Doorway pec stretch",1],["Overhead lat stretch",1],["Wall angel",1],["Hip flexor lunge stretch",1],["Butterfly stretch",1],["Hamstring stretch",1],["Wrist stretch",1],["Shoulder flexion PAILs/RAILs",3],["Middle split",3],["Front split",3],["Bridge",3],["Bridge push-up",4]]
 };
 /* modifiers that keep one movement one trackable line */
@@ -1640,6 +1701,222 @@ function recentMoves(n){
     if(!seen.has(it.name)) seen.set(it.name, it);
   }));
   return [...seen.values()].slice(0, n||12);
+}
+
+/* ============================================================
+   SKILL TREES — a ladder per skill, easiest to hardest.
+   Your position is derived from what you log, not self-reported.
+   "match" lists the movement names (class log or catalog) that
+   count as evidence for a stage.
+   Handstand is fully detailed; the rest carry structure now and
+   get enriched as you train them.
+============================================================ */
+const TREES = [
+{ id:"handstand", name:"Freestanding handstand", fam:"Handstand", depth:"full",
+  goal:"A controlled 30-second freestanding handstand with a straight line.",
+  prereq:"Wrists that tolerate bodyweight, and the shoulder range to get your arms fully overhead without arching.",
+  reality:"Most people without a gymnastics background reach a 5–10 second hold in 2–4 months of near-daily practice, and 30 seconds in 4–12 months. Frequency matters far more than session length — short daily practice beats one long weekly session.",
+  stages:[
+   {n:1, name:"Own the shape on the floor", target:"Hold a clean hollow and a clean arch for 30 s",
+    match:["Hollow body hold","Plank","Arch hold (superman)","Wall plank"],
+    crit:"30 s hollow with the lower back flat, and 30 s arch without lumbar pinching.",
+    why:"If the line breaks on the floor, it will break upside down — you just cannot see it there.",
+    drills:["hollow-line","bodyline-drill","wrist-prep","scapular-pushups"]},
+   {n:2, name:"Hold the line on the wall", target:"3 × 30 s chest-to-wall with ribs closed",
+    match:["Chest-to-wall handstand","Wall walk","Back-to-wall handstand"],
+    crit:"30 s chest-to-wall, hips and ribs close to the wall, shoulders pushing tall.",
+    why:"The wall gives honest feedback. This is where your shoulder line actually gets built.",
+    drills:["wf-hold","wf-shrugs","pike-shrugs","wall-slides","oh-lat-stretch"]},
+   {n:3, name:"Find the balance point", target:"Toe pulls and heel pulls held 3–5 s",
+    match:["Toe pulls","Heel pulls","Handstand kick-up"],
+    crit:"Pull the heels off the wall with your fingers and hold 3–5 s, repeatedly and on purpose.",
+    why:"Balance is fingertip pressure, not hip correction. This is where you learn the actual mechanism.",
+    drills:["wall-toe-finger-pulls","finger-balance","kickup-practice","first-knuckle-pushups"]},
+   {n:4, name:"Freestanding holds", target:"Consistent 10 s freestanding, kick-up 8/10",
+    match:["Freestanding handstand","Handstand kick-up","Tuck handstand"],
+    crit:"Catch balance 8 times out of 10 attempts, and hold 10 s or more without a wall.",
+    why:"Entry consistency is what turns practice time into handstand time rather than kick-up time.",
+    drills:["freestanding-holds","kickup-practice","finger-balance","wf-shrugs"]},
+   {n:5, name:"Own it", target:"30 s freestanding, straight line, calm",
+    match:["Freestanding handstand","Handstand walk","Handstand pirouette","Straddle handstand"],
+    crit:"30 s held with a straight line and relaxed breathing, most attempts.",
+    why:"From here progress is shapes, walking and one-arm work rather than more mobility.",
+    drills:["freestanding-holds","free-handstand-shrug","bodyline-drill","finger-balance"]}],
+  support:{
+    strength:["Handstand shrug","Scapular push-up","Pike push-up","Hollow body hold","Plank"],
+    mobility:["Shoulder flexion PAILs/RAILs","Overhead lat stretch","Thoracic extension","Doorway pec stretch","Wrist stretch"]},
+  volume:"20–30 freestanding attempts per session, 4 days a week. Around 60–90 minutes of handstand practice across the week, split into short frequent doses.",
+  plateau:"A plateau of two weeks or more is normal. Cut volume by about 30% for a week, then build back — grinding through it usually makes it worse."},
+
+{ id:"press", name:"Press handstand", fam:"Press handstand", depth:"full",
+  goal:"Straddle press from the floor to handstand with straight arms and no jump.",
+  prereq:"A reasonably stable handstand, plus enough pancake range to get your hips over your hands.",
+  reality:"Most people need 6–12 months of dedicated work after a stable handstand. Coaches genuinely disagree on the entry point, but straddle-before-pike, elevated-before-floor and negatives-as-the-strength-driver are near universal.",
+  stages:[
+   {n:1, name:"Build compression", target:"Pancake chest low, seated pike lifts 3×10",
+    match:["Pancake","Pancake compression","Seated pike lift","Pike fold"],
+    crit:"Chest close to the floor in a flat-backed pancake, and 10 clean seated pike lifts.",
+    why:"Passive range gets your hips forward; active compression is what peels your feet off the floor.",
+    drills:["pancake","seated-pike-lifts","lsit-parallettes","hollow-line"]},
+   {n:2, name:"Own the takeoff", target:"Straddle lift-off held 5 s",
+    match:["Straddle lift-off","Press walk","L-sit","Straddle L-sit"],
+    crit:"Lift both feet off the floor from a straddle and hold 5 s with straight arms.",
+    why:"This is the press takeoff isolated. The forward shoulder lean does the work, not the legs.",
+    drills:["straddle-liftoffs","press-walks","lsit-parallettes","seated-pike-lifts"]},
+   {n:3, name:"Control the descent", target:"4+ second straddle negative, 3×3",
+    match:["Straddle press negative","Stalder press negative","Skin the cat straddle negative"],
+    crit:"Lower from handstand to floor in 4 seconds or more with locked arms, repeatedly.",
+    why:"The strongest single press builder — you build strength through the exact path you will press up.",
+    drills:["straddle-negatives","elevated-press","straddle-liftoffs","pancake"]},
+   {n:4, name:"Press from height", target:"Box press, lowering the height over months",
+    match:["Box press","Elevated press"],
+    crit:"Press smoothly from an elevated surface without jumping, and log the height each time.",
+    why:"Removes the hardest few centimetres so you can feel the real pressing action.",
+    drills:["elevated-press","straddle-negatives","press-walks","lsit-parallettes"]},
+   {n:5, name:"Full press", target:"Straddle press from the floor",
+    match:["Straddle press","Pike press","Stalder press"],
+    crit:"Floor to handstand, straight arms, no jump, more than half of attempts.",
+    why:"Pike press is the next milestone once straddle is consistent.",
+    drills:["full-straddle-press","elevated-press","straddle-negatives","pancake"]}],
+  support:{
+    strength:["L-sit","Handstand shrug","Pike push-up","Hanging leg raise","Straddle L-sit"],
+    mobility:["Pancake","Pike fold","Hamstring stretch","Shoulder flexion PAILs/RAILs","Overhead lat stretch"]},
+  volume:"2–3 press sessions a week, always at the start of a session while fresh. Compression work can be near-daily since it is low fatigue.",
+  plateau:"Height on the elevated press is the metric to watch. If it has not dropped in two months, the limiter is usually compression, not strength."},
+
+{ id:"front-lever", name:"Front lever", fam:"Front lever", depth:"structure",
+  goal:"A horizontal full-body hold under the bar with straight arms.",
+  prereq:"Solid pull-ups and a strong hollow body position.",
+  reality:"Typically a year or more from first tuck to full lever. Straight-arm strength builds slowly and tendons adapt slower than muscle — patience matters more here than effort.",
+  stages:[
+   {n:1, name:"Tuck", target:"Tuck front lever 3×10 s", match:["Tuck front lever"],
+    crit:"10 s tucked with the back parallel to the floor and arms straight.",
+    why:"Teaches straight-arm scapular retraction, which is the whole skill in miniature.",
+    drills:["hollow-line","scapular-pushups"]},
+   {n:2, name:"Advanced tuck", target:"Advanced tuck 3×8 s", match:["Advanced tuck front lever","Tuck front lever raise"],
+    crit:"Hips open toward horizontal, back flat, 8 s.",
+    why:"The first real jump in leverage.",
+    drills:["hollow-line","bodyline-drill"]},
+   {n:3, name:"One leg", target:"One-leg front lever 5 s each side", match:["One-leg front lever"],
+    crit:"5 s per side without the hips dropping.",
+    why:"Half the leverage of straddle, and it exposes side-to-side differences.",
+    drills:["hollow-line"]},
+   {n:4, name:"Straddle", target:"Straddle front lever 5 s", match:["Straddle front lever","Front lever pull-out"],
+    crit:"5 s straddled and horizontal.",
+    why:"The last step before full.",
+    drills:["pancake","hollow-line"]},
+   {n:5, name:"Full", target:"Full front lever 5 s", match:["Full front lever","Half-lay front lever","Front lever row","Ice cream maker"],
+    crit:"5 s fully extended and horizontal.",
+    why:"From here it becomes rows, pull-outs and dynamic work.",
+    drills:[]}],
+  support:{strength:["Pull-up","Weighted pull-up","Body row","Hanging leg raise","Hollow body hold","Scapular pull-up"],
+           mobility:["Thoracic extension","Overhead lat stretch","Doorway pec stretch"]},
+  volume:"2–3 sessions a week, short holds with full rest. Straight-arm work is hard on elbows — stop well before failure.",
+  plateau:"If a stage stalls for a month, add weighted pull-ups and hanging leg raises rather than more lever holds."},
+
+{ id:"muscle-up", name:"Muscle-up", fam:"Muscle-up", depth:"structure",
+  goal:"Pull to the bar and transition over it into a dip, in one movement.",
+  prereq:"Around 8–10 strict pull-ups and 8–10 dips.",
+  reality:"With the strength prerequisites in place it is often a matter of weeks, because the transition is largely technique. Without them it can be many months.",
+  stages:[
+   {n:1, name:"Strength base", target:"8 strict pull-ups, 8 dips", match:["Pull-up","Dip","Chin-up"],
+    crit:"8 strict pull-ups and 8 clean dips in a set.", why:"Below this the transition is not a technique problem, it is a strength problem.",
+    drills:["scapular-pushups"]},
+   {n:2, name:"Explosive pull", target:"Pull to sternum height", match:["High pull-up (chest to bar)","Explosive pull-up","Chest-to-bar pull-up"],
+    crit:"Pull the bar to sternum level, not just chin.", why:"You need height to have time to transition.",
+    drills:[]},
+   {n:3, name:"Learn the transition", target:"Baby or jumping muscle-up", match:["Baby muscle-up (low bar)","Jumping muscle-up","False grip hang"],
+    crit:"Get over the bar with legs assisting, repeatedly.", why:"The transition is a distinct skill and worth drilling on its own.",
+    drills:[]},
+   {n:4, name:"Negatives", target:"Slow negative muscle-up ×3", match:["Negative muscle-up"],
+    crit:"Lower from support back under the bar under control.", why:"Builds strength through the exact transition path.",
+    drills:[]},
+   {n:5, name:"Full", target:"Strict bar muscle-up", match:["Bar muscle-up","Ring muscle-up","Ring muscle-up transition"],
+    crit:"Clean muscle-up without kipping.", why:"Rings are the next step, and considerably harder.",
+    drills:[]}],
+  support:{strength:["Pull-up","Weighted pull-up","Dip","Straight-bar dip","Ring row","False grip pull-up"],
+           mobility:["Doorway pec stretch","Overhead lat stretch","Wrist stretch","Thoracic extension"]},
+  volume:"2 sessions a week. Transition practice while fresh, strength work after.",
+  plateau:"Almost always a pull-height problem. Add weighted pull-ups rather than more attempts."},
+
+{ id:"planche", name:"Planche", fam:"Planche", depth:"structure",
+  goal:"Hold the body horizontal and off the floor on straight arms.",
+  prereq:"Strong straight-arm scapular protraction, healthy wrists and elbows.",
+  reality:"One of the slowest calisthenics skills — commonly two years or more to straddle. Connective tissue is the limiting factor, so consistency beats intensity by a wide margin.",
+  stages:[
+   {n:1, name:"Lean", target:"Planche lean 3×20 s", match:["Planche lean","Pseudo planche hold","Frog stand"],
+    crit:"20 s with shoulders well past the hands and hips level.", why:"Builds the straight-arm loading the whole skill depends on.",
+    drills:["scapular-pushups","wrist-prep","first-knuckle-pushups"]},
+   {n:2, name:"Tuck", target:"Tuck planche 3×15 s", match:["Tuck planche"],
+    crit:"15 s tucked, back rounded, hips at shoulder height.", why:"First time the whole bodyweight sits on straight arms.",
+    drills:["scapular-pushups"]},
+   {n:3, name:"Advanced tuck", target:"Advanced tuck 3×10 s", match:["Advanced tuck planche"],
+    crit:"10 s with the back flat and hips opening.", why:"The step where most people stall for months. That is normal.",
+    drills:[]},
+   {n:4, name:"Straddle", target:"Straddle planche 5 s", match:["Straddle planche","One-leg planche"],
+    crit:"5 s straddled and horizontal.", why:"Requires significant additional straight-arm strength.",
+    drills:["pancake"]},
+   {n:5, name:"Full", target:"Full planche 5 s", match:["Full planche","Planche push-up"],
+    crit:"5 s fully extended.", why:"Elite level. Years, not months.",
+    drills:[]}],
+  support:{strength:["Pseudo planche push-up","Scapular push-up","Ring support hold","Dip","L-sit"],
+           mobility:["Wrist stretch","Doorway pec stretch","Thoracic extension","Shoulder flexion PAILs/RAILs"]},
+  volume:"3 sessions a week, short holds, long rests. Total time under tension per session is small — 60–90 s of actual holding.",
+  plateau:"Wrists and elbows are usually the real limiter. If they ache, reduce volume immediately rather than pushing on."},
+
+{ id:"human-flag", name:"Human flag", fam:"Human flag", depth:"structure",
+  goal:"Hold the body horizontal off a vertical pole.",
+  prereq:"Strong lateral core, plus solid pressing and pulling strength.",
+  reality:"Typically 6–18 months. Grip and the top-arm press are the usual limiters rather than core strength, which surprises most people.",
+  stages:[
+   {n:1, name:"Vertical hold", target:"Vertical flag 3×15 s", match:["Vertical flag hold"],
+    crit:"Hold the body vertical alongside the pole, feet off the ground.", why:"Teaches the press-pull setup with minimal leverage.",
+    drills:["scapular-pushups","hollow-line"]},
+   {n:2, name:"Chamber hold", target:"Tuck flag 3×10 s", match:["Chamber hold (tuck flag)","Spotted flag hold"],
+    crit:"Knees tucked, hips level with the shoulders, 10 s.", why:"First real lateral load.",
+    drills:["hollow-line","bodyline-drill"]},
+   {n:3, name:"One leg out", target:"One leg extended 5 s each side", match:["Chamber hold (tuck flag)"],
+    crit:"Extend one leg while holding position.", why:"Gradual leverage increase without jumping to straddle.",
+    drills:[]},
+   {n:4, name:"Straddle", target:"Straddle flag 5 s", match:["Straddle flag","Flag negative"],
+    crit:"5 s straddled and horizontal.", why:"Shortened lever version of the full skill.",
+    drills:["pancake"]},
+   {n:5, name:"Full", target:"Full human flag 5 s", match:["Full human flag"],
+    crit:"5 s fully extended and horizontal.", why:"From here it is holds for time and dynamic entries.",
+    drills:[]}],
+  support:{strength:["Pull-up","Dip","Side plank","Hanging leg raise","Copenhagen plank","Ring row"],
+           mobility:["Thoracic extension","Overhead lat stretch","Doorway pec stretch"]},
+  volume:"2 sessions a week, both sides evenly. Grip usually fails before the core does.",
+  plateau:"Train the top-arm press and grip separately — they are the usual limiters, not lateral core strength."}
+];
+const treeById = id => TREES.find(t=>t.id===id);
+
+/* Position on a ladder, derived from logged evidence rather than self-report. */
+function stageEvidence(tree, stage){
+  const names = (stage.match||[]).map(s=>s.toLowerCase());
+  const hits = [];
+  (state.classLogs||[]).forEach(cl=> (cl.items||[]).forEach(it=>{
+    if(names.includes((it.name||"").toLowerCase())) hits.push({date:cl.date, it:it});
+  }));
+  (state.logs||[]).forEach(l=> (l.skills||[]).forEach(s=>{
+    if(s.skill===tree.id && s.metric) hits.push({date:l.date, it:{name:tree.name, numbers:String(s.metric)}});
+  }));
+  return hits;
+}
+function treeProgress(tree){
+  const out = tree.stages.map(st=>{
+    const ev = stageEvidence(tree, st);
+    const best = ev.reduce((b,h)=>{
+      const n=(String(h.it.numbers||"").match(/\d+(\.\d+)?/g)||[]).map(Number);
+      const top=n.length?Math.max(...n):0;
+      return top>(b?b.top:0) ? {top:top, raw:h.it.numbers, date:h.date} : b;
+    }, null);
+    return {stage:st, count:ev.length, best:best, last:ev.length?ev[ev.length-1].date:null};
+  });
+  let cur = 1;
+  out.forEach(s=>{ if(s.count>0) cur = Math.max(cur, s.stage.n); });
+  const manual = (state.prefs.treeStage||{})[tree.id];
+  return {stages:out, current: manual || cur, manual: !!manual};
 }
 
 /* ---------- weekly schedule (user's real split) ---------- */
@@ -1991,7 +2268,7 @@ function show(v){
 }
 $$("nav.tabs button").forEach(b=> b.onclick=()=>show(b.dataset.v));
 function render(v){
-  ({today:renderToday, week:renderWeek, builder:renderBuilder, library:renderLibrary, progress:renderProgress})[v]();
+  ({today:renderToday, week:renderWeek, skills:renderSkills, builder:renderBuilder, library:renderLibrary, progress:renderProgress})[v]();
 }
 
 /* ============================================================
@@ -2034,108 +2311,93 @@ function streak(){
   return n;
 }
 function renderToday(){
+  const today = todayISO();
   const {plan, routine, notes} = recommendToday();
-  const tl = logByDate(todayISO());
-  const recent = state.logs.filter(l=>l.date>=todayISO(-6));
-  const line7 = avg(recent.map(l=>l.line).filter(v=>v!=null));
-  const mob7  = avg(recent.map(l=>l.mob).filter(v=>v!=null));
-  const items = applySwaps(routine.items, todayISO()).map((it,i)=>{
-    const ex = exById(it.ex); if(!ex) return "";
-    return `<div class="exi" data-open-ex="${ex.id}">
-      <div class="ic">${String(i+1).padStart(2,"0")}</div>
-      <div class="bd"><div class="nm">${esc(ex.name)}${it._swappedFrom?' <span class="tag teal">swapped</span>':''}</div>
-      <div class="mt">${it.sets}× ${it.hold&&it.hold!=="—"?esc(it.hold):esc(it.reps)}${it.note?" · "+esc(it.note):""}</div></div>
-      <span class="tag">${catAb(ex.cats[0])}</span>
-    </div>`;
-  }).join("");
+  const ov = dayOverride(today);
+  const isRest = ov && ov.type==="rest";
+  const isOwn  = ov && ov.type==="own";
+  const clsName = ov && ov.label ? ov.label
+                : isRest ? "Rest day" : isOwn ? "Own training" : plan.cls;
+  const dayLog = logByDate(today), clsLog = classLogFor(today);
+  const runDone = dayLog && (dayLog.routineId===routine.id);
+  const deskN = deskToday();
+
+  // the day's jobs
+  const jobs = [];
+  if(!isRest) jobs.push({k:"routine", nm:routine.name, mt:routine.minutes+" min · "+routine.items.length+" drills",
+    done:runDone, act:runDone?"Redo":"Start", primary:!runDone});
+  if(!isRest) jobs.push({k:"class",
+    nm: isOwn ? "Own training session" : clsName,
+    mt: clsLog ? clsLog.items.length+" exercise"+(clsLog.items.length!==1?"s":"")+" logged" : (isOwn?"Build a session and log it":"Not logged yet"),
+    done: !!clsLog, act: clsLog?"Edit":(isOwn?"Build":"Log")});
+  jobs.push({k:"checkin", nm:"Day check-in", mt: dayLog?("Line "+(dayLog.line??"–")+" · overhead "+(dayLog.mob??"–")+" · energy "+(dayLog.energy??"–")):"Shoulder line, overhead, energy",
+    done: !!dayLog, act: dayLog?"Edit":"Log"});
+  const doneN = jobs.filter(j=>j.done).length, totalN = jobs.length;
+  const pct = totalN? doneN/totalN : 0, circ = 2*Math.PI*15.5;
+
+  const row = j => `<button class="trow ${j.done?"done":""} ${j.primary?"primary":""}" data-job="${j.k}">
+      <div class="mark ${j.done?"on":""}">${j.done?ICONS.check:(j.primary?'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l11-6.5-11-6.5Z"/></svg>':"")}</div>
+      <div class="bd"><div class="nm">${esc(j.nm)}</div><div class="mt">${esc(j.mt)}</div></div>
+      <span class="go">${j.act} <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="m9 6 6 6-6 6"/></svg></span>
+    </button>`;
+
   $("#view-today").innerHTML = `
-  <div class="hero">
-    <div class="angle">${gauge(line7, 150)}</div>
-    <div class="eyebrow teal" style="max-width:60%">${new Date().toLocaleDateString(undefined,{weekday:"long", month:"long", day:"numeric"})}</div>
-    <div class="h-lg">${esc(plan.cls)}<br><span style="color:var(--teal)">${esc(plan.focus)}</span></div>
-    <div class="sub" style="margin-top:6px;max-width:75%">${esc(plan.goal)}</div>
-    <div class="wrap" style="margin-top:12px">
-      <span class="tag teal">${esc(plan.time)}</span>
-      <span class="tag">${esc(plan.fatigue)} cost</span>
-      ${tl?'<span class="tag teal">✓ logged today</span>':''}
+  <div class="thead">
+    <div class="tring">
+      <svg viewBox="0 0 36 36"><circle cx="18" cy="18" r="15.5" fill="none" stroke="var(--line)" stroke-width="3.4"/>
+        <circle cx="18" cy="18" r="15.5" fill="none" stroke="var(--teal)" stroke-width="3.4" stroke-linecap="round"
+          stroke-dasharray="${circ.toFixed(1)}" stroke-dashoffset="${(circ*(1-pct)).toFixed(1)}"/></svg>
+      <div class="lbl"><b>${doneN}/${totalN}</b><span>DONE</span></div>
     </div>
-    <div class="statgrid">
-      <div class="stat"><div class="n">${streak()||0}</div><div class="l">day streak</div></div>
-      <div class="stat"><div class="n">${r1(line7)}</div><div class="l">line ⌀ 7d</div></div>
-      <div class="stat"><div class="n">${r1(mob7)}</div><div class="l">overhead ⌀ 7d</div></div>
-    </div>
-    <div class="quick">
-      <button class="btn primary" id="q-start">${ICONS.play}Do today's routine</button>
-      <button class="btn" id="q-build">${ICONS.build}Build custom</button>
-      <button class="btn" id="q-class">${ICONS.log}Log class</button>
+    <div class="day">${new Date().toLocaleDateString(undefined,{weekday:"long", day:"numeric", month:"long"})}</div>
+    <h2>${esc(clsName)}</h2>
+    ${!isRest?`<button class="whybtn" id="t-why">${esc(plan.focus)} — why?
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 16v-4m0-4v.01"/></svg></button>
+      <div class="whybox" id="t-whybox">${esc(plan.why)}
+        ${notes.map(n=>`<div style="margin-top:8px">${esc(n)}</div>`).join("")}</div>`:""}
+    <div class="row" style="gap:8px;margin-top:12px;flex-wrap:wrap">
+      <span class="streakpill">🔥 <b>${streak()||0}</b> day streak</span>
+      <button class="streakpill" id="t-daytype" style="cursor:pointer">⇄ Change day</button>
     </div>
   </div>
 
-  <div class="sec">
-    <div class="eyebrow">Why today's block is ${routine.minutes<=5?"light":routine.minutes<=9?"short":routine.minutes<=13?"medium":"long"}</div>
-    <div class="card"><p class="sub" style="font-size:.86rem">${esc(plan.why)}</p>
-    ${notes.map(n=>`<div class="notice">${ICONS.info}<span>${esc(n)}</span></div>`).join("")}</div>
-  </div>
+  ${isRest? `<div class="notice teal" style="margin-top:16px">${ICONS.info}<span>Rest day. Nothing scheduled — desk resets below if you want them.</span></div>`:""}
 
-  <div class="sec">
-    <div class="eyebrow teal">Today's support block — ${esc(routine.name)} · ${routine.minutes} min</div>
-    <div class="exl">${items}</div>
-    <button class="btn primary block" style="margin-top:12px" id="q-start2">${ICONS.play}Start ${esc(routine.name)}</button>
-  </div>
+  <div class="eyebrow">Today</div>
+  <div class="tlist">${jobs.map(row).join("")}</div>
 
-  <div class="sec">
-    <div class="row between" style="margin-bottom:10px;gap:10px">
-      <div class="eyebrow" style="flex:1;margin:0">Today's class — ${esc(plan.cls)}</div>
-      ${classLogFor(todayISO())?'<span class="tag teal">logged</span>':''}
-    </div>
-    <div class="card">
-      ${(function(){ const cl=classLogFor(todayISO());
-        if(!cl) return `<p class="sub" style="font-size:.84rem;margin-bottom:11px">Nothing logged yet. Takes about 30 seconds — this is the part of your training that otherwise leaves no record.</p>
-          <button class="btn primary block" id="q-class2">${ICONS.log}Log today's class</button>`;
-        return `<div class="exl">${cl.items.map((it,i)=>`<div class="exi" style="padding:9px 11px">
-            <div class="ic">${i+1}</div>
-            <div class="bd"><div class="nm">${esc(it.name)}</div>
-            <div class="mt">${esc(it.numbers||"—")}${it.variation?" · "+esc(it.variation):""}${it.assist&&it.assist!=="none"?" · "+esc((ASSIST.find(a=>a[0]===it.assist)||[])[1]||""):""}</div></div>
-          </div>`).join("")}</div>
-          <button class="btn block" style="margin-top:10px" id="q-class2">Edit class log</button>`;})()}
-    </div>
-  </div>
-
-  <div class="sec">
-    <div class="row between" style="margin-bottom:10px;gap:10px">
-      <div class="eyebrow" style="flex:1;margin:0">Desk resets — 90 seconds at work</div>
-      ${deskToday()?`<span class="tag teal">${deskToday()} today</span>`:""}
-    </div>
-    <div class="card">
-      <p class="sub" style="font-size:.83rem;margin-bottom:11px">Eight hours of sitting works against your line all day. These are the counter — tracked separately, never counted against training.</p>
-      <div class="grid2">
-        ${DESK_SETS.map(s=>`<button class="btn" style="flex-direction:column;align-items:flex-start;gap:3px;padding:12px" data-desk="${s.id}">
-          <b style="font-size:.85rem">${esc(s.name)}</b><span class="tiny">${esc(s.note)}</span></button>`).join("")}
-      </div>
-    </div>
-  </div>
-
-  <div class="sec">
-    <div class="eyebrow">Optional skill work — adds on top, never replaces</div>
-    <div class="card">
-      <p class="sub" style="font-size:.84rem;margin-bottom:11px">Got extra time or an open gym today? Add a skill session below your support block.</p>
-      <div class="grid2">
-        ${SKILLS.map(s=>{
-          const lvl = skillLevel(s.id);
-          return `<button class="btn" style="flex-direction:column;align-items:flex-start;gap:3px;padding:13px" data-skill="${s.id}">
-            <b style="font-size:.88rem">${esc(s.short)}</b>
-            <span class="tiny">Level ${lvl} · ${esc((s.levels[lvl]||s.levels[1]).name)}</span>
-          </button>`;}).join("")}
-      </div>
-    </div>
+  <div class="eyebrow">Optional</div>
+  <div class="tlist">
+    <button class="trow" data-job="desk">
+      <div class="mark ${deskN?"on":"opt"}">${deskN?ICONS.check:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>'}</div>
+      <div class="bd"><div class="nm">Desk resets</div><div class="mt">${deskN?deskN+" done today":"90 seconds at work"}</div></div>
+      <span class="go">＋ Add</span>
+    </button>
+    <button class="trow" data-job="session">
+      <div class="mark opt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></div>
+      <div class="bd"><div class="nm">Build a session</div><div class="mt">Pick your own exercises</div></div>
+      <span class="go">Build</span>
+    </button>
   </div>`;
-  $("#q-start").onclick = $("#q-start2").onclick = ()=> startRoutine(routine.id);
-  $("#q-build").onclick = ()=> show("builder");
-  $("#q-class").onclick = ()=> openClassLog(todayISO());
-  const qc2=$("#q-class2"); if(qc2) qc2.onclick = ()=> openClassLog(todayISO());
-  $$("#view-today [data-skill]").forEach(b=> b.onclick=()=> openSkillPicker(b.dataset.skill));
-  $$("#view-today [data-desk]").forEach(b=> b.onclick=()=> openDeskSet(b.dataset.desk));
-  $$("#view-today [data-open-ex]").forEach(el=> el.onclick=()=> openExercise(el.dataset.openEx));
+
+  const wb=$("#t-why"); if(wb) wb.onclick=()=> $("#t-whybox").classList.toggle("on");
+  $("#t-daytype").onclick=()=> openDayOverride(today);
+  $$("#view-today [data-job]").forEach(b=> b.onclick=()=>{
+    const k=b.dataset.job;
+    if(k==="routine") startRoutine(routine.id, today);
+    else if(k==="class") isOwn? openSessionBuilder([], "Own training") : openClassLog(today);
+    else if(k==="checkin") openLogForm(today);
+    else if(k==="desk") show("today"), openDeskPicker();
+    else if(k==="session") openSessionBuilder([], "Own session");
+  });
+}
+function openDeskPicker(){
+  openSheet("Desk resets",
+    `<p class="sub" style="margin-bottom:12px">About 90 seconds. Tracked separately from training.</p>
+     <div class="exl">${DESK_SETS.map(s=>`<button class="exi" data-ds="${s.id}" style="width:100%;text-align:left;font:inherit;color:inherit">
+       <div class="bd"><div class="nm">${esc(s.name)}</div><div class="mt">${esc(s.note)}</div></div>
+       <span class="go" style="color:var(--teal);font-size:.74rem;font-weight:700">Start</span></button>`).join("")}</div>`);
+  $$("#sheet-body [data-ds]").forEach(b=> b.onclick=()=> openDeskSet(b.dataset.ds));
 }
 
 /* ---------- skill session picker + runner ---------- */
@@ -2449,7 +2711,7 @@ function openWeekDay(dow){
 /* ============================================================
    LIBRARY view — exercise cards, filters, favorites, media prefs
 ============================================================ */
-let lib = {q:"", cat:"", when:"", fat:"", fav:false, review:false, desk:false, mode:"browse"};
+let lib = {q:"", cat:"", when:"", fat:"", fav:false, review:false, desk:false, ref:false, mode:"browse"};
 function exerciseUsage(){
   const m={}; state.logs.forEach(l=> (l.done||[]).forEach(id=> m[id]=(m[id]||0)+1)); return m;
 }
@@ -2475,6 +2737,7 @@ function renderLibrary(){
       <button class="chip" id="lib-mode">↕ By progression</button>
       <button class="chip ${lib.review?"on":""}" id="lib-review">⚑ Needs review${needsReview().length?" ("+needsReview().length+")":""}</button>
       <button class="chip ${lib.desk?"on":""}" id="lib-desk">🪑 Desk</button>
+      <button class="chip ${lib.ref?"on":""}" id="lib-ref">📖 Reference</button>
       <button class="chip ${lib.fav?"on":""}" id="lib-fav">★ Favorites</button>
       ${CATS.map(c=>`<button class="chip ${lib.cat===c.id?"on":""}" data-fc="${c.id}">${c.name}</button>`).join("")}
     </div>
@@ -2497,11 +2760,25 @@ function renderLibrary(){
         <button class="fav ${state.prefs.favs.includes(e.id)?"on":""}" data-fav="${e.id}" aria-label="Favorite" style="width:34px">${ICONS.star.replace('width','w')}</button>
       </div>`;}).join("")
      : `<div class="empty">${ICONS.info}Nothing matches these filters.<br><span class="tiny">Clear a filter to widen the search.</span></div>`}
+    ${(lib.q||lib.ref)? (function(){
+       const drillNames = new Set(EX_ALL().map(x=>x.name.toLowerCase()));
+       const refs = (lib.q? searchCatalog(lib.q) : catalogFlat().slice(0,60))
+         .filter(x=> !drillNames.has(x.name.toLowerCase()));
+       if(!refs.length) return "";
+       return `<div class="eyebrow" style="margin:18px 0 9px">Reference — from the movement catalog</div>
+         <div class="exl">${refs.map(x=>`
+           <div class="exi" data-ref="${esc(x.name)}" style="opacity:.78">
+             <div class="ic" style="background:var(--surface2);color:var(--faint)">${x.lvl||"–"}</div>
+             <div class="bd"><div class="nm">${esc(x.name)}</div><div class="mt">${esc(x.fam)}</div></div>
+             <span class="tag">reference</span>
+           </div>`).join("")}</div>`;})() : ""}
     </div>`;
   $("#lib-q").oninput = e=>{ lib.q=e.target.value; renderLibrary(); $("#lib-q").focus(); const v=$("#lib-q"); v.setSelectionRange(v.value.length,v.value.length); };
   $("#lib-mode").onclick = ()=>{ lib.mode="progression"; renderLibrary(); };
   $("#lib-review").onclick = ()=>{ lib.review=!lib.review; renderLibrary(); };
   $("#lib-desk").onclick = ()=>{ lib.desk=!lib.desk; renderLibrary(); };
+  $("#lib-ref").onclick = ()=>{ lib.ref=!lib.ref; renderLibrary(); };
+  $$("#view-library [data-ref]").forEach(el=> el.onclick=()=> openRefMove(el.dataset.ref));
   $("#lib-fav").onclick = ()=>{ lib.fav=!lib.fav; renderLibrary(); };
   $$("#view-library [data-fc]").forEach(c=> c.onclick=()=>{ lib.cat = lib.cat===c.dataset.fc?"":c.dataset.fc; renderLibrary(); });
   $$("#view-library [data-fw]").forEach(c=> c.onclick=()=>{ lib.when= lib.when===c.dataset.fw?"":c.dataset.fw; renderLibrary(); });
@@ -2539,6 +2816,28 @@ function renderLibraryProgression(usage){
   $$("#view-library [data-open-ex]").forEach(el=> el.onclick=()=> openExercise(el.dataset.openEx));
 }
 
+
+function openRefMove(name){
+  const all = catalogFlat().find(x=>x.name===name) || {name:name, fam:"—", lvl:0};
+  const uses = [];
+  (state.classLogs||[]).forEach(cl=> (cl.items||[]).forEach(it=>{ if(it.name===name) uses.push({d:cl.date, n:it.numbers, a:it.assist}); }));
+  const inTrees = TREES.filter(t=> t.stages.some(s=>(s.match||[]).includes(name)) ||
+    t.support.strength.includes(name) || t.support.mobility.includes(name));
+  openSheet(name,
+   `<div class="wrap" style="margin-bottom:12px">
+      <span class="tag">${esc(all.fam)}</span>${all.lvl?`<span class="tag">Level ${all.lvl}</span>`:""}
+      <span class="tag amber">Reference only</span>
+    </div>
+    <div class="notice teal">${ICONS.info}<span>This is a catalog movement — it exists so you can log it. It has no steps or video yet. Promote it to a full drill when it becomes part of your training.</span></div>
+    ${uses.length?`<div class="sec" style="margin-top:16px"><div class="eyebrow">Your history</div>
+      <div class="card">${uses.slice(-8).reverse().map(u=>`<div class="kv"><b>${fmtDate(u.d)}</b><span>${esc(u.n||"—")}${u.a&&u.a!=="none"?" · "+esc((ASSIST.find(a=>a[0]===u.a)||[])[1]||""):""}</span></div>`).join("")}</div></div>`
+      :`<p class="tiny" style="margin-top:14px">Not logged yet.</p>`}
+    ${inTrees.length?`<div class="sec"><div class="eyebrow">Feeds into</div>
+      <div class="wrap">${inTrees.map(t=>`<button class="chip" data-gotree="${t.id}">${esc(t.name)}</button>`).join("")}</div></div>`:""}`,
+   `<button class="btn primary block" id="ref-promote">${ICONS.build}Promote to a full drill</button>`);
+  $$("#sheet-body [data-gotree]").forEach(b=> b.onclick=()=> openTree(b.dataset.gotree));
+  $("#ref-promote").onclick=()=>{ closeSheet(); show("builder"); openDrillEditor(); setTimeout(()=>{ const f=$("#dl-name"); if(f) f.value=name; },60); };
+}
 function mediaList(e){
   const list = e.media.slice();
   const custom = state.prefs.customMedia[e.id];
@@ -3271,7 +3570,9 @@ function openClassLog(date){
   const recents = recentMoves(10);
 
   openSheet((existing?"Edit class — ":"Log class — ")+fmtDate(date),
-   `<label class="f">Class</label>
+   `<label class="f">Date</label>
+    <input type="date" id="cl-date" value="${date}" max="${todayISO()}">
+    <label class="f">Class</label>
     <input type="text" id="cl-cls" value="${esc(L.cls)}" placeholder="e.g. Calisthenics skills">
 
     ${L.items.length? `<label class="f">What you did</label><div class="cllist">${L.items.map(itemRow).join("")}</div>`
@@ -3340,8 +3641,10 @@ function openClassLog(date){
     state.classLogs=(state.classLogs||[]).filter(x=>x.date!==date);
     state.meta_classU=Date.now(); save(); closeSheet(); render(curView); toast("Class log deleted"); };
   $("#cl-save").onclick=()=>{
+    const nd=$("#cl-date").value||date;
     L.cls=$("#cl-cls").value.trim()||plan.cls;
     L.notes=$("#cl-notes").value.trim();
+    if(nd!==date){ state.classLogs=(state.classLogs||[]).filter(x=>x.date!==date); L.date=nd; date=nd; }
     if(!L.items.length && !L.notes){ toast("Add at least one exercise"); return; }
     state.classLogs=(state.classLogs||[]).filter(x=>x.date!==date).concat([L]).sort((a,b)=>a.date<b.date?-1:1);
     state.meta_classU=Date.now(); save(); closeSheet(); render(curView); toast("Class logged ✓");
@@ -3363,6 +3666,199 @@ function personalBests(){
     if(!best[key] || top > best[key].top) best[key]={top:top, raw:it.numbers, date:cl.date, assist:it.assist};
   }));
   return best;
+}
+
+
+
+/* ============================================================
+   SESSION BUILDER — pick exercises, run them, log them.
+   Covers sick days, gym-closed weeks, and self-directed training.
+============================================================ */
+let sess = null;
+function openSessionBuilder(preIds, title){
+  sess = {title: title||"Own session", items:(preIds||[]).map(id=>{
+    const e=exById(id); return {name: e?e.name:id, ref:id, numbers:"", variation:"", assist:"none"};
+  }), date: todayISO()};
+  renderSessionBuilder();
+}
+function renderSessionBuilder(){
+  const rows = sess.items.map((it,i)=>`
+    <div class="clitem">
+      <div class="row between" style="gap:8px">
+        <div style="flex:1;min-width:0"><div class="nm">${i+1}. ${esc(it.name)}</div></div>
+        <button class="iconbtn" style="width:30px;height:30px" data-srm="${i}" aria-label="Remove">✕</button>
+      </div>
+      <input type="text" data-snum="${i}" value="${esc(it.numbers)}" placeholder="3×8 · 30s ×3" style="margin-top:8px;padding:9px 11px">
+    </div>`).join("");
+  openSheet("Build a session",
+   `<label class="f">Name</label><input type="text" id="ss-title" value="${esc(sess.title)}">
+    <label class="f">Date</label><input type="date" id="ss-date" value="${sess.date}" max="${todayISO()}">
+    ${sess.items.length?`<label class="f">Exercises</label><div class="cllist">${rows}</div>`
+      :`<div class="empty" style="padding:20px">${ICONS.build}Add exercises below.</div>`}
+    <div class="sec" style="margin-top:14px"><div class="eyebrow teal">Add</div>
+      <div class="searchbar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input type="text" id="ss-q" placeholder="Search drills and movements…">
+      </div>
+      <div id="ss-res"></div>
+      <div class="tiny" style="margin:12px 0 6px">Or start from a routine</div>
+      <div class="wrap">${state.routines.map(r=>`<button class="chip" data-sr="${r.id}">${esc(r.name)}</button>`).join("")}</div>
+    </div>`,
+   `<button class="btn ghost" id="ss-cancel">Close</button>
+    <button class="btn primary" style="flex:1" id="ss-save">Save session</button>`);
+  const res=$("#ss-res");
+  const show=()=>{
+    const q=$("#ss-q").value.trim().toLowerCase();
+    if(!q){ res.innerHTML=""; return; }
+    const drills = EX_ALL().filter(e=>e.name.toLowerCase().includes(q)).slice(0,8)
+      .map(e=>({name:e.name, sub:"Your drill · "+catName(e.cats[0]), ref:e.id}));
+    const moves = searchCatalog(q).slice(0,10).map(x=>({name:x.name, sub:x.fam, ref:null}));
+    const all=drills.concat(moves);
+    res.innerHTML = all.length? `<div class="exl" style="margin-top:8px">${all.map((x,i)=>`
+      <div class="exi" data-sadd="${i}" style="padding:9px 11px">
+        <div class="bd"><div class="nm">${esc(x.name)}</div><div class="mt">${esc(x.sub)}</div></div>
+      </div>`).join("")}</div>` : `<p class="tiny" style="margin-top:10px">Nothing found.</p>`;
+    res.querySelectorAll("[data-sadd]").forEach(b=> b.onclick=()=>{
+      const x=all[+b.dataset.sadd];
+      sess.items.push({name:x.name, ref:x.ref, numbers:"", variation:"", assist:"none"});
+      sess.title=$("#ss-title").value; sess.date=$("#ss-date").value; renderSessionBuilder();
+    });
+  };
+  $("#ss-q").oninput=show;
+  $$("#sheet-body [data-srm]").forEach(b=> b.onclick=()=>{ sess.items.splice(+b.dataset.srm,1); renderSessionBuilder(); });
+  $$("#sheet-body [data-snum]").forEach(inp=> inp.oninput=e=> sess.items[+inp.dataset.snum].numbers=e.target.value);
+  $$("#sheet-body [data-sr]").forEach(b=> b.onclick=()=>{
+    const r=routineById(b.dataset.sr);
+    r.items.forEach(it=>{ const e=exById(it.ex); if(e) sess.items.push({name:e.name, ref:e.id,
+      numbers:(it.sets+"×"+(it.hold&&it.hold!=="—"?it.hold:it.reps)), variation:"", assist:"none"}); });
+    renderSessionBuilder();
+  });
+  $("#ss-cancel").onclick=closeSheet;
+  $("#ss-save").onclick=()=>{
+    if(!sess.items.length){ toast("Add at least one exercise"); return; }
+    const d=$("#ss-date").value||todayISO();
+    const entry={date:d, cls:$("#ss-title").value.trim()||"Own session", items:sess.items.map(x=>({
+      name:x.name, variation:x.variation||"", assist:x.assist||"none", numbers:x.numbers||""})), notes:"", own:true};
+    state.classLogs=(state.classLogs||[]).filter(x=>x.date!==d).concat([entry]).sort((a,b)=>a.date<b.date?-1:1);
+    state.meta_classU=Date.now(); save(); closeSheet(); render(curView); toast("Session logged ✓");
+  };
+}
+/* ---------- day override ---------- */
+function dayOverride(date){ return (state.prefs.dayType||{})[date||todayISO()] || null; }
+function setDayOverride(date, type, label){
+  state.prefs.dayType = state.prefs.dayType||{};
+  if(type) state.prefs.dayType[date] = {type:type, label:label||""};
+  else delete state.prefs.dayType[date];
+  save();
+}
+function openDayOverride(date){
+  const cur = dayOverride(date);
+  const plan = planFor(new Date(date+"T12:00:00").getDay());
+  openSheet("What kind of day is this?",
+   `<p class="sub" style="margin-bottom:12px">${fmtDate(date)} — normally <b>${esc(plan.cls)}</b>.</p>
+    <div class="exl">
+      ${[["","As scheduled",plan.cls],
+         ["other","Different class","Swapped for another class"],
+         ["own","Own training","No class — training on your own"],
+         ["rest","Rest day","Not training today"]].map(o=>`
+        <button class="exi" data-dt="${o[0]}" style="width:100%;text-align:left;font:inherit;color:inherit;${(cur?cur.type:"")===o[0]?"border-color:var(--teal)":""}">
+          <div class="bd"><div class="nm">${o[1]}</div><div class="mt">${esc(o[2])}</div></div>
+          ${(cur?cur.type:"")===o[0]?'<span class="tag teal">now</span>':""}
+        </button>`).join("")}
+    </div>
+    <label class="f">Label (optional)</label>
+    <input type="text" id="dt-label" placeholder="e.g. Skills class instead" value="${esc(cur&&cur.label||"")}">`,
+   `<button class="btn primary block" id="dt-done">Done</button>`);
+  $$("#sheet-body [data-dt]").forEach(b=> b.onclick=()=>{
+    setDayOverride(date, b.dataset.dt, $("#dt-label").value.trim());
+    closeSheet(); render(curView); toast("Day updated");
+  });
+  $("#dt-done").onclick=()=>{ setDayOverride(date, (cur?cur.type:""), $("#dt-label").value.trim()); closeSheet(); render(curView); };
+}
+
+/* ============================================================
+   SKILLS view — ladders, position from logged evidence
+============================================================ */
+let skillOpen = null;
+function renderSkills(){
+  const cards = TREES.map(t=>{
+    const p = treeProgress(t);
+    const st = t.stages.find(s=>s.n===p.current) || t.stages[0];
+    const pct = Math.round(((p.current-1)/(t.stages.length-1))*100);
+    return `<div class="card" data-tree="${t.id}" style="cursor:pointer">
+      <div class="row between" style="gap:10px">
+        <div style="flex:1;min-width:0">
+          <div class="h-md">${esc(t.name)}</div>
+          <div class="sub" style="font-size:.79rem;margin-top:2px">Stage ${p.current} of ${t.stages.length} · ${esc(st.name)}</div>
+        </div>
+        ${t.depth==="full"?'<span class="tag teal">detailed</span>':'<span class="tag">outline</span>'}
+      </div>
+      <div class="ladder">${t.stages.map(s=>`<i class="${s.n<p.current?"done":s.n===p.current?"now":""}"></i>`).join("")}</div>
+      <div class="row between" style="margin-top:7px"><span class="tiny">${pct}% through the ladder</span>
+        <span class="tiny">${p.manual?"set by you":"from your logs"}</span></div>
+    </div>`;}).join("");
+  $("#view-skills").innerHTML = `
+    <div class="eyebrow teal" style="margin-bottom:10px">Skills — where you are on each</div>
+    ${cards}
+    <div class="notice teal" style="margin-top:14px">${ICONS.info}<span>Your stage is worked out from what you log in class. Log a movement and the ladder moves on its own.</span></div>`;
+  $$("#view-skills [data-tree]").forEach(el=> el.onclick=()=> openTree(el.dataset.tree));
+}
+function openTree(id){
+  const t = treeById(id); if(!t) return;
+  const p = treeProgress(t);
+  openSheet(t.name,
+   `<p class="sub" style="font-size:.88rem;margin-bottom:10px">${esc(t.goal)}</p>
+    <div class="notice teal">${ICONS.info}<span><b>Prerequisites:</b> ${esc(t.prereq)}</span></div>
+
+    <div class="sec" style="margin-top:16px"><div class="eyebrow teal">The ladder</div>
+      ${t.stages.map(s=>{
+        const info = p.stages.find(x=>x.stage.n===s.n);
+        const state_ = s.n<p.current?"done":s.n===p.current?"now":"todo";
+        return `<div class="stg ${state_}">
+          <div class="stgn">${s.n}</div>
+          <div class="stgb">
+            <div class="row between" style="gap:8px"><b>${esc(s.name)}</b>
+              ${info.count?`<span class="tag teal">${info.count}× logged</span>`:""}</div>
+            <div class="tiny" style="margin-top:2px">Target: ${esc(s.target)}</div>
+            ${info.best?`<div class="tiny" style="color:var(--teal);margin-top:3px">Best: ${esc(info.best.raw)} · ${fmtDate(info.best.date)}</div>`:""}
+            <div class="sub" style="font-size:.79rem;margin-top:6px">${esc(s.crit)}</div>
+            ${state_==="now"?`<div class="tiny" style="margin-top:6px;font-style:italic">${esc(s.why)}</div>`:""}
+            ${s.drills.length?`<div class="wrap" style="margin-top:8px">${s.drills.map(d=>{const e=exById(d);return e?`<button class="chip" data-drill="${d}">${esc(e.name)}</button>`:"";}).join("")}</div>`:""}
+          </div></div>`;}).join("")}
+    </div>
+
+    <div class="sec"><div class="eyebrow">Supporting work</div>
+      <div class="card"><div class="tiny" style="font-weight:700;margin-bottom:6px">Strength</div>
+        <div class="wrap">${t.support.strength.map(s=>`<span class="tag">${esc(s)}</span>`).join("")}</div>
+        <div class="tiny" style="font-weight:700;margin:12px 0 6px">Mobility</div>
+        <div class="wrap">${t.support.mobility.map(s=>`<span class="tag">${esc(s)}</span>`).join("")}</div>
+      </div>
+    </div>
+
+    <div class="sec"><div class="eyebrow">Realistic expectations</div>
+      <div class="card">
+        <p class="sub" style="font-size:.83rem">${esc(t.reality)}</p>
+        <div class="kv" style="margin-top:10px"><b>Volume</b><span>${esc(t.volume)}</span></div>
+        <div class="kv"><b>If you plateau</b><span>${esc(t.plateau)}</span></div>
+      </div>
+    </div>
+
+    <div class="sec"><div class="eyebrow">Stage</div>
+      <p class="tiny" style="margin-bottom:8px">Worked out from your logs. Override if it is wrong.</p>
+      <div class="wrap">${t.stages.map(s=>`<button class="chip ${s.n===p.current?"on":""}" data-setstage="${s.n}">${s.n}</button>`).join("")}
+        ${p.manual?'<button class="chip" data-setstage="auto">↺ auto</button>':""}</div>
+    </div>`,
+   `<button class="btn primary block" id="tree-build">${ICONS.build}Build a session from this</button>`);
+  $$("#sheet-body [data-drill]").forEach(b=> b.onclick=()=> openExercise(b.dataset.drill, ()=>openTree(id)));
+  $$("#sheet-body [data-setstage]").forEach(b=> b.onclick=()=>{
+    state.prefs.treeStage = state.prefs.treeStage||{};
+    if(b.dataset.setstage==="auto") delete state.prefs.treeStage[id];
+    else state.prefs.treeStage[id] = +b.dataset.setstage;
+    save(); openTree(id); render(curView); });
+  $("#tree-build").onclick=()=>{
+    const st = t.stages.find(s=>s.n===p.current)||t.stages[0];
+    openSessionBuilder(st.drills.slice(), t.name+" — stage "+p.current);
+  };
 }
 
 /* ============================================================
@@ -3631,7 +4127,9 @@ function renderProgress(){
          return keys.slice(0,14).map(k=>`<div class="kv"><b>${esc(k)}</b><span>${esc(pb[k].raw)} · ${fmtDate(pb[k].date)}</span></div>`).join("");
        })()}
      </div></div>
-   <div class="sec"><div class="eyebrow">Class history</div>
+   <div class="sec"><div class="row between" style="margin-bottom:10px;gap:10px">
+       <div class="eyebrow" style="flex:1;margin:0">Class history</div>
+       <button class="btn small" id="pg-addclass">＋ Log a past day</button></div>
      <div class="card">
        ${(state.classLogs||[]).length
          ? (state.classLogs||[]).slice(-10).reverse().map(cl=>`<div class="kv" data-editcl="${cl.date}" style="cursor:pointer">
@@ -3688,6 +4186,7 @@ function renderProgress(){
   $("#ms-add").onclick=()=>{ const v=$("#ms-text").value.trim(); if(!v) return; state.milestones.push({date:todayISO(),text:v}); state.meta_milestonesU=Date.now(); save(); renderProgress(); };
   $$("#view-progress [data-editlog]").forEach(el=> el.onclick=()=> openLogForm(el.dataset.editlog));
   $$("#view-progress [data-editcl]").forEach(el=> el.onclick=()=> openClassLog(el.dataset.editcl));
+  const pac=$("#pg-addclass"); if(pac) pac.onclick=()=> openClassLog(todayISO(-1));
 }
 function loadDemo(){
   const rids=["r-prep-a","r-reset","r-opener","r-prep-b","r-opener","r-long","r-recovery"];
