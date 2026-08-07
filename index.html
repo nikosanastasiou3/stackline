@@ -332,6 +332,10 @@ ul.bul{padding-left:18px;font-size:.85rem;line-height:1.6}
 .navrow[data-go="none"]{opacity:.6;cursor:default}
 
 
+.cllist{display:flex;flex-direction:column;gap:10px}
+.clitem{background:var(--surface2);border:1px solid var(--line);border-radius:12px;padding:11px 12px}
+.clitem .nm{font-weight:600;font-size:.87rem}
+
 .musclebox{background:var(--surface2);border:1px solid var(--line);border-radius:14px;padding:10px}
 .mmviews{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .mmviews>div{background:var(--surface);border-radius:11px;padding:6px;min-height:150px}
@@ -1588,6 +1592,56 @@ function parseTime(t){
   const m=t.match(/^(\d+):(\d{1,2})$/); return m? (+m[1])*60+(+m[2]) : 0;
 }
 
+/* ============================================================
+   CALISTHENICS CATALOG — for class logging.
+   Lightweight on purpose: name + family + progression order.
+   Full coaching detail lives on the 46 training drills instead.
+   Variations are modifiers (banded, weighted, tuck…) so the same
+   movement stays one trackable line as it progresses.
+============================================================ */
+const CATALOG = {
+"Pull — bar":[["Dead hang",1],["Active hang",1],["Scapular pull-up",1],["Arch hang",2],["Negative pull-up",2],["Pull-up",3],["Chin-up",3],["Commando pull-up",3],["Wide-grip pull-up",4],["L-sit pull-up",4],["Archer pull-up",4],["Typewriter pull-up",4],["Weighted pull-up",4],["One-arm pull-up negative",5],["One-arm pull-up",5],["Bar pullover",3],["Chest-to-bar pull-up",4],["Kipping pull-up",2]],
+"Pull — rows":[["Incline body row",1],["Body row",2],["Feet-elevated body row",3],["Wide body row",3],["Archer body row",4],["One-arm body row",5],["Ring row",2],["Front lever row",5]],
+"Push — floor":[["Incline push-up",1],["Knee push-up",1],["Push-up",2],["Diamond push-up",3],["Wide push-up",2],["Decline push-up",3],["Archer push-up",4],["Pseudo planche push-up",4],["One-arm push-up negative",4],["One-arm push-up",5],["Explosive push-up",3],["Clap push-up",4],["Ring push-up",3]],
+"Push — dips":[["Bench dip",1],["Support hold (bars)",1],["Negative dip",2],["Dip",3],["Weighted dip",4],["Ring support hold",2],["Ring dip",4],["Bulgarian dip",5],["Straight-bar dip",3]],
+"Push — vertical":[["Pike push-up",2],["Feet-elevated pike push-up",3],["Wall-supported HSPU negative",3],["Wall handstand push-up",4],["Deficit wall HSPU",5],["Freestanding HSPU",5],["Wall walk",2]],
+"Muscle-up":[["High pull-up (chest to bar)",4],["Explosive pull-up",4],["Baby muscle-up (low bar)",3],["Jumping muscle-up",3],["Negative muscle-up",4],["Bar muscle-up",5],["Ring muscle-up transition",4],["Ring muscle-up",5],["False grip hang",3],["False grip pull-up",4]],
+"Front lever":[["Tuck front lever",2],["Tuck front lever raise",3],["Advanced tuck front lever",3],["One-leg front lever",4],["Straddle front lever",4],["Half-lay front lever",5],["Full front lever",5],["Front lever pull-out",4],["Ice cream maker",5]],
+"Back lever":[["Skin the cat",2],["Tuck back lever",3],["Advanced tuck back lever",3],["One-leg back lever",4],["Straddle back lever",4],["Full back lever",5],["German hang",2],["Skin the cat straddle negative",3]],
+"Planche":[["Planche lean",2],["Frog stand",2],["Tuck planche",3],["Advanced tuck planche",4],["One-leg planche",4],["Straddle planche",5],["Full planche",5],["Planche push-up",5],["Pseudo planche hold",3]],
+"Human flag":[["Vertical flag hold",2],["Chamber hold (tuck flag)",3],["Spotted flag hold",3],["Straddle flag",4],["Full human flag",5],["Flag negative",4]],
+"Handstand":[["Wall plank",1],["Chest-to-wall handstand",2],["Back-to-wall handstand",2],["Handstand kick-up",2],["Toe pulls",3],["Heel pulls",3],["Freestanding handstand",3],["Handstand shrug",3],["Handstand walk",4],["Tuck handstand",3],["Straddle handstand",4],["One-arm handstand prep",5],["Handstand pirouette",4]],
+"Press handstand":[["Pancake compression",2],["Seated pike lift",2],["Straddle lift-off",3],["Press walk",3],["Box press",3],["Straddle press negative",3],["Stalder press negative",4],["Straddle press",4],["Pike press",5],["Stalder press",5],["Elevated press",3]],
+"Core — compression":[["Hollow body hold",1],["Hollow rock",2],["Tuck L-sit",2],["One-leg L-sit",2],["L-sit",3],["Straddle L-sit",4],["V-sit",5],["Manna",5],["Toes to bar",3],["Hanging leg raise",3],["Hanging knee raise",2],["Windshield wipers",4]],
+"Core — other":[["Plank",1],["Side plank",1],["Arch hold (superman)",1],["Dragon flag negative",4],["Dragon flag",5],["Ab wheel from knees",3],["Ab wheel standing",5],["Dead bug",1],["Copenhagen plank",3],["Hanging windshield wipers",5]],
+"Legs & glutes":[["Bodyweight squat",1],["Split squat",2],["Bulgarian split squat",3],["Pistol squat negative",3],["Pistol squat",4],["Shrimp squat",4],["Glute bridge",1],["Single-leg glute bridge",2],["Hip thrust",2],["Weighted hip thrust",3],["Nordic curl negative",4],["Nordic curl",5],["Reverse lunge",2],["Walking lunge",2],["Step-up",2],["Calf raise",1],["Single-leg deadlift",2],["Frog pump",1],["Fire hydrant",1],["Clamshell",1],["Kickback",1],["Banded lateral walk",1],["Curtsy lunge",2],["Sumo squat",1],["Jump squat",3],["Wall sit",1]],
+"Rings":[["Ring support hold",2],["Ring row",2],["Ring push-up",3],["Ring dip",4],["Ring L-sit",4],["Skin the cat",2],["German hang",2],["Ring turned-out support",4],["Ring flye",4],["Ring archer row",4]],
+"Warm-up & prep":[["Band pull-apart",1],["Band dislocate",1],["Shoulder dislocate (stick)",1],["Arm circles",1],["Wrist circles",1],["Scapular push-up",1],["Scapular pull-up",1],["Cat-cow",1],["Jumping jacks",1],["Bodyweight squat",1],["Hip circles",1],["Leg swings",1],["Inchworm",1],["World's greatest stretch",1],["Band face pull",1],["Ring support scap work",2]],
+"Mobility & stretch":[["Pancake",2],["Pike fold",1],["Couch stretch",2],["Pigeon pose",2],["Downward dog",1],["Puppy pose",1],["Thoracic extension",1],["Doorway pec stretch",1],["Overhead lat stretch",1],["Wall angel",1],["Hip flexor lunge stretch",1],["Butterfly stretch",1],["Hamstring stretch",1],["Wrist stretch",1],["Shoulder flexion PAILs/RAILs",3],["Middle split",3],["Front split",3],["Bridge",3],["Bridge push-up",4]]
+};
+/* modifiers that keep one movement one trackable line */
+const VARIATIONS = ["strict","banded (assist)","banded (resist)","weighted","tempo / slow","negative only","tuck","advanced tuck","one leg","straddle","half lay","full","paused","explosive","rings","parallettes","elevated","deficit","assisted","spotted","one arm","L-sit","archer","false grip","wide grip","close grip"];
+const ASSIST = [["none","Unassisted"],["light","Light spot"],["heavy","Heavy spot"],["band","Band assist"],["box","Box / elevated"]];
+function catalogFlat(){
+  const out=[];
+  Object.keys(CATALOG).forEach(fam=> CATALOG[fam].forEach(x=> out.push({name:x[0], lvl:x[1], fam:fam})));
+  (state.customMoves||[]).forEach(m=> out.push({name:m.name, lvl:m.lvl||0, fam:m.fam||"Mine", custom:true}));
+  return out;
+}
+function searchCatalog(q){
+  const s=(q||"").toLowerCase().trim();
+  const all=catalogFlat();
+  if(!s) return [];
+  return all.filter(x=> x.name.toLowerCase().includes(s) || x.fam.toLowerCase().includes(s)).slice(0,24);
+}
+function recentMoves(n){
+  const seen=new Map();
+  (state.classLogs||[]).slice().reverse().forEach(cl=> (cl.items||[]).forEach(it=>{
+    if(!seen.has(it.name)) seen.set(it.name, it);
+  }));
+  return [...seen.values()].slice(0, n||12);
+}
+
 /* ---------- weekly schedule (user's real split) ---------- */
 const SCHEDULE = [
  {dow:0, day:"Sunday",    cls:"Optional recovery / rest", focus:"Recovery flow (optional)", time:"8 min",  fatigue:"Very low", goal:"Restore tissue, keep the overhead pattern warm", routine:"r-recovery",
@@ -1685,6 +1739,8 @@ let state = {
   routines: seedRoutines(),
   customDrills: [],
   deskLogs: [],
+  classLogs: [],   // {date, cls, items:[{name,variation,assist,numbers}], notes}
+  customMoves: [],
   daySwaps: {},   // {"YYYY-MM-DD": {originalExId: replacementExId}} — today only, never edits the routine
   logs: [],            // {date, routineId, done:[exIds], dosage:{}, line, mob, energy, tight:[], pain, notes, mediaNote}
   milestones: [],      // {date, text}
@@ -1703,6 +1759,7 @@ async function loadState(){
     state.customDrills = d.customDrills||[]; state.meta_drillsU = d.meta_drillsU||0;
     state.deskLogs = d.deskLogs||[]; state.meta_deskU = d.meta_deskU||0;
     state.daySwaps = d.daySwaps||{};
+    state.classLogs = d.classLogs||[]; state.customMoves = d.customMoves||[]; state.meta_classU = d.meta_classU||0;
     state.prefs = Object.assign(state.prefs, d.prefs||{});
     if(Array.isArray(d.routines)){
       // keep seeds fresh but preserve user edits/custom routines
@@ -1718,7 +1775,7 @@ async function loadState(){
 // (only present inside Claude's own preview) is best-effort and fire-and-forget on top.
 function saveLocalOnly(){
   const raw = JSON.stringify({routines:state.routines, logs:state.logs, milestones:state.milestones,
-                              prefs:state.prefs, customDrills:state.customDrills, deskLogs:state.deskLogs, meta_deskU:state.meta_deskU, daySwaps:state.daySwaps,
+                              prefs:state.prefs, customDrills:state.customDrills, deskLogs:state.deskLogs, meta_deskU:state.meta_deskU, daySwaps:state.daySwaps, classLogs:state.classLogs, customMoves:state.customMoves, meta_classU:state.meta_classU,
                               meta_routinesU:state.meta_routinesU, meta_milestonesU:state.meta_milestonesU, meta_drillsU:state.meta_drillsU});
   try{ localStorage.setItem(SKEY, raw); }catch(e){}
   try{ if(window.storage && window.storage.set){ window.storage.set(SKEY, raw).catch(()=>{}); } }catch(e){}
@@ -1768,7 +1825,9 @@ function metaBlob(){
     milestones: {data: state.milestones, u: state.meta_milestonesU || Date.now()},
     customDrills:{data: state.customDrills, u: state.meta_drillsU || Date.now()},
     deskLogs:   {data: state.deskLogs,    u: state.meta_deskU   || Date.now()},
-    daySwaps:   {data: state.daySwaps,    u: state.meta_deskU   || Date.now()}
+    daySwaps:   {data: state.daySwaps,    u: state.meta_deskU   || Date.now()},
+    classLogs:  {data: state.classLogs,   u: state.meta_classU  || Date.now()},
+    customMoves:{data: state.customMoves, u: state.meta_classU  || Date.now()}
   };
 }
 async function syncPush(){
@@ -1812,6 +1871,10 @@ async function syncPull(){
         state.deskLogs = cloud.deskLogs.data||[]; state.meta_deskU = cloud.deskLogs.u;
       }
       if(cloud.daySwaps) state.daySwaps = Object.assign({}, cloud.daySwaps.data||{}, state.daySwaps||{});
+      if(cloud.classLogs && (cloud.classLogs.u||0) > (state.meta_classU||0)){
+        state.classLogs = cloud.classLogs.data||[]; state.meta_classU = cloud.classLogs.u;
+      }
+      if(cloud.customMoves && (cloud.customMoves.u||0) > (state.meta_classU||0)) state.customMoves = cloud.customMoves.data||[];
       saveLocalOnly(); takeSnapshot(); applyTheme(); render(curView);
     }
     SYNC.last=Date.now(); SYNC.err=null;
@@ -2004,7 +2067,7 @@ function renderToday(){
     <div class="quick">
       <button class="btn primary" id="q-start">${ICONS.play}Do today's routine</button>
       <button class="btn" id="q-build">${ICONS.build}Build custom</button>
-      <button class="btn" id="q-yday">${ICONS.log}Log yesterday</button>
+      <button class="btn" id="q-class">${ICONS.log}Log class</button>
     </div>
   </div>
 
@@ -2018,6 +2081,24 @@ function renderToday(){
     <div class="eyebrow teal">Today's support block — ${esc(routine.name)} · ${routine.minutes} min</div>
     <div class="exl">${items}</div>
     <button class="btn primary block" style="margin-top:12px" id="q-start2">${ICONS.play}Start ${esc(routine.name)}</button>
+  </div>
+
+  <div class="sec">
+    <div class="row between" style="margin-bottom:10px;gap:10px">
+      <div class="eyebrow" style="flex:1;margin:0">Today's class — ${esc(plan.cls)}</div>
+      ${classLogFor(todayISO())?'<span class="tag teal">logged</span>':''}
+    </div>
+    <div class="card">
+      ${(function(){ const cl=classLogFor(todayISO());
+        if(!cl) return `<p class="sub" style="font-size:.84rem;margin-bottom:11px">Nothing logged yet. Takes about 30 seconds — this is the part of your training that otherwise leaves no record.</p>
+          <button class="btn primary block" id="q-class2">${ICONS.log}Log today's class</button>`;
+        return `<div class="exl">${cl.items.map((it,i)=>`<div class="exi" style="padding:9px 11px">
+            <div class="ic">${i+1}</div>
+            <div class="bd"><div class="nm">${esc(it.name)}</div>
+            <div class="mt">${esc(it.numbers||"—")}${it.variation?" · "+esc(it.variation):""}${it.assist&&it.assist!=="none"?" · "+esc((ASSIST.find(a=>a[0]===it.assist)||[])[1]||""):""}</div></div>
+          </div>`).join("")}</div>
+          <button class="btn block" style="margin-top:10px" id="q-class2">Edit class log</button>`;})()}
+    </div>
   </div>
 
   <div class="sec">
@@ -2050,7 +2131,8 @@ function renderToday(){
   </div>`;
   $("#q-start").onclick = $("#q-start2").onclick = ()=> startRoutine(routine.id);
   $("#q-build").onclick = ()=> show("builder");
-  $("#q-yday").onclick  = ()=> openLogForm(todayISO(-1));
+  $("#q-class").onclick = ()=> openClassLog(todayISO());
+  const qc2=$("#q-class2"); if(qc2) qc2.onclick = ()=> openClassLog(todayISO());
   $$("#view-today [data-skill]").forEach(b=> b.onclick=()=> openSkillPicker(b.dataset.skill));
   $$("#view-today [data-desk]").forEach(b=> b.onclick=()=> openDeskSet(b.dataset.desk));
   $$("#view-today [data-open-ex]").forEach(el=> el.onclick=()=> openExercise(el.dataset.openEx));
@@ -3150,6 +3232,139 @@ function howTo(id){
   return HOWTO[id]||null;
 }
 
+
+/* ============================================================
+   CLASS LOG — the 80% of training that happens in class.
+   Designed for ~30 seconds on a phone, tired, after a session.
+============================================================ */
+const classLogFor = d => (state.classLogs||[]).find(x=>x.date===d);
+function openClassLog(date){
+  date = date || todayISO();
+  const existing = classLogFor(date);
+  const plan = planFor(new Date(date+"T12:00:00").getDay());
+  const L = existing ? JSON.parse(JSON.stringify(existing))
+                     : {date:date, cls:plan.cls, items:[], notes:""};
+  let picking = false, query = "";
+
+  const itemRow = (it,i)=> `
+    <div class="clitem">
+      <div class="row between" style="gap:8px">
+        <div style="flex:1;min-width:0">
+          <div class="nm">${i+1}. ${esc(it.name)}${it.unnamed?' <span class="tag amber">name later</span>':''}</div>
+          ${it.variation?`<div class="tiny">${esc(it.variation)}</div>`:""}
+        </div>
+        <button class="iconbtn" style="width:30px;height:30px" data-rm="${i}" aria-label="Remove">✕</button>
+      </div>
+      <div class="row" style="gap:7px;margin-top:8px;flex-wrap:wrap">
+        <input type="text" data-num="${i}" value="${esc(it.numbers||"")}" placeholder="3×3 · 20s each side ×3" style="flex:1;min-width:130px;padding:9px 11px">
+      </div>
+      <div class="chiprow" style="margin-top:7px;padding-bottom:2px">
+        ${ASSIST.map(a=>`<button class="chip ${((it.assist||"none")===a[0])?"on":""}" data-as="${i}|${a[0]}">${a[1]}</button>`).join("")}
+      </div>
+      <div class="chiprow" style="padding-bottom:2px">
+        ${VARIATIONS.slice(0,10).map(v=>`<button class="chip ${it.variation===v?"on":""}" data-va="${i}|${v}">${v}</button>`).join("")}
+        <button class="chip" data-vmore="${i}">more…</button>
+      </div>
+    </div>`;
+
+  const results = picking ? searchCatalog(query) : [];
+  const recents = recentMoves(10);
+
+  openSheet((existing?"Edit class — ":"Log class — ")+fmtDate(date),
+   `<label class="f">Class</label>
+    <input type="text" id="cl-cls" value="${esc(L.cls)}" placeholder="e.g. Calisthenics skills">
+
+    ${L.items.length? `<label class="f">What you did</label><div class="cllist">${L.items.map(itemRow).join("")}</div>`
+      : `<div class="empty" style="padding:20px">${ICONS.build}Nothing added yet.</div>`}
+
+    <div class="sec" style="margin-top:14px"><div class="eyebrow teal">Add an exercise</div>
+      <div class="searchbar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input type="text" id="cl-q" placeholder="Search ${catalogFlat().length} movements…" value="${esc(query)}">
+      </div>
+      <div id="cl-res"></div>
+      ${recents.length? `<div class="tiny" style="margin:10px 0 6px">Recently used</div>
+        <div class="wrap">${recents.map(r=>`<button class="chip" data-add="${esc(r.name)}">${esc(r.name)}</button>`).join("")}</div>`:""}
+      <div class="row" style="margin-top:10px;gap:8px">
+        <button class="btn small" id="cl-unnamed">＋ Add one I can't name</button>
+      </div>
+    </div>
+
+    <label class="f">Notes</label>
+    <textarea id="cl-notes" placeholder="How it felt, what the coach corrected…">${esc(L.notes||"")}</textarea>`,
+   `${existing?'<button class="btn danger" id="cl-del">Delete</button>':""}
+    <button class="btn primary" style="flex:1" id="cl-save">Save class</button>`);
+
+  const rerender = ()=>{ closeSheet(); state._clDraft = L; openClassLogFrom(L, date, existing); };
+  const add = (name, unnamed)=>{ L.items.push({name:name, variation:"", assist:"none", numbers:"", unnamed:!!unnamed}); rerender(); };
+
+  const resBox = $("#cl-res");
+  const showResults = ()=>{
+    const q = $("#cl-q").value;
+    const r = searchCatalog(q);
+    if(!q.trim()){ resBox.innerHTML=""; return; }
+    resBox.innerHTML = r.length
+      ? `<div class="exl" style="margin-top:8px">${r.map(x=>`
+          <div class="exi" data-add="${esc(x.name)}" style="padding:9px 11px">
+            <div class="bd"><div class="nm">${esc(x.name)}</div><div class="mt">${esc(x.fam)}</div></div>
+            ${x.lvl?`<span class="tag">Lv ${x.lvl}</span>`:""}
+          </div>`).join("")}</div>`
+      : `<div class="tiny" style="margin-top:10px">No match. <button class="btn small" id="cl-new">Add “${esc(q)}” as a new movement</button></div>`;
+    resBox.querySelectorAll("[data-add]").forEach(b=> b.onclick=()=> add(b.dataset.add));
+    const nb=resBox.querySelector("#cl-new");
+    if(nb) nb.onclick=()=>{
+      const nm=$("#cl-q").value.trim();
+      state.customMoves=(state.customMoves||[]).concat([{name:nm, fam:"Mine", lvl:0}]);
+      state.meta_classU=Date.now(); save(); add(nm);
+    };
+  };
+  $("#cl-q").oninput = showResults;
+  $$("#sheet-body [data-add]").forEach(b=> b.onclick=()=> add(b.dataset.add));
+  $("#cl-unnamed").onclick = ()=> add("Unnamed drill — describe in notes", true);
+  $$("#sheet-body [data-rm]").forEach(b=> b.onclick=()=>{ L.items.splice(+b.dataset.rm,1); rerender(); });
+  $$("#sheet-body [data-num]").forEach(inp=> inp.oninput=e=> L.items[+inp.dataset.num].numbers=e.target.value);
+  $$("#sheet-body [data-as]").forEach(b=> b.onclick=()=>{
+    const [i,v]=b.dataset.as.split("|"); L.items[+i].assist=v; rerender(); });
+  $$("#sheet-body [data-va]").forEach(b=> b.onclick=()=>{
+    const [i,v]=b.dataset.va.split("|"); const it=L.items[+i];
+    it.variation = it.variation===v ? "" : v; rerender(); });
+  $$("#sheet-body [data-vmore]").forEach(b=> b.onclick=()=>{
+    const i=+b.dataset.vmore;
+    openSheet("Variation", `<div class="wrap">${VARIATIONS.map(v=>`<button class="chip ${L.items[i].variation===v?"on":""}" data-vv="${v}">${v}</button>`).join("")}</div>`,
+      `<button class="btn primary block" id="vv-done">Done</button>`, ()=>rerender());
+    $$("#sheet-body [data-vv]").forEach(x=> x.onclick=()=>{
+      L.items[i].variation = L.items[i].variation===x.dataset.vv ? "" : x.dataset.vv; rerender(); });
+    $("#vv-done").onclick=()=>rerender();
+  });
+  if(existing) $("#cl-del").onclick=()=>{
+    state.classLogs=(state.classLogs||[]).filter(x=>x.date!==date);
+    state.meta_classU=Date.now(); save(); closeSheet(); render(curView); toast("Class log deleted"); };
+  $("#cl-save").onclick=()=>{
+    L.cls=$("#cl-cls").value.trim()||plan.cls;
+    L.notes=$("#cl-notes").value.trim();
+    if(!L.items.length && !L.notes){ toast("Add at least one exercise"); return; }
+    state.classLogs=(state.classLogs||[]).filter(x=>x.date!==date).concat([L]).sort((a,b)=>a.date<b.date?-1:1);
+    state.meta_classU=Date.now(); save(); closeSheet(); render(curView); toast("Class logged ✓");
+  };
+}
+function openClassLogFrom(L, date, existing){
+  state.classLogs=(state.classLogs||[]).filter(x=>x.date!==date);
+  if(existing || L.items.length) state.classLogs.push(L);
+  openClassLog(date);
+}
+/* personal bests across logged class work */
+function personalBests(){
+  const best={};
+  (state.classLogs||[]).forEach(cl=> (cl.items||[]).forEach(it=>{
+    if(!it.numbers) return;
+    const key = it.name + (it.variation? " · "+it.variation : "");
+    const nums = (it.numbers.match(/\d+(\.\d+)?/g)||[]).map(Number);
+    const top = nums.length? Math.max(...nums) : 0;
+    if(!best[key] || top > best[key].top) best[key]={top:top, raw:it.numbers, date:cl.date, assist:it.assist};
+  }));
+  return best;
+}
+
 /* ============================================================
    BUILDER view — draft routine, browse + compare, dosage
 ============================================================ */
@@ -3409,6 +3624,20 @@ function renderProgress(){
        <div class="kv"><b>Shoulder line</b><span>${r1(lA)} → <b style="color:var(--teal)">${r1(lB)}</b>${lB!=null&&lA!=null?` (${lB-lA>=0?"+":""}${r1(lB-lA)})`:""}</span></div>
        <div class="kv"><b>Overhead mobility</b><span>${r1(mA)} → <b style="color:var(--teal)">${r1(mB)}</b>${mB!=null&&mA!=null?` (${mB-mA>=0?"+":""}${r1(mB-mA)})`:""}</span></div>
      </div></div>`:""}`}
+   <div class="sec"><div class="eyebrow">Personal bests — class work</div>
+     <div class="card">
+       ${(function(){ const pb=personalBests(); const keys=Object.keys(pb).sort();
+         if(!keys.length) return '<span class="sub" style="font-size:.8rem">Log a few classes and your bests will build up here.</span>';
+         return keys.slice(0,14).map(k=>`<div class="kv"><b>${esc(k)}</b><span>${esc(pb[k].raw)} · ${fmtDate(pb[k].date)}</span></div>`).join("");
+       })()}
+     </div></div>
+   <div class="sec"><div class="eyebrow">Class history</div>
+     <div class="card">
+       ${(state.classLogs||[]).length
+         ? (state.classLogs||[]).slice(-10).reverse().map(cl=>`<div class="kv" data-editcl="${cl.date}" style="cursor:pointer">
+             <b>${fmtDate(cl.date)}</b><span>${esc(cl.cls)} · ${cl.items.length} exercise${cl.items.length!==1?"s":""}</span></div>`).join("")
+         : '<span class="sub" style="font-size:.8rem">No classes logged yet.</span>'}
+     </div></div>
    <div class="sec"><div class="eyebrow">Skill work</div>
      ${SKILLS.map(sk=>{
        const sess = logs.filter(l=> (l.skills||[]).some(s=>s.skill===sk.id));
@@ -3458,6 +3687,7 @@ function renderProgress(){
   const cdbtn=$("#clear-demo"); if(cdbtn) cdbtn.onclick=clearDemoLogs;
   $("#ms-add").onclick=()=>{ const v=$("#ms-text").value.trim(); if(!v) return; state.milestones.push({date:todayISO(),text:v}); state.meta_milestonesU=Date.now(); save(); renderProgress(); };
   $$("#view-progress [data-editlog]").forEach(el=> el.onclick=()=> openLogForm(el.dataset.editlog));
+  $$("#view-progress [data-editcl]").forEach(el=> el.onclick=()=> openClassLog(el.dataset.editcl));
 }
 function loadDemo(){
   const rids=["r-prep-a","r-reset","r-opener","r-prep-b","r-opener","r-long","r-recovery"];
@@ -3502,6 +3732,15 @@ function showExport(title, content, fname){
     }catch(e){ toast("Download blocked — copy instead"); }
   };
 }
+function classCSV(){
+  const head=["date","class","order","exercise","variation","assistance","numbers","notes"];
+  const q=v=>'"'+String(v==null?"":v).replace(/"/g,'""')+'"';
+  const rows=[head.join(",")];
+  (state.classLogs||[]).forEach(cl=>(cl.items||[]).forEach((it,i)=>{
+    rows.push([cl.date,cl.cls,i+1,it.name,it.variation||"",(ASSIST.find(a=>a[0]===it.assist)||[])[1]||"",it.numbers||"",cl.notes||""].map(q).join(","));
+  }));
+  return rows.join("\n");
+}
 function logsCSV(){
   const head=["date","routine","exercises_completed","dosage","shoulder_line","overhead_mobility","energy","tightness","pain","media_note","notes","skill_sessions"];
   const q=v=>'"'+String(v==null?"":v).replace(/"/g,'""')+'"';
@@ -3530,6 +3769,7 @@ $("#btn-data").onclick=()=>{
   openSheet("Data",
    acctHTML + `<div class="exl">
       <button class="btn block" id="d-csv">${ICONS.doc}Export logs → CSV</button>
+      <button class="btn block" id="d-ccsv">${ICONS.doc}Export class log → CSV</button>
       <button class="btn block" id="d-json">${ICONS.doc}Export everything → JSON</button>
       <button class="btn block" id="d-rjson">${ICONS.doc}Export routines → JSON</button>
       <label class="btn block" style="cursor:pointer">${ICONS.link}Import JSON backup<input type="file" id="d-imp" accept=".json,application/json" hidden></label>
@@ -3547,6 +3787,7 @@ $("#btn-data").onclick=()=>{
   const bs=$("#d-syncnow");
   if(bs) bs.onclick=async()=>{ await syncPull(); await syncPush(); toast(SYNC.err?"Sync failed":"Synced ✓"); };
   $("#d-csv").onclick=()=> showExport("Logs CSV", logsCSV(), "stackline-logs.csv");
+  $("#d-ccsv").onclick=()=> showExport("Class CSV", classCSV(), "stackline-classes.csv");
   $("#d-json").onclick=()=> showExport("Full backup", JSON.stringify({routines:state.routines,logs:state.logs,milestones:state.milestones,prefs:state.prefs},null,2), "stackline-backup.json");
   $("#d-rjson").onclick=()=> showExport("Routines JSON", JSON.stringify(state.routines,null,2), "stackline-routines.json");
   $("#d-imp").onchange=e=>{
@@ -3646,7 +3887,7 @@ window.SL_FB = {
     const batch = writeBatch(db);
     (payload.logs||[]).forEach(l=> batch.set(doc(db,"users",uid,"logs",l.date), l));
     (payload.deletes||[]).forEach(dt=> batch.delete(doc(db,"users",uid,"logs",dt)));
-    ["prefs","routines","milestones","customDrills","deskLogs","daySwaps"].forEach(k=>{
+    ["prefs","routines","milestones","customDrills","deskLogs","daySwaps","classLogs","customMoves"].forEach(k=>{
       if(payload[k]) batch.set(doc(db,"users",uid,"meta",k), {data:payload[k].data, u:payload[k].u||Date.now()});
     });
     await batch.commit();
