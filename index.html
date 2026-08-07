@@ -66,6 +66,7 @@ svg{display:block}
 }
 .iconbtn:active{transform:scale(.92)}
 main{max-width:640px;margin:0 auto;padding:16px 16px 8px}
+@media(min-width:700px){ main{max-width:600px} }
 .view{display:none;animation:rise .3s ease both}
 .view.on{display:block}
 @keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
@@ -354,6 +355,31 @@ ul.bul{padding-left:18px;font-size:.85rem;line-height:1.6}
 .streakpill{display:inline-flex;align-items:center;gap:6px;background:var(--surface);border:1px solid var(--line);
   border-radius:999px;padding:5px 12px;font-size:.74rem;font-weight:600;color:var(--ink);font-family:inherit}
 .streakpill b{font-family:"Archivo";font-weight:800;color:var(--teal)}
+.wdrow{display:flex;gap:6px;margin-top:12px}
+.wd{flex:1;text-align:center}
+.wd span{display:block;font-size:.6rem;color:var(--faint);font-weight:700;margin-bottom:4px}
+.wd i{display:block;height:6px;border-radius:3px;background:var(--line)}
+.wd.on i{background:var(--teal)}
+.bar{display:flex;align-items:center;gap:10px;padding:6px 0}
+.bar .bl{font-size:.8rem;width:38%;color:var(--muted)}
+.bar .bt{flex:1;height:7px;border-radius:4px;background:var(--line);overflow:hidden}
+.bar .bt i{display:block;height:100%;background:var(--teal);border-radius:4px}
+.bar b{font-size:.76rem;font-variant-numeric:tabular-nums;min-width:18px;text-align:right}
+
+.segrow{display:flex;gap:6px;background:var(--surface2);border:1px solid var(--line);border-radius:12px;padding:4px;margin-bottom:14px}
+.seg{flex:1;padding:9px;border-radius:9px;border:0;background:none;font:inherit;font-size:.83rem;font-weight:600;
+  color:var(--muted);cursor:pointer}
+.seg.on{background:var(--surface);color:var(--ink);box-shadow:var(--shadow)}
+.grouprow{margin-bottom:2px}
+.glabel{display:block;font-size:.58rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);margin-bottom:5px}
+
+.feelrow{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.feel{background:var(--surface2);border:2px solid var(--line);border-radius:13px;padding:12px 8px;cursor:pointer;
+  font:inherit;color:var(--ink);text-align:center;transition:all .15s}
+.feel.on{border-color:var(--teal);background:var(--teal-soft)}
+.feel b{display:block;font-size:.86rem;font-weight:700}
+.feel span{display:block;font-size:.66rem;color:var(--muted);margin-top:3px;line-height:1.3}
+
 .tlist{display:flex;flex-direction:column;gap:9px}
 .trow{display:flex;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--line);
   border-radius:14px;padding:13px 14px;cursor:pointer;transition:transform .12s;box-shadow:var(--shadow);
@@ -422,42 +448,7 @@ ul.bul{padding-left:18px;font-size:.85rem;line-height:1.6}
 .vidmissing svg{width:20px;height:20px;flex:none;margin-top:2px;color:var(--faint)}
 .vidmissing b{color:var(--ink);font-size:.88rem}
 
-/* ================= DESKTOP ≥900px — for review & content work ================= */
-@media (min-width:900px){
-  body{padding-bottom:0;display:grid;grid-template-columns:232px 1fr;grid-template-rows:auto 1fr;
-       grid-template-areas:"side top" "side main";min-height:100dvh}
-  .top{grid-area:top;padding:14px 28px}
-  .brand small{font-size:.64rem}
-  nav.tabs{grid-area:side;position:sticky;top:0;height:100dvh;flex-direction:column;justify-content:flex-start;
-    gap:4px;padding:74px 14px 20px;border-top:none;border-right:1px solid var(--line);background:var(--surface)}
-  nav.tabs button{max-width:none;width:100%;flex-direction:row;justify-content:flex-start;gap:11px;
-    padding:11px 13px;font-size:.8rem;text-transform:none;letter-spacing:0;border-radius:11px}
-  nav.tabs button svg{width:18px;height:18px}
-  nav.tabs button.on{background:var(--teal-soft)}
-  main{grid-area:main;max-width:1180px;padding:24px 28px 60px;width:100%}
-  /* two-column content so review work fits on one screen */
-  #view-library,#view-builder,#view-progress{
-    display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:18px;align-items:start}
-  #view-library>.searchbar,#view-library>.chiprow,#view-library>.notice,
-  #view-builder>.sec:first-child,#view-progress>.row{grid-column:1/-1}
-  .grid2{grid-template-columns:repeat(2,1fr)}
-  .statgrid{gap:12px}
-  /* sheets become centred modals instead of bottom drawers */
-  .sheet{top:50%;left:50%;right:auto;bottom:auto;transform:translate(-50%,-46%) scale(.97);
-    width:min(680px,92vw);max-height:86dvh;border-radius:20px;border-bottom:1px solid var(--line);
-    opacity:0;transition:opacity .18s,transform .22s cubic-bezier(.32,.72,.35,1)}
-  .sheet.on{transform:translate(-50%,-50%);opacity:1}
-  .sheet .grab{display:none}
-  .sheet .shead{padding:16px 22px}
-  .sheet .sbody{padding:18px 22px 22px}
-  .sheet .sfoot{padding:14px 22px}
-  .hero{padding:26px 24px}
-  .hero .angle{width:190px;height:190px}
-  .vidwrap{max-width:560px}
-  .exi{padding:13px 15px}
-  .toast{bottom:28px}
-}
-@media (min-width:1280px){ main{padding:28px 44px 60px} }
+
 
 .toast{
   position:fixed;left:50%;bottom:calc(90px + env(safe-area-inset-bottom));transform:translateX(-50%) translateY(18px);
@@ -520,6 +511,12 @@ ul.bul{padding-left:18px;font-size:.85rem;line-height:1.6}
    Modular structure: CATS, EXERCISES, SCHEDULE, seed routines,
    state {routines, logs, prefs, milestones}
 ============================================================ */
+const CAT_GROUPS = [
+  {name:"Shoulder & overhead", cats:["flexion","overhead","lats","pecs","scap"]},
+  {name:"Spine & line",        cats:["thoracic","rib","line"]},
+  {name:"Lower body & compression", cats:["compression","hips"]},
+  {name:"Wrists",              cats:["wrist"]}
+];
 const CATS = [
   {id:"flexion",  name:"Shoulder flexion",   ab:"FLX"},
   {id:"overhead", name:"Overhead mobility",  ab:"OVH"},
@@ -1419,11 +1416,16 @@ const EXERCISES = [
 const EX_ALL = () => EXERCISES.concat(state.customDrills||[]);
 const exById = id => EX_ALL().find(e=>e.id===id);
 const catProgression = catId => EX_ALL().filter(e=>e.cats.includes(catId)).sort((a,b)=>a.level-b.level);
+/* Suggested level in a category, from how much you have actually logged in it. */
 function recommendedLevel(catId){
-  const recent = state.logs.filter(l=>l.date>=todayISO(-13));
-  const m = avg(recent.map(l=>l.mob).filter(v=>v!=null));
-  if(m==null) return 2;
-  if(m<=3) return 1; if(m<=6) return 2; if(m<=8) return 3; return 4;
+  const recent = state.logs.filter(l=>l.date>=todayISO(-27));
+  const done = {};
+  recent.forEach(l=> (l.done||[]).forEach(id=>{ const e=exById(id);
+    if(e && e.cats.includes(catId)) done[e.level]=(done[e.level]||0)+1; }));
+  const lvls = Object.keys(done).map(Number);
+  if(!lvls.length) return 2;
+  const top = Math.max(...lvls);
+  return (done[top]||0) >= 4 ? Math.min(4, top+1) : top;
 }
 
 /* ============================================================
@@ -1538,6 +1540,8 @@ function exSkills(exId){
 function skillLevel(skillId){
   const manual = (state.prefs.skillLevels||{})[skillId];
   if(manual) return manual;
+  const t = treeById(skillId);
+  if(t) return Math.min(4, treeProgress(t).current);
   const done = state.logs.filter(l=> (l.skills||[]).some(s=>s.skill===skillId)).length;
   if(done>=24) return 3; if(done>=10) return 2;
   return 1;
@@ -1721,27 +1725,27 @@ const TREES = [
     match:["Hollow body hold","Plank","Arch hold (superman)","Wall plank"],
     crit:"30 s hollow with the lower back flat, and 30 s arch without lumbar pinching.",
     why:"If the line breaks on the floor, it will break upside down — you just cannot see it there.",
-    drills:["hollow-line","bodyline-drill","wrist-prep","scapular-pushups"]},
+    drills:["hollow-line","bodyline-drill","wrist-prep","scapular-pushups","tspine-ext","hollow-line"]},
    {n:2, name:"Hold the line on the wall", target:"3 × 30 s chest-to-wall with ribs closed",
     match:["Chest-to-wall handstand","Wall walk","Back-to-wall handstand"],
     crit:"30 s chest-to-wall, hips and ribs close to the wall, shoulders pushing tall.",
     why:"The wall gives honest feedback. This is where your shoulder line actually gets built.",
-    drills:["wf-hold","wf-shrugs","pike-shrugs","wall-slides","oh-lat-stretch"]},
+    drills:["wf-hold","wf-shrugs","pike-shrugs","wall-slides","oh-lat-stretch","scap-wall-slides","bench-lat-opener","wrist-prep"]},
    {n:3, name:"Find the balance point", target:"Toe pulls and heel pulls held 3–5 s",
     match:["Toe pulls","Heel pulls","Handstand kick-up"],
     crit:"Pull the heels off the wall with your fingers and hold 3–5 s, repeatedly and on purpose.",
     why:"Balance is fingertip pressure, not hip correction. This is where you learn the actual mechanism.",
-    drills:["wall-toe-finger-pulls","finger-balance","kickup-practice","first-knuckle-pushups"]},
+    drills:["wall-toe-finger-pulls","finger-balance","kickup-practice","first-knuckle-pushups","wf-hold","wrist-prep","reverse-wrist-pushups"]},
    {n:4, name:"Freestanding holds", target:"Consistent 10 s freestanding, kick-up 8/10",
     match:["Freestanding handstand","Handstand kick-up","Tuck handstand"],
     crit:"Catch balance 8 times out of 10 attempts, and hold 10 s or more without a wall.",
     why:"Entry consistency is what turns practice time into handstand time rather than kick-up time.",
-    drills:["freestanding-holds","kickup-practice","finger-balance","wf-shrugs"]},
+    drills:["freestanding-holds","kickup-practice","finger-balance","wf-shrugs","hollow-line","wrist-prep","bodyline-drill"]},
    {n:5, name:"Own it", target:"30 s freestanding, straight line, calm",
     match:["Freestanding handstand","Handstand walk","Handstand pirouette","Straddle handstand"],
     crit:"30 s held with a straight line and relaxed breathing, most attempts.",
     why:"From here progress is shapes, walking and one-arm work rather than more mobility.",
-    drills:["freestanding-holds","free-handstand-shrug","bodyline-drill","finger-balance"]}],
+    drills:["freestanding-holds","free-handstand-shrug","bodyline-drill","finger-balance","wf-shrugs","wrist-prep"]}],
   support:{
     strength:["Handstand shrug","Scapular push-up","Pike push-up","Hollow body hold","Plank"],
     mobility:["Shoulder flexion PAILs/RAILs","Overhead lat stretch","Thoracic extension","Doorway pec stretch","Wrist stretch"]},
@@ -1757,27 +1761,27 @@ const TREES = [
     match:["Pancake","Pancake compression","Seated pike lift","Pike fold"],
     crit:"Chest close to the floor in a flat-backed pancake, and 10 clean seated pike lifts.",
     why:"Passive range gets your hips forward; active compression is what peels your feet off the floor.",
-    drills:["pancake","seated-pike-lifts","lsit-parallettes","hollow-line"]},
+    drills:["pancake","seated-pike-lifts","lsit-parallettes","hollow-line","oh-lat-stretch","wrist-prep"]},
    {n:2, name:"Own the takeoff", target:"Straddle lift-off held 5 s",
     match:["Straddle lift-off","Press walk","L-sit","Straddle L-sit"],
     crit:"Lift both feet off the floor from a straddle and hold 5 s with straight arms.",
     why:"This is the press takeoff isolated. The forward shoulder lean does the work, not the legs.",
-    drills:["straddle-liftoffs","press-walks","lsit-parallettes","seated-pike-lifts"]},
+    drills:["straddle-liftoffs","press-walks","lsit-parallettes","seated-pike-lifts","pancake","scapular-pushups"]},
    {n:3, name:"Control the descent", target:"4+ second straddle negative, 3×3",
     match:["Straddle press negative","Stalder press negative","Skin the cat straddle negative"],
     crit:"Lower from handstand to floor in 4 seconds or more with locked arms, repeatedly.",
     why:"The strongest single press builder — you build strength through the exact path you will press up.",
-    drills:["straddle-negatives","elevated-press","straddle-liftoffs","pancake"]},
+    drills:["straddle-negatives","elevated-press","straddle-liftoffs","pancake","wf-shrugs","lsit-parallettes"]},
    {n:4, name:"Press from height", target:"Box press, lowering the height over months",
     match:["Box press","Elevated press"],
     crit:"Press smoothly from an elevated surface without jumping, and log the height each time.",
     why:"Removes the hardest few centimetres so you can feel the real pressing action.",
-    drills:["elevated-press","straddle-negatives","press-walks","lsit-parallettes"]},
+    drills:["elevated-press","straddle-negatives","press-walks","lsit-parallettes","pancake","seated-pike-lifts"]},
    {n:5, name:"Full press", target:"Straddle press from the floor",
     match:["Straddle press","Pike press","Stalder press"],
     crit:"Floor to handstand, straight arms, no jump, more than half of attempts.",
     why:"Pike press is the next milestone once straddle is consistent.",
-    drills:["full-straddle-press","elevated-press","straddle-negatives","pancake"]}],
+    drills:["full-straddle-press","elevated-press","straddle-negatives","pancake","lsit-parallettes","wf-shrugs"]}],
   support:{
     strength:["L-sit","Handstand shrug","Pike push-up","Hanging leg raise","Straddle L-sit"],
     mobility:["Pancake","Pike fold","Hamstring stretch","Shoulder flexion PAILs/RAILs","Overhead lat stretch"]},
@@ -1792,7 +1796,7 @@ const TREES = [
    {n:1, name:"Tuck", target:"Tuck front lever 3×10 s", match:["Tuck front lever"],
     crit:"10 s tucked with the back parallel to the floor and arms straight.",
     why:"Teaches straight-arm scapular retraction, which is the whole skill in miniature.",
-    drills:["hollow-line","scapular-pushups"]},
+    drills:["hollow-line","scapular-pushups","bodyline-drill"]},
    {n:2, name:"Advanced tuck", target:"Advanced tuck 3×8 s", match:["Advanced tuck front lever","Tuck front lever raise"],
     crit:"Hips open toward horizontal, back flat, 8 s.",
     why:"The first real jump in leverage.",
@@ -1846,7 +1850,7 @@ const TREES = [
   stages:[
    {n:1, name:"Lean", target:"Planche lean 3×20 s", match:["Planche lean","Pseudo planche hold","Frog stand"],
     crit:"20 s with shoulders well past the hands and hips level.", why:"Builds the straight-arm loading the whole skill depends on.",
-    drills:["scapular-pushups","wrist-prep","first-knuckle-pushups"]},
+    drills:["scapular-pushups","wrist-prep","first-knuckle-pushups","reverse-wrist-pushups","pec-doorway"]},
    {n:2, name:"Tuck", target:"Tuck planche 3×15 s", match:["Tuck planche"],
     crit:"15 s tucked, back rounded, hips at shoulder height.", why:"First time the whole bodyweight sits on straight arms.",
     drills:["scapular-pushups"]},
@@ -2199,27 +2203,6 @@ const ICONS = {
 const MEDIA_IC = {video:ICONS.vid, gif:ICONS.img, image:ICONS.img, article:ICONS.doc, custom:ICONS.link};
 
 /* line-angle gauge — the app's signature */
-function gauge(score, size=120){
-  const s = score==null ? null : Math.max(0,Math.min(10,score));
-  const ang = s==null ? 118 : 118 + (180-118)*(s/10); // est. arm-torso angle 118°→180°
-  const rad = a => (180-a)*Math.PI/180;
-  const cx=size/2, cy=size*0.78, R=size*0.42;
-  const px = a => cx + R*Math.cos(rad(a)), py = a => cy - R*Math.sin(rad(a));
-  const ticks=[120,140,160,180].map(a=>`<line x1="${px(a)}" y1="${py(a)}" x2="${cx+(R-7)*Math.cos(rad(a))}" y2="${cy-(R-7)*Math.sin(rad(a))}" stroke="var(--line2)" stroke-width="2"/>`).join("");
-  const needle = s==null ? "" :
-    `<line x1="${cx}" y1="${cy}" x2="${px(ang)}" y2="${py(ang)}" stroke="var(--teal)" stroke-width="3.4" stroke-linecap="round"/>
-     <circle cx="${px(ang)}" cy="${py(ang)}" r="4.4" fill="var(--teal)"/>`;
-  return `<svg width="${size}" height="${size*0.86}" viewBox="0 0 ${size} ${size*0.86}" aria-hidden="true">
-    <path d="M ${px(118)} ${py(118)} A ${R} ${R} 0 0 1 ${px(180)} ${py(180)}" fill="none" stroke="var(--line)" stroke-width="7" stroke-linecap="round"/>
-    <path d="M ${px(118)} ${py(118)} A ${R} ${R} 0 0 1 ${px(s==null?118:ang)} ${py(s==null?118:ang)}" fill="none" stroke="var(--teal)" stroke-width="7" stroke-linecap="round" opacity=".35"/>
-    ${ticks}
-    <line x1="${cx}" y1="${cy}" x2="${cx}" y2="${cy-R-4}" stroke="var(--faint)" stroke-width="1.6" stroke-dasharray="3 4"/>
-    ${needle}
-    <circle cx="${cx}" cy="${cy}" r="4.6" fill="var(--ink)"/>
-    <text x="${px(183)-2}" y="${py(181)+4}" font-size="9" fill="var(--faint)" font-weight="700">180°</text>
-  </svg>`;
-}
-
 /* ---------- sheet modal ---------- */
 let sheetBack = null;
 function openSheet(title, bodyHTML, footHTML, backFn){
@@ -2590,90 +2573,98 @@ function renderRunner(){
   };
 }
 
-const TIGHT = ["Lats","Pecs","Upper traps","T-spine","Wrists","Neck","Low back"];
+const FEEL = [["rough","Rough","Wrecked, sore, or run down",3],
+              ["ok","Normal","Nothing special either way",6],
+              ["good","Good","Fresh and moving well",8]];
+const TIGHT = ["Lats","Pecs","Upper traps","T-spine","Wrists","Neck","Low back","Hips","Hamstrings"];
 function openLogForm(date, pre={}){
   const ex0 = logByDate(date);
   const skillPre = pre.skillPre; delete pre.skillPre;
-  const d = Object.assign({date, routineId:"", done:[], line:5, mob:5, energy:6, tight:[], pain:"", notes:"", mediaNote:"", dosage:"", skills:[]}, ex0||{}, pre);
+  const d = Object.assign({date, routineId:"", done:[], feel:"ok", tight:[], pain:"", notes:"", mediaNote:"", dosage:"", skills:[]}, ex0||{}, pre);
   d.skills = (d.skills||[]).slice();
   if(skillPre){
-    // merge the just-finished skill session into today's entry without clobbering existing ones
     d.skills = d.skills.filter(s=> s.skill!==skillPre.skill).concat([{skill:skillPre.skill, preset:skillPre.preset, level:skillPre.level, metric:"", metric2:""}]);
     d.done = [...new Set([...(d.done||[]), ...skillPre.done])];
   }
-  const ropts = state.routines.map(r=>`<option value="${r.id}" ${r.id===d.routineId?"selected":""}>${esc(r.name)}</option>`).join("");
-  const exChecks = EX_ALL().map(e=>`<button class="chip ${d.done.includes(e.id)?"on":""}" data-lex="${e.id}">${esc(e.name)}</button>`).join("");
+  // exercises to tick: the day's routine if there is one, otherwise everything
+  const r = routineById(d.routineId);
+  const pool = r ? applySwaps(r.items, date).map(it=>exById(it.ex)).filter(Boolean)
+                 : EX_ALL().filter(e=>!e.desk);
+  const ropts = state.routines.map(x=>`<option value="${x.id}" ${x.id===d.routineId?"selected":""}>${esc(x.name)}</option>`).join("");
   const tightChips = TIGHT.map(t=>`<button class="chip ${d.tight.includes(t)?"on":""}" data-tt="${t}">${t}</button>`).join("");
-  const slider=(id,lbl,val,hint)=>`<label class="f">${lbl}</label>
-    <div class="slider"><input type="range" min="0" max="10" step="1" value="${val}" id="${id}"><div class="val" id="${id}-v">${val}</div></div>
-    <div class="tiny">${hint}</div>`;
-  openSheet((ex0?"Edit log — ":"Log — ")+fmtDate(date),
+  openSheet((ex0?"Check-in — ":"Check-in — ")+fmtDate(date),
    `<label class="f">Date</label><input type="date" id="lg-date" value="${d.date}" max="${todayISO()}">
+
+    <label class="f">How did today feel?</label>
+    <div class="feelrow">${FEEL.map(f=>`<button class="feel ${d.feel===f[0]?"on":""}" data-feel="${f[0]}">
+        <b>${f[1]}</b><span>${f[2]}</span></button>`).join("")}</div>
+
     <label class="f">Routine used</label>
-    <select id="lg-r"><option value="">— none / freestyle —</option>${ropts}</select>
-    <label class="f">Exercises completed</label><div class="wrap">${exChecks}</div>
-    <label class="f">Sets / reps / holds (optional)</label>
-    <input type="text" id="lg-dosage" placeholder="e.g. wall slides 3×8 · wf hold 3×30s" value="${esc(d.dosage)}">
+    <select id="lg-r"><option value="">— none / own session —</option>${ropts}</select>
+
+    <label class="f">Drills completed${r?"":" — search or pick"}</label>
+    ${r?"":`<input type="text" id="lg-q" placeholder="Filter drills…" style="margin-bottom:8px">`}
+    <div class="wrap" id="lg-pool">${pool.map(e=>`<button class="chip ${d.done.includes(e.id)?"on":""}" data-lex="${e.id}">${esc(e.name)}</button>`).join("")}</div>
+
     ${d.skills.length? `<div class="sec" style="margin-top:16px"><div class="eyebrow teal">Skill sessions today</div>
-      ${d.skills.map((s,i)=>{
-        const sk=skillById(s.skill); if(!sk) return "";
+      ${d.skills.map((s,i)=>{ const sk=skillById(s.skill); if(!sk) return "";
         return `<div class="card" style="padding:13px 14px;margin-bottom:10px">
-          <div class="row between" style="margin-bottom:8px">
-            <b style="font-size:.9rem">${esc(sk.name)}</b>
-            <span class="tag teal">Lv ${s.level} · ${esc((SKILL_PRESETS.find(p=>p.id===s.preset)||{}).name||"")}</span>
-          </div>
+          <div class="row between" style="margin-bottom:8px"><b style="font-size:.9rem">${esc(sk.name)}</b>
+            <span class="tag teal">Lv ${s.level}</span></div>
           <label class="f" style="margin-top:0">${esc(sk.metric.label)}</label>
           <input type="${sk.metric.type}" data-skm="${i}" placeholder="${esc(sk.metric.hint)}" value="${esc(s.metric||"")}">
-          <label class="f">${esc(sk.metric2.label)}</label>
-          <input type="text" data-skm2="${i}" placeholder="${esc(sk.metric2.hint)}" value="${esc(s.metric2||"")}">
-          <button class="btn small danger" style="margin-top:10px" data-skrm="${i}">Remove this session</button>
-        </div>`;}).join("")}
-    </div>` : ""}
-    ${slider("lg-line","Shoulder line score", d.line,"0 = big arch / arms far forward · 10 = stacked, open, straight")}
-    ${slider("lg-mob","Perceived overhead mobility", d.mob,"How free did the overhead position feel today?")}
-    ${slider("lg-energy","Energy / recovery", d.energy,"0 = wrecked · 10 = fresh")}
-    <label class="f">Tightness areas</label><div class="wrap">${tightChips}</div>
-    <label class="f">Pain / discomfort</label>
-    <input type="text" id="lg-pain" placeholder="e.g. slight pinch left front delt at end range" value="${esc(d.pain)}">
-    <label class="f">Photo / video reference</label>
-    <input type="text" id="lg-media" placeholder="Filename or link of today's line photo/video" value="${esc(d.mediaNote)}">
+          <button class="btn small danger" style="margin-top:10px" data-skrm="${i}">Remove</button>
+        </div>`;}).join("")}</div>` : ""}
+
+    <label class="f">Anything tight?</label><div class="wrap">${tightChips}</div>
+    <label class="f">Pain or discomfort</label>
+    <input type="text" id="lg-pain" placeholder="e.g. slight pinch left front delt" value="${esc(d.pain)}">
     <label class="f">Notes</label>
     <textarea id="lg-notes" placeholder="What changed? What limited you?">${esc(d.notes)}</textarea>`,
    `${ex0?'<button class="btn danger" id="lg-del">Delete</button>':""}
-    <button class="btn primary" style="flex:1" id="lg-save">Save log</button>`);
-  ["lg-line","lg-mob","lg-energy"].forEach(id=>{ $("#"+id).oninput=e=>$("#"+id+"-v").textContent=e.target.value; });
+    <button class="btn primary" style="flex:1" id="lg-save">Save</button>`);
+  let feel = d.feel;
   const doneSet = new Set(d.done), tightSet = new Set(d.tight);
   const skillsArr = d.skills.map(s=>Object.assign({},s));
-  $$("#sheet-body [data-skm]").forEach(inp=> inp.oninput=e=>{ skillsArr[+inp.dataset.skm].metric = e.target.value; });
-  $$("#sheet-body [data-skm2]").forEach(inp=> inp.oninput=e=>{ skillsArr[+inp.dataset.skm2].metric2 = e.target.value; });
-  $$("#sheet-body [data-skrm]").forEach(b=> b.onclick=()=>{
-    const i=+b.dataset.skrm; skillsArr.splice(i,1);
-    const merged = Object.assign({}, d, {skills:skillsArr, done:[...doneSet], tight:[...tightSet]});
-    state.logs = state.logs.filter(l=>l.date!==d.date); if(ex0||skillsArr.length) state.logs.push(merged);
-    state.logs.sort((a,b)=>a.date<b.date?-1:1); save(); openLogForm(d.date); toast("Session removed");
-  });
-  $$("#sheet-body [data-lex]").forEach(c=> c.onclick=()=>{ const id=c.dataset.lex; doneSet.has(id)?doneSet.delete(id):doneSet.add(id); c.classList.toggle("on"); });
-  $$("#sheet-body [data-tt]").forEach(c=> c.onclick=()=>{ const t=c.dataset.tt; tightSet.has(t)?tightSet.delete(t):tightSet.add(t); c.classList.toggle("on"); });
-  if(ex0) $("#lg-del").onclick=()=>{ SYNC.pendingDeletes=(SYNC.pendingDeletes||[]).concat([date]); state.logs = state.logs.filter(l=>l.date!==date); save(); closeSheet(); render(curView); toast("Log deleted"); };
+  $$("#sheet-body [data-feel]").forEach(b=> b.onclick=()=>{
+    feel=b.dataset.feel; $$("#sheet-body [data-feel]").forEach(x=>x.classList.toggle("on", x.dataset.feel===feel)); });
+  const bindPool = ()=> $$("#lg-pool [data-lex]").forEach(cb=> cb.onclick=()=>{
+    const id=cb.dataset.lex; doneSet.has(id)?doneSet.delete(id):doneSet.add(id); cb.classList.toggle("on"); });
+  bindPool();
+  const q=$("#lg-q");
+  if(q) q.oninput=()=>{
+    const t=q.value.trim().toLowerCase();
+    $("#lg-pool").innerHTML = EX_ALL().filter(e=>!e.desk && e.name.toLowerCase().includes(t))
+      .map(e=>`<button class="chip ${doneSet.has(e.id)?"on":""}" data-lex="${e.id}">${esc(e.name)}</button>`).join("");
+    bindPool();
+  };
+  $("#lg-r").onchange = ()=>{ const nd=Object.assign({},d,{routineId:$("#lg-r").value, feel:feel, done:[...doneSet], tight:[...tightSet]});
+    state.logs=state.logs.filter(l=>l.date!==date); if(ex0) state.logs.push(nd); openLogForm(date, nd); };
+  $$("#sheet-body [data-skm]").forEach(inp=> inp.oninput=e=>{ skillsArr[+inp.dataset.skm].metric=e.target.value; });
+  $$("#sheet-body [data-skrm]").forEach(b=> b.onclick=()=>{ skillsArr.splice(+b.dataset.skrm,1); openLogForm(date, Object.assign({},d,{skills:skillsArr})); });
+  $$("#sheet-body [data-tt]").forEach(cb=> cb.onclick=()=>{ const t=cb.dataset.tt; tightSet.has(t)?tightSet.delete(t):tightSet.add(t); cb.classList.toggle("on"); });
+  if(ex0) $("#lg-del").onclick=()=>{ state.logs=state.logs.filter(l=>l.date!==date); save(); closeSheet(); render(curView); toast("Check-in deleted"); };
   $("#lg-save").onclick=()=>{
-    const nd = $("#lg-date").value || date;
-    const entry = { date:nd, routineId:$("#lg-r").value, done:[...doneSet], dosage:$("#lg-dosage").value.trim(),
-      line:+$("#lg-line").value, mob:+$("#lg-mob").value, energy:+$("#lg-energy").value,
-      tight:[...tightSet], pain:$("#lg-pain").value.trim(), mediaNote:$("#lg-media").value.trim(), notes:$("#lg-notes").value.trim(),
-      skills:skillsArr };
-    state.logs = state.logs.filter(l=> l.date!==nd && l.date!==date);
+    const nd=$("#lg-date").value||date;
+    const energy=(FEEL.find(f=>f[0]===feel)||FEEL[1])[3];
+    const entry={date:nd, routineId:$("#lg-r").value, done:[...doneSet], feel:feel, energy:energy,
+      tight:[...tightSet], pain:$("#lg-pain").value.trim(), notes:$("#lg-notes").value.trim(), skills:skillsArr};
+    state.logs=state.logs.filter(l=> l.date!==nd && l.date!==date);
     state.logs.push(entry); state.logs.sort((a,b)=>a.date<b.date?-1:1);
-    save(); closeSheet(); render(curView); toast("Logged "+fmtDate(nd)+" ✓");
+    save(); closeSheet(); render(curView); toast("Saved "+fmtDate(nd)+" ✓");
   };
 }
 
 /* ============================================================
    WEEK view
 ============================================================ */
+let weekTab = "days";
 function renderWeek(){
+  if(weekTab==="routines") return renderRoutinesList();
   const dow = new Date().getDay();
   const order = [1,2,3,4,5,6,0];
   $("#view-week").innerHTML = `
+   <div class="segrow"><button class="seg on" data-wt="days">Week</button><button class="seg" data-wt="routines">Routines</button></div>
    <div class="eyebrow" style="margin-bottom:12px">Your week — classes + support blocks</div>
    ${order.map(i=>{
      const p=planFor(i); const r=routineById(p.routine);
@@ -2690,7 +2681,62 @@ function renderWeek(){
          <div class="kv" style="margin-top:9px;border:none;padding-bottom:0"><b>Key goal</b><span>${esc(p.goal)}</span></div>
        </div></div>`;
    }).join("")}`;
+  $$("#view-week [data-wt]").forEach(b=> b.onclick=()=>{ weekTab=b.dataset.wt; renderWeek(); });
   $$("#view-week [data-day]").forEach(el=> el.onclick=()=> openWeekDay(+el.dataset.day));
+}
+
+function renderRoutinesList(){
+  $("#view-week").innerHTML = `
+   <div class="segrow"><button class="seg" data-wt="days">Week</button><button class="seg on" data-wt="routines">Routines</button></div>
+   <div class="row between" style="margin-bottom:12px;gap:10px">
+     <div class="eyebrow" style="flex:1;margin:0">Your routines</div>
+     <button class="btn small primary" id="rt-new">＋ New</button>
+   </div>
+   ${state.routines.map(r=>{
+     const days=(r.days||[]).map(d=>planFor(d).day.slice(0,3)).join(" ");
+     return `<div class="card">
+       <div class="row between" style="gap:10px">
+         <div style="flex:1;min-width:0"><div class="h-md">${esc(r.name)}</div>
+           <div class="sub" style="font-size:.78rem;margin-top:2px">${esc(r.useCase||"")}</div></div>
+         <span class="tag ${r.seeded&&!r.edited?"":"teal"}">${r.seeded&&!r.edited?"seeded":"custom"}</span>
+       </div>
+       <div class="wrap" style="margin-top:9px">
+         <span class="tag teal">${r.minutes} min</span><span class="tag">${FATIGUE_LBL[r.fatigue]}</span>
+         <span class="tag">${r.items.length} drills</span>${days?`<span class="tag amber">${days}</span>`:""}
+       </div>
+       <div class="exl" style="margin-top:10px">${r.items.slice(0,4).map((it,i)=>{
+         const e=exById(it.ex); if(!e) return "";
+         return `<div class="exi" style="padding:8px 10px" data-rex="${e.id}">
+           <div class="ic" style="width:26px;height:26px;font-size:.66rem">${i+1}</div>
+           <div class="bd"><div class="nm" style="font-size:.83rem">${esc(e.name)}</div>
+           <div class="mt">${it.sets}× ${it.hold&&it.hold!=="—"?esc(it.hold):esc(it.reps)}</div></div></div>`;}).join("")}
+         ${r.items.length>4?`<div class="tiny" style="padding-left:4px">+ ${r.items.length-4} more</div>`:""}</div>
+       <div class="row" style="margin-top:11px;gap:7px;flex-wrap:wrap">
+         <button class="btn small primary" data-rstart2="${r.id}">${ICONS.play}Start</button>
+         <button class="btn small" data-redit2="${r.id}">Edit</button>
+         <button class="btn small" data-rdup2="${r.id}">Duplicate</button>
+         <button class="btn small danger" data-rdel2="${r.id}">Delete</button>
+       </div></div>`;}).join("")}`;
+  $$("#view-week [data-wt]").forEach(b=> b.onclick=()=>{ weekTab=b.dataset.wt; renderWeek(); });
+  $$("#view-week [data-rex]").forEach(el=> el.onclick=()=> openExercise(el.dataset.rex));
+  $$("#view-week [data-rstart2]").forEach(b=> b.onclick=()=> startRoutine(b.dataset.rstart2));
+  $$("#view-week [data-redit2]").forEach(b=> b.onclick=()=>{
+    const r=routineById(b.dataset.redit2);
+    draft={name:r.name,minutes:r.minutes,fatigue:r.fatigue,days:(r.days||[]).slice(),
+           items:JSON.parse(JSON.stringify(r.items)),editingId:r.id};
+    show("builder"); window.scrollTo({top:0}); });
+  $$("#view-week [data-rdup2]").forEach(b=> b.onclick=()=>{
+    const r=routineById(b.dataset.rdup2);
+    state.routines.push(Object.assign(JSON.parse(JSON.stringify(r)),
+      {id:"r-"+Date.now().toString(36), name:r.name+" (copy)", seeded:false, edited:false}));
+    save(); renderRoutinesList(); toast("Duplicated"); });
+  $$("#view-week [data-rdel2]").forEach(b=> b.onclick=()=>{
+    const r=routineById(b.dataset.rdel2);
+    openSheet("Delete routine?", `<p class="sub">“${esc(r.name)}” will be removed.</p>`,
+      `<button class="btn ghost" id="rd-no">Keep</button><button class="btn danger" style="flex:1" id="rd-yes">Delete</button>`);
+    $("#rd-no").onclick=closeSheet;
+    $("#rd-yes").onclick=()=>{ state.routines=state.routines.filter(x=>x.id!==r.id); save(); closeSheet(); renderRoutinesList(); toast("Deleted"); }; });
+  $("#rt-new").onclick=()=>{ draft={name:"",items:[],editingId:null,minutes:10,fatigue:"low",days:[]}; show("builder"); };
 }
 function openWeekDay(dow){
   const p = planFor(dow), r = routineById(p.routine);
@@ -3701,8 +3747,12 @@ function renderSessionBuilder(){
         <input type="text" id="ss-q" placeholder="Search drills and movements…">
       </div>
       <div id="ss-res"></div>
-      <div class="tiny" style="margin:12px 0 6px">Or start from a routine</div>
+      <div class="tiny" style="margin:12px 0 6px">Or pull in a whole block</div>
       <div class="wrap">${state.routines.map(r=>`<button class="chip" data-sr="${r.id}">${esc(r.name)}</button>`).join("")}</div>
+      <div class="tiny" style="margin:12px 0 6px">Skill stages — adds drills, target movements and support</div>
+      <div class="wrap">${TREES.map(t=>{const p=treeProgress(t);
+        return `<button class="chip" data-sk="${t.id}">${esc(t.name)} · stage ${p.current}</button>`;}).join("")}</div>
+      ${sess.items.length>10?`<div class="notice" style="margin-top:12px">${ICONS.info}<span>${sess.items.length} exercises is a long session. Consider splitting it across days.</span></div>`:""}
     </div>`,
    `<button class="btn ghost" id="ss-cancel">Close</button>
     <button class="btn primary" style="flex:1" id="ss-save">Save session</button>`);
@@ -3727,6 +3777,16 @@ function renderSessionBuilder(){
   $("#ss-q").oninput=show;
   $$("#sheet-body [data-srm]").forEach(b=> b.onclick=()=>{ sess.items.splice(+b.dataset.srm,1); renderSessionBuilder(); });
   $$("#sheet-body [data-snum]").forEach(inp=> inp.oninput=e=> sess.items[+inp.dataset.snum].numbers=e.target.value);
+  $$("#sheet-body [data-sk]").forEach(b=> b.onclick=()=>{
+    const t=treeById(b.dataset.sk); const p=treeProgress(t);
+    const st=t.stages.find(s=>s.n===p.current)||t.stages[0];
+    const have=new Set(sess.items.map(x=>x.name));
+    (st.match||[]).forEach(m=>{ if(!have.has(m)){ sess.items.push({name:m, ref:null, numbers:"", variation:"", assist:"none"}); have.add(m); } });
+    (st.drills||[]).forEach(d=>{ const e=exById(d); if(e&&!have.has(e.name)){ sess.items.push({name:e.name, ref:d, numbers:"", variation:"", assist:"none"}); have.add(e.name); } });
+    (t.support.strength||[]).slice(0,2).forEach(m=>{ if(!have.has(m)){ sess.items.push({name:m, ref:null, numbers:"", variation:"", assist:"none"}); have.add(m); } });
+    sess.title = sess.items.length && sess.title==="Own session" ? t.name+" stage "+p.current : sess.title;
+    renderSessionBuilder(); toast(t.name+" stage "+p.current+" added");
+  });
   $$("#sheet-body [data-sr]").forEach(b=> b.onclick=()=>{
     const r=routineById(b.dataset.sr);
     r.items.forEach(it=>{ const e=exById(it.ex); if(e) sess.items.push({name:e.name, ref:e.id,
@@ -4048,170 +4108,159 @@ function barChart(vals, labels, max, w=560, h=150){
         <text x="${cx}" y="${h-6}" font-size="9" fill="var(--faint)" text-anchor="middle">${labels[i]}</text>`;
     }).join("")}</svg>`;
 }
-let progRange = 30;
-function renderProgress(){
-  const logs = state.logs.slice().sort((a,b)=>a.date<b.date?-1:1);
-  const demoCount = logs.filter(l=>l.demo).length;
-  const inRange = logs.filter(l=> l.date>=todayISO(-(progRange-1)));
-  const days=[]; for(let i=progRange-1;i>=0;i--) days.push(todayISO(-i));
-  const byDate = Object.fromEntries(logs.map(l=>[l.date,l]));
-  const lineD = days.map(d=> byDate[d]?.line ?? null);
-  const mobD  = days.map(d=> byDate[d]?.mob ?? null);
-  const labels= days.map(d=> d.slice(8,10)+"/"+d.slice(5,7));
-  const wk=[0,0,0,0,0,0,0]; inRange.forEach(l=> wk[new Date(l.date+"T12:00:00").getDay()]++);
-  const wkOrder=[1,2,3,4,5,6,0];
-  const rUse={}, eUse={};
-  inRange.forEach(l=>{ if(l.routineId) rUse[l.routineId]=(rUse[l.routineId]||0)+1; (l.done||[]).forEach(id=> eUse[id]=(eUse[id]||0)+1); });
-  const rEff = Object.entries(rUse).map(([rid,n])=>{
-    const ls = inRange.filter(l=>l.routineId===rid);
-    return {rid, n, line:avg(ls.map(l=>l.line).filter(v=>v!=null)), mob:avg(ls.map(l=>l.mob).filter(v=>v!=null))};
-  }).sort((a,b)=> (b.mob??0)-(a.mob??0));
-  const first7 = logs.slice(0,7), last7 = logs.slice(-7);
-  const ba = k => [avg(first7.map(l=>l[k]).filter(v=>v!=null)), avg(last7.map(l=>l[k]).filter(v=>v!=null))];
-  const [lA,lB]=ba("line"), [mA,mB]=ba("mob");
-  const avgLine = avg(inRange.map(l=>l.line).filter(v=>v!=null));
-  const avgMob  = avg(inRange.map(l=>l.mob).filter(v=>v!=null));
-  const tightCount={}; inRange.forEach(l=> (l.tight||[]).forEach(t=> tightCount[t]=(tightCount[t]||0)+1));
-  const topTight = Object.entries(tightCount).sort((a,b)=>b[1]-a[1]).slice(0,2).map(x=>x[0]);
-  const insights=[];
-  if(rEff.length && rEff[0].mob!=null) insights.push(`Best signal so far: days using “${routineById(rEff[0].rid)?.name||"?"}” average ${r1(rEff[0].mob)}/10 overhead mobility — your current top performer.`);
-  if(lB!=null && lA!=null && logs.length>=8){ const d=lB-lA; insights.push(d>=0.4?`Shoulder line is trending up: ${r1(lA)} → ${r1(lB)} comparing your first and last 7 logs.`: d<=-0.4?`Line score has dipped (${r1(lA)} → ${r1(lB)}). Check energy scores — fatigue usually shows up here first.`:`Line score is holding steady around ${r1(lB)}. Range change is slow — consistency is the lever.`); }
-  if(topTight.length) insights.push(`Most-flagged tightness: ${topTight.join(" and ")}. Bias the ${topTight[0].toLowerCase().includes("lat")?"lat openers":topTight[0].toLowerCase().includes("pec")?"pec work":"matching category"} in Saturday's long session.`);
-  const adh7 = last7Adherence();
-  insights.push(adh7>=5?`${adh7}/7 days logged this week — this is the adherence that moves overhead range.`:`${adh7}/7 days logged this week. If time is the blocker, the 5-min reset still counts.`);
+let progRange = 30, progTab = "week";
 
-  $("#view-progress").innerHTML = `
-   <div class="row between" style="margin-bottom:12px">
-     <div class="eyebrow" style="flex:1">Progress — handstand line</div>
-     <div class="row" style="gap:6px">
-       <button class="chip ${progRange===7?"on":""}" data-pr="7">7d</button>
-       <button class="chip ${progRange===30?"on":""}" data-pr="30">30d</button>
-     </div>
-   </div>
-   ${demoCount? `<div class="notice" style="margin-bottom:12px">${ICONS.info}<span>${demoCount} sample log${demoCount>1?"s":""} still loaded — these are mixed into the charts below.</span></div>
-   <button class="btn danger block" style="margin-bottom:14px" id="clear-demo">Clear ${demoCount} demo log${demoCount>1?"s":""}, keep my real ones</button>` : ""}
-   ${!logs.length? `<div class="card empty">${ICONS.info}No logs yet.<br><span class="tiny">Finish today's block, or load two weeks of demo data to preview the charts.</span>
-      <div style="margin-top:14px"><button class="btn small" id="demo-data">Load demo logs</button></div></div>` : `
-   <div class="card"><div class="gaugewrap">
-     ${gauge(avgLine,116)}
-     <div style="flex:1">
-       <div class="tiny" style="letter-spacing:.1em;text-transform:uppercase;font-weight:700">Est. shoulder angle</div>
-       <div class="h-lg" style="margin:2px 0">${avgLine==null?"—":Math.round(118+62*avgLine/10)+"°"}</div>
-       <div class="sub" style="font-size:.78rem">from a ${r1(avgLine)}/10 average line score over ${progRange} days. 180° = fully stacked.</div>
-     </div></div></div>
-   <div class="statgrid" style="margin-top:12px">
-     <div class="stat"><div class="n">${inRange.length}</div><div class="l">days done / ${progRange}</div></div>
-     <div class="stat"><div class="n">${Math.round(100*inRange.length/progRange)}%</div><div class="l">adherence</div></div>
-     <div class="stat"><div class="n">${r1(avgMob)}</div><div class="l">overhead ⌀</div></div>
-   </div>
-   <div class="sec"><div class="chart"><div class="cttl">Scores over ${progRange} days
-     <span class="legend"><span><i style="background:var(--teal)"></i>Line</span><span><i style="background:var(--amber)"></i>Overhead</span></span></div>
-     ${lineChart([{data:lineD,color:"var(--teal)"},{data:mobD,color:"var(--amber)"}],labels)}</div></div>
-   <div class="sec"><div class="chart"><div class="cttl">Days completed by weekday</div>
-     ${barChart(wkOrder.map(d=>wk[d]), wkOrder.map(d=>planFor(d).day.slice(0,3)), Math.max(...wk,1))}</div></div>
-   <div class="sec"><div class="eyebrow">What's working best</div>
-     <div class="card">${insights.map(t=>`<div class="kv" style="border-bottom:1px dashed var(--line)"><span style="text-align:left;color:var(--ink);font-size:.84rem">${esc(t)}</span></div>`).join("")}</div></div>
-   <div class="sec"><div class="eyebrow">Routine effectiveness</div>
-     <div class="card">${rEff.length? rEff.map(r=>`<div class="kv"><b>${esc(routineById(r.rid)?.name||"(deleted)")}</b><span>${r.n}× · line ${r1(r.line)} · ovh ${r1(r.mob)}</span></div>`).join("") : '<span class="sub">Log with a routine selected to compare them here.</span>'}</div></div>
-   <div class="sec"><div class="eyebrow">Most used drills</div>
-     <div class="card">${Object.entries(eUse).sort((a,b)=>b[1]-a[1]).slice(0,6).map(([id,n])=>`<div class="kv"><b>${esc(exById(id)?.name||id)}</b><span>${n}×</span></div>`).join("")||'<span class="sub">Tick drills when logging to see usage.</span>'}</div></div>
-   ${logs.length>=8?`<div class="sec"><div class="eyebrow">Before / after — first 7 vs last 7 logs</div>
-     <div class="card">
-       <div class="kv"><b>Shoulder line</b><span>${r1(lA)} → <b style="color:var(--teal)">${r1(lB)}</b>${lB!=null&&lA!=null?` (${lB-lA>=0?"+":""}${r1(lB-lA)})`:""}</span></div>
-       <div class="kv"><b>Overhead mobility</b><span>${r1(mA)} → <b style="color:var(--teal)">${r1(mB)}</b>${mB!=null&&mA!=null?` (${mB-mA>=0?"+":""}${r1(mB-mA)})`:""}</span></div>
-     </div></div>`:""}`}
-   <div class="sec"><div class="eyebrow">Personal bests — class work</div>
-     <div class="card">
-       ${(function(){ const pb=personalBests(); const keys=Object.keys(pb).sort();
-         if(!keys.length) return '<span class="sub" style="font-size:.8rem">Log a few classes and your bests will build up here.</span>';
-         return keys.slice(0,14).map(k=>`<div class="kv"><b>${esc(k)}</b><span>${esc(pb[k].raw)} · ${fmtDate(pb[k].date)}</span></div>`).join("");
-       })()}
-     </div></div>
-   <div class="sec"><div class="row between" style="margin-bottom:10px;gap:10px">
-       <div class="eyebrow" style="flex:1;margin:0">Class history</div>
-       <button class="btn small" id="pg-addclass">＋ Log a past day</button></div>
-     <div class="card">
-       ${(state.classLogs||[]).length
-         ? (state.classLogs||[]).slice(-10).reverse().map(cl=>`<div class="kv" data-editcl="${cl.date}" style="cursor:pointer">
-             <b>${fmtDate(cl.date)}</b><span>${esc(cl.cls)} · ${cl.items.length} exercise${cl.items.length!==1?"s":""}</span></div>`).join("")
-         : '<span class="sub" style="font-size:.8rem">No classes logged yet.</span>'}
-     </div></div>
-   <div class="sec"><div class="eyebrow">Skill work</div>
-     ${SKILLS.map(sk=>{
-       const sess = logs.filter(l=> (l.skills||[]).some(s=>s.skill===sk.id));
-       const inR = inRange.filter(l=> (l.skills||[]).some(s=>s.skill===sk.id));
-       const hist = sess.slice(-6).reverse().map(l=>{
-         const s=(l.skills||[]).find(x=>x.skill===sk.id);
-         const bits=[s.metric,s.metric2].filter(Boolean).join(" · ");
-         return `<div class="kv"><b>${fmtDate(l.date)}</b><span>Lv ${s.level}${bits?" · "+esc(bits):""}</span></div>`;
-       }).join("");
-       return `<div class="card">
-         <div class="row between"><div class="h-md">${esc(sk.name)}</div><span class="tag teal">Level ${skillLevel(sk.id)}</span></div>
-         <div class="wrap" style="margin:8px 0 4px">
-           <span class="tag">${sess.length} session${sess.length!==1?"s":""} total</span>
-           <span class="tag">${inR.length} in ${progRange}d</span>
-         </div>
-         ${hist || '<span class="sub" style="font-size:.8rem">No sessions logged yet — start one from Today.</span>'}
-       </div>`;
-     }).join("")}
-   </div>
-   <div class="sec"><div class="eyebrow">Desk resets — tracked separately</div>
-     <div class="card">
-       <div class="statgrid" style="margin-top:0">
-         <div class="stat"><div class="n">${deskToday()}</div><div class="l">today</div></div>
-         <div class="stat"><div class="n">${(state.deskLogs||[]).filter(d=>d.date>=todayISO(-(progRange-1))).length}</div><div class="l">in ${progRange}d</div></div>
-         <div class="stat"><div class="n">${deskStreak()}</div><div class="l">day streak</div></div>
-       </div>
-       ${(state.deskLogs||[]).length? `<p class="tiny" style="margin-top:10px">Most used: ${(function(){
-         const m={}; (state.deskLogs||[]).forEach(d=> m[d.set]=(m[d.set]||0)+1);
-         const top=Object.entries(m).sort((a,b)=>b[1]-a[1])[0];
-         return top? esc((DESK_SETS.find(s=>s.id===top[0])||{}).name||top[0])+" ("+top[1]+"×)" : "—";
-       })()}</p>` : '<p class="sub" style="font-size:.8rem;margin-top:10px">Nothing logged yet — start one from Today.</p>'}
-     </div></div>
-   <div class="sec"><div class="eyebrow">Milestones</div>
-     <div class="card">
-       ${state.milestones.slice().reverse().map((m,i)=>`<div class="kv"><b>${fmtDate(m.date)}</b><span>${esc(m.text)}</span></div>`).join("")||'<span class="sub">e.g. "First 30 s wall-facing hold with ribs closed."</span>'}
-       <div class="row" style="margin-top:10px"><input type="text" id="ms-text" placeholder="Add a milestone…" style="flex:1"><button class="btn small primary" id="ms-add">Add</button></div>
-     </div></div>
-   <div class="sec"><div class="eyebrow">History</div>
-     ${logs.slice(-14).reverse().map(l=>`<div class="exi" data-editlog="${l.date}">
-       <div class="ic">${l.line??"–"}</div>
-       <div class="bd"><div class="nm">${fmtDate(l.date)}${l.demo?' <span class="tag amber">DEMO</span>':''}</div>
-       <div class="mt">${esc(routineById(l.routineId)?.name||"Freestyle")} · ovh ${l.mob??"–"} · energy ${l.energy??"–"}${(l.tight||[]).length?" · "+l.tight.join(", "):""}</div></div>
-       </div>`).join("")||""}
-   </div>`;
-  $$("#view-progress [data-pr]").forEach(b=> b.onclick=()=>{ progRange=+b.dataset.pr; renderProgress(); });
-  const dbtn=$("#demo-data"); if(dbtn) dbtn.onclick=loadDemo;
-  const cdbtn=$("#clear-demo"); if(cdbtn) cdbtn.onclick=clearDemoLogs;
-  $("#ms-add").onclick=()=>{ const v=$("#ms-text").value.trim(); if(!v) return; state.milestones.push({date:todayISO(),text:v}); state.meta_milestonesU=Date.now(); save(); renderProgress(); };
-  $$("#view-progress [data-editlog]").forEach(el=> el.onclick=()=> openLogForm(el.dataset.editlog));
+/* ---- weekly analyzer: what the week actually contained ---- */
+function weekWindow(offset){
+  const now=new Date(); now.setDate(now.getDate() - (offset||0)*7);
+  const dow=(now.getDay()+6)%7;               // Monday-start
+  const start=new Date(now); start.setDate(now.getDate()-dow);
+  const days=[]; for(let i=0;i<7;i++){ const d=new Date(start); d.setDate(start.getDate()+i);
+    days.push(d.toISOString().slice(0,10)); }
+  return days;
+}
+function analyseWeek(offset){
+  const days = weekWindow(offset);
+  const cls  = (state.classLogs||[]).filter(c=>days.includes(c.date));
+  const logs = (state.logs||[]).filter(l=>days.includes(l.date));
+  const desk = (state.deskLogs||[]).filter(d=>days.includes(d.date));
+  const items = [];
+  cls.forEach(c=> (c.items||[]).forEach(it=> items.push(it)));
+  // volume by category, using our drills where we can map them
+  const catCount = {};
+  logs.forEach(l=> (l.done||[]).forEach(id=>{ const e=exById(id); if(e) e.cats.forEach(k=> catCount[k]=(catCount[k]||0)+1); }));
+  // which skill ladders saw work
+  const skillHits = {};
+  TREES.forEach(t=>{
+    let n=0;
+    t.stages.forEach(st=> (st.match||[]).forEach(m=>{ items.forEach(it=>{ if((it.name||"").toLowerCase()===m.toLowerCase()) n++; }); }));
+    if(n) skillHits[t.id]=n;
+  });
+  const missing = TREES.filter(t=>!skillHits[t.id]);
+  const coldCats = CATS.filter(k=> !catCount[k.id]);
+  const trained = new Set(days.filter(d=> cls.some(c=>c.date===d) || logs.some(l=>l.date===d)));
+  const feels = logs.map(l=>l.feel).filter(Boolean);
+  const rough = feels.filter(f=>f==="rough").length;
+  return {days, cls, logs, desk, items, catCount, skillHits, missing, coldCats,
+          trainedN:trained.size, rough, feels};
+}
+function renderProgress(){
+  const tabs = `<div class="segrow">
+    <button class="seg ${progTab==="week"?"on":""}" data-pt="week">This week</button>
+    <button class="seg ${progTab==="skills"?"on":""}" data-pt="skills">Skills</button>
+    <button class="seg ${progTab==="bests"?"on":""}" data-pt="bests">Bests</button>
+    <button class="seg ${progTab==="history"?"on":""}" data-pt="history">History</button></div>`;
+  let body="";
+  if(progTab==="week") body = viewWeekAnalysis();
+  else if(progTab==="skills") body = viewSkillProgress();
+  else if(progTab==="bests") body = viewBests();
+  else body = viewHistory();
+  $("#view-progress").innerHTML = tabs + body;
+  $$("#view-progress [data-pt]").forEach(b=> b.onclick=()=>{ progTab=b.dataset.pt; renderProgress(); });
   $$("#view-progress [data-editcl]").forEach(el=> el.onclick=()=> openClassLog(el.dataset.editcl));
+  $$("#view-progress [data-editlog]").forEach(el=> el.onclick=()=> openLogForm(el.dataset.editlog));
+  $$("#view-progress [data-gotree]").forEach(el=> el.onclick=()=> openTree(el.dataset.gotree));
   const pac=$("#pg-addclass"); if(pac) pac.onclick=()=> openClassLog(todayISO(-1));
+  const dm=$("#demo-data"); if(dm) dm.onclick=loadDemo;
+  const cd=$("#clear-demo"); if(cd) cd.onclick=clearDemoLogs;
+}
+function viewWeekAnalysis(){
+  const a = analyseWeek(0), p = analyseWeek(1);
+  const dayDots = a.days.map(d=>{
+    const has = a.cls.some(c=>c.date===d)||a.logs.some(l=>l.date===d);
+    const nm = new Date(d+"T12:00:00").toLocaleDateString(undefined,{weekday:"narrow"});
+    return `<div class="wd ${has?"on":""}"><span>${nm}</span><i></i></div>`;}).join("");
+  const insights=[];
+  if(a.trainedN>=5) insights.push(`Trained on ${a.trainedN} of 7 days — that's the consistency that actually moves range.`);
+  else if(a.trainedN) insights.push(`${a.trainedN} of 7 days logged. Last week was ${p.trainedN}.`);
+  else insights.push("Nothing logged this week yet.");
+  if(a.missing.length && a.items.length) insights.push(`No work logged toward: ${a.missing.map(t=>t.name).join(", ")}.`);
+  if(a.coldCats.length) insights.push(`Untouched categories: ${a.coldCats.slice(0,4).map(c=>c.name).join(", ")}${a.coldCats.length>4?" and "+(a.coldCats.length-4)+" more":""}.`);
+  if(a.rough>=2) insights.push(`${a.rough} rough days this week — worth a lighter week before pushing again.`);
+  if(a.desk.length) insights.push(`${a.desk.length} desk resets logged.`);
+  const topCats = Object.entries(a.catCount).sort((x,y)=>y[1]-x[1]).slice(0,6);
+  const max = topCats.length? topCats[0][1] : 1;
+  return `
+   <div class="card"><div class="row between"><div class="h-md">This week</div>
+     <span class="tag teal">${a.trainedN}/7 days</span></div>
+     <div class="wdrow">${dayDots}</div>
+     <div class="statgrid" style="margin-top:12px">
+       <div class="stat"><div class="n">${a.cls.length}</div><div class="l">sessions</div></div>
+       <div class="stat"><div class="n">${a.items.length}</div><div class="l">exercises</div></div>
+       <div class="stat"><div class="n">${a.desk.length}</div><div class="l">desk resets</div></div>
+     </div></div>
+
+   <div class="sec"><div class="eyebrow">What the week covered</div>
+     <div class="card">${topCats.length? topCats.map(([k,v])=>{
+       const cat=CATS.find(x=>x.id===k)||{name:k};
+       return `<div class="bar"><span class="bl">${esc(cat.name)}</span>
+         <span class="bt"><i style="width:${Math.round(100*v/max)}%"></i></span><b>${v}</b></div>`;}).join("")
+       : '<span class="sub" style="font-size:.82rem">No support work logged yet this week.</span>'}</div></div>
+
+   <div class="sec"><div class="eyebrow">Skills touched</div>
+     <div class="card">${TREES.map(t=>{
+       const n=a.skillHits[t.id]||0;
+       return `<div class="kv" data-gotree="${t.id}" style="cursor:pointer">
+         <b>${esc(t.name)}</b><span>${n? n+" logged":'<span style="color:var(--amber)">nothing this week</span>'}</span></div>`;}).join("")}
+     </div></div>
+
+   <div class="sec"><div class="eyebrow">Read on the week</div>
+     <div class="card">${insights.map(t=>`<div class="kv"><span style="text-align:left;color:var(--ink);font-size:.85rem">${esc(t)}</span></div>`).join("")}</div></div>`;
+}
+function viewSkillProgress(){
+  return `<div class="eyebrow" style="margin-bottom:10px">Ladder positions</div>
+   ${TREES.map(t=>{ const p=treeProgress(t);
+     const moved = p.stages.filter(s=>s.count>0).length;
+     return `<div class="card" data-gotree="${t.id}" style="cursor:pointer">
+       <div class="row between"><div class="h-md">${esc(t.name)}</div><span class="tag teal">Stage ${p.current}</span></div>
+       <div class="ladder">${t.stages.map(s=>`<i class="${s.n<p.current?"done":s.n===p.current?"now":""}"></i>`).join("")}</div>
+       <div class="tiny" style="margin-top:7px">${moved} of ${t.stages.length} stages have logged work</div>
+       ${p.stages.filter(s=>s.best).slice(-2).map(s=>`<div class="kv"><b>${esc(s.stage.name)}</b><span>${esc(s.best.raw)} · ${fmtDate(s.best.date)}</span></div>`).join("")}
+     </div>`;}).join("")}`;
+}
+function viewBests(){
+  const pb=personalBests(); const keys=Object.keys(pb).sort();
+  return `<div class="eyebrow" style="margin-bottom:10px">Personal bests — everything logged</div>
+    <div class="card">${keys.length? keys.map(k=>`<div class="kv"><b>${esc(k)}</b><span>${esc(pb[k].raw)} · ${fmtDate(pb[k].date)}</span></div>`).join("")
+      : '<span class="sub" style="font-size:.82rem">Log a few sessions and your bests build up here.</span>'}</div>`;
+}
+function viewHistory(){
+  const logs=(state.logs||[]).slice().sort((a,b)=>a.date<b.date?-1:1);
+  const demoN=logs.filter(l=>l.demo).length;
+  return `${demoN?`<button class="btn danger block" style="margin-bottom:12px" id="clear-demo">Clear ${demoN} demo log${demoN>1?"s":""}</button>`:""}
+   <div class="row between" style="margin-bottom:10px;gap:10px">
+     <div class="eyebrow" style="flex:1;margin:0">Sessions</div>
+     <button class="btn small" id="pg-addclass">＋ Log a past day</button></div>
+   <div class="card">${(state.classLogs||[]).length
+     ? (state.classLogs||[]).slice(-15).reverse().map(cl=>`<div class="kv" data-editcl="${cl.date}" style="cursor:pointer">
+         <b>${fmtDate(cl.date)}</b><span>${esc(cl.cls)} · ${cl.items.length} exercise${cl.items.length!==1?"s":""}</span></div>`).join("")
+     : '<span class="sub" style="font-size:.82rem">No sessions logged yet.</span>'}</div>
+   <div class="eyebrow" style="margin:20px 0 10px">Check-ins</div>
+   <div class="card">${logs.length? logs.slice(-15).reverse().map(l=>{
+       const f=(FEEL.find(x=>x[0]===l.feel)||[])[1]||"—";
+       return `<div class="kv" data-editlog="${l.date}" style="cursor:pointer"><b>${fmtDate(l.date)}${l.demo?' <span class="tag amber">demo</span>':''}</b>
+         <span>${f}${(l.tight||[]).length?" · "+l.tight.join(", "):""}</span></div>`;}).join("")
+     : `<span class="sub" style="font-size:.82rem">No check-ins yet.</span>
+        <div style="margin-top:12px"><button class="btn small" id="demo-data">Load demo data</button></div>`}</div>`;
 }
 function loadDemo(){
-  const rids=["r-prep-a","r-reset","r-opener","r-prep-b","r-opener","r-long","r-recovery"];
   for(let i=14;i>=1;i--){
-    if(i%7===5) continue; // one missed day per week
+    if(i%7===5) continue;
     const d=todayISO(-i), dow=new Date(d+"T12:00:00").getDay();
+    if(logByDate(d)) continue;
     const rid=planFor(dow).routine;
-    const drift=(14-i)*0.12;
-    if(logByDate(d)) continue; // never overwrite a real log
     state.logs.push({date:d, routineId:rid, done:(routineById(rid)?.items||[]).map(x=>x.ex),
-      dosage:"", line:Math.min(10,Math.round(4+drift+ (i%3===0?1:0))), mob:Math.min(10,Math.round(4.5+drift)),
-      energy:6+((i%4)-1), tight:i%3===0?["Lats"]:i%4===0?["Pecs","T-spine"]:[], pain:"", mediaNote:"",
-      notes:i===14?"Baseline — arms clearly in front of ears at end range.":"", demo:true});
+      feel:i%4===0?"rough":i%3===0?"good":"ok", energy:i%4===0?3:i%3===0?8:6,
+      tight:i%3===0?["Lats"]:i%4===0?["Pecs","T-spine"]:[], pain:"", notes:"", skills:[], demo:true});
   }
   state.logs.sort((a,b)=>a.date<b.date?-1:1);
-  save(); renderProgress(); toast("Demo logs loaded — clear them anytime from Progress");
+  save(); renderProgress(); toast("Demo data loaded");
 }
 function clearDemoLogs(){
-  const n = state.logs.filter(l=>l.demo).length;
-  if(!n){ toast("No demo logs to clear"); return; }
-  openSheet("Clear demo logs?",
-    `<p class="sub">This removes the ${n} sample log${n>1?"s":""} loaded for the chart preview. Any real logs you've entered — even on the same dates — are left untouched.</p>`,
-    `<button class="btn ghost" id="cd-no">Keep them</button><button class="btn danger" style="flex:1" id="cd-yes">Clear ${n} demo log${n>1?"s":""}</button>`);
-  $("#cd-no").onclick = closeSheet;
-  $("#cd-yes").onclick = ()=>{ SYNC.pendingDeletes=(SYNC.pendingDeletes||[]).concat(state.logs.filter(l=>l.demo).map(l=>l.date)); state.logs = state.logs.filter(l=>!l.demo); save(); closeSheet(); renderProgress(); toast("Demo logs cleared"); };
+  const n=state.logs.filter(l=>l.demo).length;
+  if(!n){ toast("No demo data"); return; }
+  SYNC.pendingDeletes=(SYNC.pendingDeletes||[]).concat(state.logs.filter(l=>l.demo).map(l=>l.date));
+  state.logs=state.logs.filter(l=>!l.demo); save(); renderProgress(); toast("Demo data cleared");
 }
 
 /* ============================================================
@@ -4241,11 +4290,11 @@ function classCSV(){
   return rows.join("\n");
 }
 function logsCSV(){
-  const head=["date","routine","exercises_completed","dosage","shoulder_line","overhead_mobility","energy","tightness","pain","media_note","notes","skill_sessions"];
+  const head=["date","routine","drills_completed","dosage","feel","energy","tightness","pain","notes","skill_sessions"];
   const q=v=>'"'+String(v==null?"":v).replace(/"/g,'""')+'"';
   return [head.join(",")].concat(state.logs.map(l=>[
     l.date, routineById(l.routineId)?.name||"", (l.done||[]).map(id=>exById(id)?.name||id).join("; "),
-    l.dosage||"", l.line, l.mob, l.energy, (l.tight||[]).join("; "), l.pain||"", l.mediaNote||"", l.notes||"",
+    l.dosage||"", l.feel||"", l.energy, (l.tight||[]).join("; "), l.pain||"", l.notes||"",
     (l.skills||[]).map(s=>`${skillById(s.skill)?.name||s.skill} Lv${s.level} ${s.preset}${s.metric?" | "+s.metric:""}${s.metric2?" | "+s.metric2:""}`).join(" ;; ")
   ].map(q).join(","))).join("\n");
 }
