@@ -1579,11 +1579,15 @@ function howTo(id){
    Designed for ~30 seconds on a phone, tired, after a session.
 ============================================================ */
 const classLogFor = d => (state.classLogs||[]).find(x=>x.date===d);
-function openClassLog(date){
+function openClassLog(date, draft){
   date = date || todayISO();
   const existing = classLogFor(date);
-  const L = existing ? JSON.parse(JSON.stringify(existing))
-                     : {date:date, cls:plan0.cls, items:[], notes:""};
+  const plan0 = planFor(new Date(date+"T12:00:00").getDay());
+  const L = draft ? draft
+          : existing ? JSON.parse(JSON.stringify(existing))
+          : {date:date, cls:plan0.cls, mode:"items", items:[], highlights:[], notes:"", duration:"", focus:[]};
+  L.items = L.items||[]; L.highlights = L.highlights||[]; L.focus = L.focus||[];
+  L.mode = L.mode || "items";
   let picking = false, query = "";
 
   const itemRow = (it,i)=> `
