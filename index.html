@@ -355,6 +355,34 @@ ul.bul{padding-left:18px;font-size:.85rem;line-height:1.6}
 .streakpill{display:inline-flex;align-items:center;gap:6px;background:var(--surface);border:1px solid var(--line);
   border-radius:999px;padding:5px 12px;font-size:.74rem;font-weight:600;color:var(--ink);font-family:inherit}
 .streakpill b{font-family:"Archivo";font-weight:800;color:var(--teal)}
+.catgrid{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.ccard{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:12px;box-shadow:var(--shadow);
+  cursor:pointer;text-align:left;font:inherit;color:var(--ink);transition:transform .12s}
+.ccard:active{transform:scale(.985)}
+.ccard .figs{display:flex;gap:4px;justify-content:center;align-items:flex-end;background:var(--sunken);
+  border-radius:11px;padding:8px 4px;margin-bottom:9px}
+.ccard h3{font-family:"Archivo";font-size:.95rem;font-weight:800;line-height:1.2}
+.ccard .n{font-size:.69rem;color:var(--muted);margin-top:2px}
+.ccard .subs{display:flex;flex-wrap:wrap;gap:4px;margin-top:7px}
+.ccard .subs span{font-size:.55rem;font-weight:700;letter-spacing:.03em;text-transform:uppercase;
+  background:var(--surface2);color:var(--muted);border-radius:5px;padding:2px 5px}
+.cathead{display:flex;gap:12px;align-items:center;margin-top:12px}
+.cathead .figs{display:flex;gap:4px;background:var(--sunken);border-radius:12px;padding:8px}
+.cathead h2{font-family:"Archivo";font-size:1.25rem;font-weight:800}
+.backbar{display:flex;align-items:center;gap:7px;background:none;border:0;color:var(--teal);font:inherit;
+  font-size:.82rem;font-weight:700;cursor:pointer;padding:4px 0}
+.backbar svg{width:15px;height:15px}
+.exi.ref{opacity:.78;background:var(--surface2)}
+
+.filtertoggle{width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 13px;
+  border:1px solid var(--line);border-radius:12px;background:var(--surface);font:inherit;font-size:.83rem;
+  font-weight:600;color:var(--ink);cursor:pointer;margin-bottom:8px}
+.filtertoggle svg{width:15px;height:15px;color:var(--faint);transition:transform .2s}
+.filterbox.open ~ .filtertoggle svg,.filtertoggle.open svg{transform:rotate(180deg)}
+.filterbox{display:none;background:var(--surface2);border:1px solid var(--line);border-radius:13px;padding:13px;margin-bottom:12px}
+.filterbox.open{display:block}
+.filterbox .grouprow+.grouprow{margin-top:13px}
+
 .wdrow{display:flex;gap:6px;margin-top:12px}
 .wd{flex:1;text-align:center}
 .wd span{display:block;font-size:.6rem;color:var(--faint);font-weight:700;margin-bottom:4px}
@@ -1658,10 +1686,10 @@ function parseTime(t){
    movement stays one trackable line as it progresses.
 ============================================================ */
 const CATALOG = {
-"Pull — bar":[["Dead hang",1],["Active hang",1],["Scapular pull-up",1],["Arch hang",2],["Negative pull-up",2],["Pull-up",3],["Chin-up",3],["Commando pull-up",3],["Wide-grip pull-up",4],["L-sit pull-up",4],["Archer pull-up",4],["Typewriter pull-up",4],["Weighted pull-up",4],["One-arm pull-up negative",5],["One-arm pull-up",5],["Bar pullover",3],["Chest-to-bar pull-up",4],["Kipping pull-up",2]],
-"Pull — rows":[["Incline body row",1],["Body row",2],["Feet-elevated body row",3],["Wide body row",3],["Archer body row",4],["One-arm body row",5],["Ring row",2],["Front lever row",5]],
-"Push — floor":[["Incline push-up",1],["Knee push-up",1],["Push-up",2],["Diamond push-up",3],["Wide push-up",2],["Decline push-up",3],["Archer push-up",4],["Pseudo planche push-up",4],["One-arm push-up negative",4],["One-arm push-up",5],["Explosive push-up",3],["Clap push-up",4],["Ring push-up",3]],
-"Push — dips":[["Bench dip",1],["Support hold (bars)",1],["Negative dip",2],["Dip",3],["Weighted dip",4],["Ring support hold",2],["Ring dip",4],["Bulgarian dip",5],["Straight-bar dip",3]],
+"Pull — bar":[["Dead hang",1],["Scapular pull-up",1],["Arch hang",2],["Negative pull-up",2],["Pull-up",3],["Chin-up",3],["Commando pull-up",3],["Wide-grip pull-up",4],["L-sit pull-up",4],["Archer pull-up",4],["Typewriter pull-up",4],["Weighted pull-up",4],["One-arm pull-up negative",5],["One-arm pull-up",5],["Bar pullover",3],["Chest-to-bar pull-up",4],["Kipping pull-up",2]],
+"Pull — rows":[["Incline body row",1],["Body row",2],["Feet-elevated body row",3],["Wide body row",3],["Archer body row",4],["One-arm body row",5],["Front lever row",5]],
+"Push — floor":[["Incline push-up",1],["Knee push-up",1],["Push-up",2],["Diamond push-up",3],["Wide push-up",2],["Decline push-up",3],["Archer push-up",4],["Pseudo planche push-up",4],["One-arm push-up negative",4],["One-arm push-up",5]],
+"Push — dips":[["Bench dip",1],["Support hold (bars)",1],["Negative dip",2],["Dip",3],["Weighted dip",4],["Bulgarian dip",5],["Straight-bar dip",3]],
 "Push — vertical":[["Pike push-up",2],["Feet-elevated pike push-up",3],["Wall-supported HSPU negative",3],["Wall handstand push-up",4],["Deficit wall HSPU",5],["Freestanding HSPU",5],["Wall walk",2]],
 "Muscle-up":[["High pull-up (chest to bar)",4],["Explosive pull-up",4],["Baby muscle-up (low bar)",3],["Jumping muscle-up",3],["Negative muscle-up",4],["Bar muscle-up",5],["Ring muscle-up transition",4],["Ring muscle-up",5],["False grip hang",3],["False grip pull-up",4]],
 "Front lever":[["Tuck front lever",2],["Tuck front lever raise",3],["Advanced tuck front lever",3],["One-leg front lever",4],["Straddle front lever",4],["Half-lay front lever",5],["Full front lever",5],["Front lever pull-out",4],["Ice cream maker",5]],
@@ -1673,16 +1701,15 @@ const CATALOG = {
 "Core — compression":[["Hollow body hold",1],["Hollow rock",2],["Tuck L-sit",2],["One-leg L-sit",2],["L-sit",3],["Straddle L-sit",4],["V-sit",5],["Manna",5],["Toes to bar",3],["Hanging leg raise",3],["Hanging knee raise",2],["Windshield wipers",4]],
 "Core — other":[["Plank",1],["Side plank",1],["Arch hold (superman)",1],["Dragon flag negative",4],["Dragon flag",5],["Ab wheel from knees",3],["Ab wheel standing",5],["Dead bug",1],["Copenhagen plank",3],["Hanging windshield wipers",5]],
 "Legs & glutes":[["Bodyweight squat",1],["Split squat",2],["Bulgarian split squat",3],["Pistol squat negative",3],["Pistol squat",4],["Shrimp squat",4],["Glute bridge",1],["Single-leg glute bridge",2],["Hip thrust",2],["Weighted hip thrust",3],["Nordic curl negative",4],["Nordic curl",5],["Reverse lunge",2],["Walking lunge",2],["Step-up",2],["Calf raise",1],["Single-leg deadlift",2],["Frog pump",1],["Fire hydrant",1],["Clamshell",1],["Kickback",1],["Banded lateral walk",1],["Curtsy lunge",2],["Sumo squat",1],["Jump squat",3],["Wall sit",1]],
-"Rings":[["Ring support hold",2],["Ring row",2],["Ring push-up",3],["Ring dip",4],["Ring L-sit",4],["Skin the cat",2],["German hang",2],["Ring turned-out support",4],["Ring flye",4],["Ring archer row",4]],
-"Warm-up & prep":[["Band pull-apart",1],["Band dislocate",1],["Shoulder dislocate (stick)",1],["Arm circles",1],["Wrist circles",1],["Scapular push-up",1],["Scapular pull-up",1],["Cat-cow",1],["Jumping jacks",1],["Bodyweight squat",1],["Hip circles",1],["Leg swings",1],["Inchworm",1],["World's greatest stretch",1],["Band face pull",1],["Ring support scap work",2]],
+"Rings":[["Ring support hold",2],["Ring row",2],["Ring push-up",3],["Ring dip",4],["Ring L-sit",4],["Ring turned-out support",4],["Ring flye",4],["Ring archer row",4]],
+"Warm-up & prep":[["Band pull-apart",1],["Shoulder dislocate (stick)",1],["Arm circles",1],["Wrist circles",1],["Cat-cow",1],["Jumping jacks",1],["Hip circles",1],["Leg swings",1],["Inchworm",1],["World's greatest stretch",1],["Band face pull",1],["Ring support scap work",2]],
 "Grip & hangs":[["Passive hang",1],["Active hang",1],["One-arm hang",3],["Towel hang",3],["Fingertip hang",4],["Rope climb (legs)",3],["Rope climb (legless)",5],["Plate pinch",2],["Bar hang shrug",2]],
-"Bridging":[["Glute bridge",1],["Table top bridge",1],["Bridge (short)",2],["Full bridge",3],["Bridge push-up",4],["Wall walk down",3],["Stand-to-bridge",5],["One-arm bridge",5]],
-"Explosive":[["Clap push-up",4],["Explosive push-up",3],["Bar pop-up",3],["Muscle-up pop",4],["Jump squat",2],["Box jump",2],["Broad jump",2],["Burpee",2],["Kip swing",2],["Plyo pull-up",4]],
-"Rings — extra":[["Inverted hang",2],["Ring support hold",2],["Ring roll",4],["Ring shoulder stand",4],["Ring hollow hold",3],["Bulgarian ring dip",5],["Ring handstand",5],["False grip row",3]],
-"Weighted":[["Weighted pull-up",4],["Weighted dip",4],["Weighted push-up",3],["Weighted hip thrust",3],["Weighted L-sit",4],["Vest hold",3]],
-"Neck & forearm":[["Neck bridge",3],["Chin tuck",1],["Wrist curl",1],["Reverse wrist curl",1],["Forearm plank",1],["Wrist rotation",1],["First knuckle push-up",2],["Reverse wrist push-up",2]],
+"Bridging":[["Table top bridge",1],["Bridge (short)",2],["Full bridge",3],["Bridge push-up",4],["Wall walk down",3],["Stand-to-bridge",5],["One-arm bridge",5]],
+"Explosive":[["Clap push-up",4],["Explosive push-up",3],["Bar pop-up",3],["Muscle-up pop",4],["Box jump",2],["Broad jump",2],["Burpee",2],["Kip swing",2],["Plyo pull-up",4]],
+"Rings — extra":[["Inverted hang",2],["Ring roll",4],["Ring shoulder stand",4],["Ring hollow hold",3],["Bulgarian ring dip",5],["Ring handstand",5],["False grip row",3]],
+"Neck & forearm":[["Neck bridge",3],["Wrist curl",1],["Reverse wrist curl",1],["Forearm plank",1],["Wrist rotation",1]],
 "Handstand entries":[["Kick-up",2],["Tuck-up to handstand",4],["Straddle-up to handstand",4],["Pike-up to handstand",5],["Frog stand to handstand",4],["Crow to handstand",4]],
-"Mobility & stretch":[["Pancake",2],["Pike fold",1],["Couch stretch",2],["Pigeon pose",2],["Downward dog",1],["Puppy pose",1],["Thoracic extension",1],["Doorway pec stretch",1],["Overhead lat stretch",1],["Wall angel",1],["Hip flexor lunge stretch",1],["Butterfly stretch",1],["Hamstring stretch",1],["Wrist stretch",1],["Shoulder flexion PAILs/RAILs",3],["Middle split",3],["Front split",3],["Bridge",3],["Bridge push-up",4]]
+"Mobility & stretch":[["Pancake",2],["Pike fold",1],["Couch stretch",2],["Pigeon pose",2],["Downward dog",1],["Puppy pose",1],["Thoracic extension",1],["Doorway pec stretch",1],["Overhead lat stretch",1],["Wall angel",1],["Hip flexor lunge stretch",1],["Butterfly stretch",1],["Hamstring stretch",1],["Wrist stretch",1],["Shoulder flexion PAILs/RAILs",3],["Middle split",3],["Front split",3],["Bridge",3]]
 };
 /* modifiers that keep one movement one trackable line */
 const VARIATIONS = ["strict","banded (assist)","banded (resist)","weighted","tempo / slow","negative only","tuck","advanced tuck","one leg","straddle","half lay","full","paused","explosive","rings","parallettes","elevated","deficit","assisted","spotted","one arm","L-sit","archer","false grip","wide grip","close grip"];
@@ -1921,6 +1948,106 @@ function treeProgress(tree){
   out.forEach(s=>{ if(s.count>0) cur = Math.max(cur, s.stage.n); });
   const manual = (state.prefs.treeStage||{})[tree.id];
   return {stages:out, current: manual || cur, manual: !!manual};
+}
+
+/* ============================================================
+   ONE TAXONOMY for both libraries — the standard calisthenics
+   grouping (push / pull / legs / core / skills) with mobility
+   and prep alongside. Every drill and every catalog movement
+   resolves into exactly one top-level category.
+============================================================ */
+const TAXONOMY = [
+ {id:"push", name:"Push", blurb:"Pressing away from you — floor, bars, overhead.",
+  muscles:["pecs","triceps","delts","serratus"],
+  subs:[{id:"push-h", name:"Horizontal", fams:["Push — floor"]},
+        {id:"push-v", name:"Vertical",   fams:["Push — vertical","Push — dips"]},
+        {id:"push-sa",name:"Straight-arm",fams:["Planche"]}],
+  cats:["scap"]},
+ {id:"pull", name:"Pull", blurb:"Pulling toward you — bars, rings, levers.",
+  muscles:["lats","biceps","traps","forearms"],
+  subs:[{id:"pull-v", name:"Vertical",   fams:["Pull — bar","Muscle-up"]},
+        {id:"pull-h", name:"Horizontal", fams:["Pull — rows","Rings","Rings — extra"]},
+        {id:"pull-sa",name:"Straight-arm",fams:["Front lever","Back lever"]},
+        {id:"pull-g", name:"Grip",       fams:["Grip & hangs"]}],
+  cats:["lats"]},
+ {id:"legs", name:"Legs", blurb:"Squat, hinge and single-leg work.",
+  muscles:["quads","glutes","hamstrings","adductors","calves"],
+  subs:[{id:"legs-all", name:"All", fams:["Legs & glutes"]}],
+  cats:[]},
+ {id:"core", name:"Core", blurb:"Compression, anti-extension and rotation.",
+  muscles:["abs","obliques","hipflexors","erectors"],
+  subs:[{id:"core-c", name:"Compression", fams:["Core — compression"]},
+        {id:"core-a", name:"Anti-extension / holds", fams:["Core — other"]}],
+  cats:["rib","compression"]},
+ {id:"skills", name:"Skills", blurb:"Balance and the named calisthenics skills.",
+  muscles:["delts","abs","traps","forearms"],
+  subs:[{id:"sk-hs", name:"Handstand", fams:["Handstand","Handstand entries"]},
+        {id:"sk-pr", name:"Press",     fams:["Press handstand"]},
+        {id:"sk-fl", name:"Flag",      fams:["Human flag"]},
+        {id:"sk-br", name:"Bridging",  fams:["Bridging"]},
+        {id:"sk-ex", name:"Explosive", fams:["Explosive"]}],
+  cats:["line"]},
+ {id:"mobility", name:"Mobility", blurb:"Opening the tissue that limits your positions.",
+  muscles:["lats","pecs","erectors","hipflexors","hamstrings"], stretch:true,
+  subs:[{id:"mb-sh", name:"Shoulders & overhead", cats:["flexion","overhead","lats","pecs"]},
+        {id:"mb-sp", name:"Spine & chest",        cats:["thoracic"]},
+        {id:"mb-hp", name:"Hips & compression",   cats:["hips"]},
+        {id:"mb-wr", name:"Wrists",               cats:["wrist"], fams:["Neck & forearm"]}],
+  fams:["Mobility & stretch"], cats:["flexion","overhead","pecs","thoracic","hips","wrist"]},
+ {id:"prep", name:"Prep & desk", blurb:"Warm-ups and the resets that undo sitting.",
+  muscles:["delts","forearms","erectors"],
+  subs:[{id:"pr-wu", name:"Warm-up", fams:["Warm-up & prep"]},
+        {id:"pr-dk", name:"Desk resets", desk:true}],
+  cats:[]}
+];
+const taxById = id => TAXONOMY.find(t=>t.id===id);
+
+/* which top-level category a drill or catalog movement belongs to */
+function taxOfDrill(e){
+  if(e.desk) return "prep";
+  for(const t of TAXONOMY){
+    const own = (t.cats||[]).concat(...(t.subs||[]).map(s=>s.cats||[]));
+    if(e.cats.some(c=>own.includes(c))) return t.id;
+  }
+  return "mobility";
+}
+function taxOfFamily(fam){
+  for(const t of TAXONOMY){
+    if((t.fams||[]).includes(fam)) return t.id;
+    for(const s of (t.subs||[])) if((s.fams||[]).includes(fam)) return t.id;
+  }
+  return null;
+}
+function taxContents(taxId, subId){
+  const t = taxById(taxId); if(!t) return {drills:[], moves:[]};
+  const subs = subId ? (t.subs||[]).filter(s=>s.id===subId) : (t.subs||[]);
+  const cats = subId ? [].concat(...subs.map(s=>s.cats||[])) : (t.cats||[]).concat(...(t.subs||[]).map(s=>s.cats||[]));
+  const fams = subId ? [].concat(...subs.map(s=>s.fams||[])) : (t.fams||[]).concat(...(t.subs||[]).map(s=>s.fams||[]));
+  const wantDesk = subs.some(s=>s.desk) || (!subId && (t.subs||[]).some(s=>s.desk));
+  const drills = EX_ALL().filter(e=>{
+    if(e.desk) return wantDesk;
+    if(taxOfDrill(e)!==taxId) return false;
+    return subId ? e.cats.some(c=>cats.includes(c)) : true;
+  }).sort((a,b)=>a.level-b.level);
+  const drillNames = new Set(EX_ALL().map(d=>d.name.toLowerCase()));
+  const moves = catalogFlat().filter(m=>{
+    if(drillNames.has(m.name.toLowerCase())) return false;
+    return subId ? fams.includes(m.fam) : (taxOfFamily(m.fam)===taxId);
+  }).sort((a,b)=>(a.lvl||0)-(b.lvl||0));
+  return {drills, moves};
+}
+/* small front+back body map for a category card */
+function taxMap(t, h){
+  const SM = window.SL_MUSCLES; if(!SM||!SM.ready) return "";
+  const on = new Set([].concat(...(t.muscles||[]).map(k=> SM.groups[k]||[])));
+  const col = t.stretch ? "var(--amber)" : "var(--teal)";
+  const fig = (defs, vb) => {
+    const paths = defs.map(d=>`<path d="${d.path}" fill="${on.has(d.id)?col:"var(--figure)"}"/>`).join("");
+    return `<svg viewBox="${vb}" style="height:${h}px;width:auto" xmlns="http://www.w3.org/2000/svg">${paths}</svg>`;
+  };
+  const F = SM.defs.filter(d=>d.view===SM.ViewSide.FRONT);
+  const B = SM.defs.filter(d=>d.view===SM.ViewSide.BACK);
+  return fig(F,"0 0 35 93")+fig(B,"37 0 35 93");
 }
 
 /* ---------- weekly schedule (user's real split) ---------- */
@@ -2757,84 +2884,111 @@ function openWeekDay(dow){
 /* ============================================================
    LIBRARY view — exercise cards, filters, favorites, media prefs
 ============================================================ */
-let lib = {q:"", cat:"", when:"", fat:"", fav:false, review:false, desk:false, ref:false, mode:"browse"};
+let lib = {q:"", cat:"", when:"", fat:"", fav:false, review:false, desk:false, ref:false, showFilters:false, mode:"browse"};
 function exerciseUsage(){
   const m={}; state.logs.forEach(l=> (l.done||[]).forEach(id=> m[id]=(m[id]||0)+1)); return m;
 }
 const lvlBadge = lvl => `<span class="tag" style="background:var(--surface2)">Lv ${lvl}</span>`;
+let libCat = null, libSub = null;
 function renderLibrary(){
+  if(lib.mode==="progression"){ renderLibraryProgression(exerciseUsage()); return; }
+  if(libCat) return renderLibraryCategory();
   const usage = exerciseUsage();
-  if(lib.mode==="progression"){ renderLibraryProgression(usage); return; }
-  const list = EX_ALL().filter(e=>{
-    if(e.desk && !lib.desk) return false;
-    if(lib.q && !(e.name+" "+e.targets).toLowerCase().includes(lib.q.toLowerCase())) return false;
-    if(lib.cat && !e.cats.includes(lib.cat)) return false;
-    if(lib.when && !e.when.includes(lib.when)) return false;
-    if(lib.fat && e.fatigue!==lib.fat) return false;
-    if(lib.fav && !state.prefs.favs.includes(e.id)) return false;
-    if(lib.review){ const v=vidFor(e.id); if(!v || v.status==="ok") return false; }
-    return true;
-  });
+  // search cuts across everything
+  if(lib.q.trim()){
+    const q=lib.q.toLowerCase();
+    const drills = EX_ALL().filter(e=> (e.name+" "+(e.targets||"")).toLowerCase().includes(q));
+    const dn = new Set(drills.map(d=>d.name.toLowerCase()));
+    const moves = searchCatalog(lib.q).filter(m=>!dn.has(m.name.toLowerCase()));
+    $("#view-library").innerHTML = libSearchBar() +
+      `<div class="eyebrow" style="margin:16px 0 9px">Your drills · ${drills.length}</div>
+       <div class="exl">${drills.map(e=>drillRow(e,usage)).join("")||'<p class="tiny">None.</p>'}</div>
+       <div class="eyebrow" style="margin:20px 0 9px">Movements · ${moves.length}</div>
+       <div class="exl">${moves.map(refRow).join("")||'<p class="tiny">None.</p>'}</div>`;
+    bindLibrary();
+    return;
+  }
+  $("#view-library").innerHTML = libSearchBar() +
+    `${needsReview().length? `<button class="btn small block" id="lib-review" style="margin-bottom:12px">⚑ ${needsReview().length} drills need a video check</button>`:""}
+     <div class="catgrid">${TAXONOMY.map(t=>{
+       const n = taxContents(t.id);
+       return `<button class="ccard" data-tax="${t.id}">
+         <div class="figs">${taxMap(t,86)}</div>
+         <h3>${esc(t.name)}</h3>
+         <div class="n">${n.drills.length} drill${n.drills.length!==1?"s":""} · ${n.moves.length} movement${n.moves.length!==1?"s":""}</div>
+         <div class="subs">${(t.subs||[]).slice(0,4).map(s=>`<span>${esc(s.name)}</span>`).join("")}</div>
+       </button>`;}).join("")}</div>
+     <div class="notice teal" style="margin-top:14px">${ICONS.info}<span>Tap a category to see every drill and movement in it. Teal shows what it trains; amber shows what it lengthens.</span></div>`;
+  bindLibrary();
+}
+function libSearchBar(){
+  return `<div class="searchbar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+    <input type="text" id="lib-q" placeholder="Search ${EX_ALL().length + catalogFlat().length} drills and movements…" value="${esc(lib.q)}"></div>`;
+}
+function drillRow(e, usage){
+  const upgraded=(state.prefs.upgradesInUse[e.id]||[]).length>0;
+  const v=vidFor(e.id), vrev = v && v.status!=="ok";
+  return `<div class="exi">
+    <div class="ic">${catAb(e.cats[0])}</div>
+    <div class="bd" data-open-ex="${e.id}">
+      <div class="nm">${esc(e.name)}${upgraded?' <span class="tag teal">upgraded</span>':''}${vrev?' <span class="tag amber">video?</span>':''}${e.custom?' <span class="tag">yours</span>':''}</div>
+      <div class="mt">${e.cats.map(catName).join(" · ")}${usage&&usage[e.id]?` · used ${usage[e.id]}×`:""}</div>
+    </div>
+    <span class="tag">Lv ${e.level}</span>
+    <button class="fav ${state.prefs.favs.includes(e.id)?"on":""}" data-fav="${e.id}" aria-label="Favorite" style="width:32px">${ICONS.star}</button>
+  </div>`;
+}
+function refRow(m){
+  const used=(state.classLogs||[]).reduce((n,cl)=>n+(cl.items||[]).filter(i=>i.name===m.name).length,0);
+  return `<div class="exi ref" data-ref="${esc(m.name)}">
+    <div class="ic" style="background:var(--surface2);color:var(--faint)">${m.lvl||"–"}</div>
+    <div class="bd"><div class="nm">${esc(m.name)}</div><div class="mt">${esc(m.fam)}${used?` · logged ${used}×`:""}</div></div>
+    <span class="tag">ref</span></div>`;
+}
+function renderLibraryCategory(){
+  const t=taxById(libCat), usage=exerciseUsage();
+  const {drills,moves}=taxContents(libCat, libSub);
   $("#view-library").innerHTML = `
-    <div class="searchbar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-      <input type="text" id="lib-q" placeholder="Search ${EX_ALL().length} drills…" value="${esc(lib.q)}"></div>
-    ${needsReview().length? `<div class="notice" style="margin-bottom:12px">${ICONS.info}<span><b>${needsReview().length} drill${needsReview().length>1?"s":""} need a video check.</b> Open one, scrub to where the drill starts, set the time, then tap “Looks right”.</span></div>`:""}
-    <div class="chiprow">
-      <button class="chip" id="lib-mode">↕ By progression</button>
-      <button class="chip ${lib.review?"on":""}" id="lib-review">⚑ Needs review${needsReview().length?" ("+needsReview().length+")":""}</button>
-      <button class="chip ${lib.desk?"on":""}" id="lib-desk">🪑 Desk</button>
-      <button class="chip ${lib.ref?"on":""}" id="lib-ref">📖 Reference</button>
-      <button class="chip ${lib.fav?"on":""}" id="lib-fav">★ Favorites</button>
-      ${CATS.map(c=>`<button class="chip ${lib.cat===c.id?"on":""}" data-fc="${c.id}">${c.name}</button>`).join("")}
+    <button class="backbar" id="lib-back">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M15 5l-7 7 7 7"/></svg>
+      All categories</button>
+    <div class="cathead">
+      <div class="figs">${taxMap(t,96)}</div>
+      <div><h2>${esc(t.name)}</h2><p class="sub" style="font-size:.82rem">${esc(t.blurb)}</p></div>
     </div>
-    <div class="chiprow">
-      ${Object.entries(WHEN).map(([k,v])=>`<button class="chip ${lib.when===k?"on":""}" data-fw="${k}">${v}</button>`).join("")}
-      ${["low","med","high"].map(f=>`<button class="chip ${lib.fat===f?"on":""}" data-ff="${f}">${FATIGUE_LBL[f]}</button>`).join("")}
+    <div class="chiprow" style="margin-top:12px">
+      <button class="chip ${!libSub?"on":""}" data-sub="">All</button>
+      ${(t.subs||[]).map(s=>`<button class="chip ${libSub===s.id?"on":""}" data-sub="${s.id}">${esc(s.name)}</button>`).join("")}
     </div>
-    <div class="exl" style="margin-top:6px">
-    ${list.length? list.map(e=>{
-      const upgraded = (state.prefs.upgradesInUse[e.id]||[]).length>0;
-      const vrev = (function(){ const v=vidFor(e.id); return v && v.status!=='ok'; })();
-      return `
-      <div class="exi">
-        <div class="ic">${catAb(e.cats[0])}</div>
-        <div class="bd" data-open-ex="${e.id}">
-          <div class="nm">${esc(e.name)}${upgraded?' <span class="tag teal">upgraded</span>':''}${vrev?' <span class="tag amber">video?</span>':''}${e.custom?' <span class="tag">yours</span>':''}</div>
-          <div class="mt">${e.cats.map(catName).join(" · ")}${usage[e.id]?` · used ${usage[e.id]}×`:""}</div>
-        </div>
-        ${lvlBadge(e.level)}
-        <button class="fav ${state.prefs.favs.includes(e.id)?"on":""}" data-fav="${e.id}" aria-label="Favorite" style="width:34px">${ICONS.star.replace('width','w')}</button>
-      </div>`;}).join("")
-     : `<div class="empty">${ICONS.info}Nothing matches these filters.<br><span class="tiny">Clear a filter to widen the search.</span></div>`}
-    ${(lib.q||lib.ref)? (function(){
-       const drillNames = new Set(EX_ALL().map(x=>x.name.toLowerCase()));
-       const refs = (lib.q? searchCatalog(lib.q) : catalogFlat().slice(0,60))
-         .filter(x=> !drillNames.has(x.name.toLowerCase()));
-       if(!refs.length) return "";
-       return `<div class="eyebrow" style="margin:18px 0 9px">Reference — from the movement catalog</div>
-         <div class="exl">${refs.map(x=>`
-           <div class="exi" data-ref="${esc(x.name)}" style="opacity:.78">
-             <div class="ic" style="background:var(--surface2);color:var(--faint)">${x.lvl||"–"}</div>
-             <div class="bd"><div class="nm">${esc(x.name)}</div><div class="mt">${esc(x.fam)}</div></div>
-             <span class="tag">reference</span>
-           </div>`).join("")}</div>`;})() : ""}
-    </div>`;
-  $("#lib-q").oninput = e=>{ lib.q=e.target.value; renderLibrary(); $("#lib-q").focus(); const v=$("#lib-q"); v.setSelectionRange(v.value.length,v.value.length); };
-  $("#lib-mode").onclick = ()=>{ lib.mode="progression"; renderLibrary(); };
-  $("#lib-review").onclick = ()=>{ lib.review=!lib.review; renderLibrary(); };
-  $("#lib-desk").onclick = ()=>{ lib.desk=!lib.desk; renderLibrary(); };
-  $("#lib-ref").onclick = ()=>{ lib.ref=!lib.ref; renderLibrary(); };
-  $$("#view-library [data-ref]").forEach(el=> el.onclick=()=> openRefMove(el.dataset.ref));
-  $("#lib-fav").onclick = ()=>{ lib.fav=!lib.fav; renderLibrary(); };
-  $$("#view-library [data-fc]").forEach(c=> c.onclick=()=>{ lib.cat = lib.cat===c.dataset.fc?"":c.dataset.fc; renderLibrary(); });
-  $$("#view-library [data-fw]").forEach(c=> c.onclick=()=>{ lib.when= lib.when===c.dataset.fw?"":c.dataset.fw; renderLibrary(); });
-  $$("#view-library [data-ff]").forEach(c=> c.onclick=()=>{ lib.fat = lib.fat===c.dataset.ff?"":c.dataset.ff; renderLibrary(); });
+    <div class="eyebrow" style="margin:14px 0 9px">Your drills · ${drills.length}</div>
+    <div class="exl">${drills.length? drills.map(e=>drillRow(e,usage)).join("")
+      : '<p class="tiny">No detailed drills here yet — promote a movement below to build one.</p>'}</div>
+    <div class="eyebrow" style="margin:20px 0 9px">Movements · ${moves.length}</div>
+    <div class="exl">${moves.length? moves.map(refRow).join("") : '<p class="tiny">None.</p>'}</div>`;
+  bindLibrary();
+}
+function bindLibrary(){
+  const q=$("#lib-q");
+  if(q) q.oninput=e=>{ lib.q=e.target.value; libCat=null; libSub=null; renderLibrary();
+    const n=$("#lib-q"); if(n){ n.focus(); n.setSelectionRange(n.value.length,n.value.length); } };
+  $$("#view-library [data-tax]").forEach(b=> b.onclick=()=>{ libCat=b.dataset.tax; libSub=null; renderLibrary(); window.scrollTo({top:0}); });
+  $$("#view-library [data-sub]").forEach(b=> b.onclick=()=>{ libSub=b.dataset.sub||null; renderLibraryCategory(); });
+  const bk=$("#lib-back"); if(bk) bk.onclick=()=>{ libCat=null; libSub=null; renderLibrary(); };
+  const rv=$("#lib-review"); if(rv) rv.onclick=()=>{ lib.q=""; libCat=null; renderLibraryReview(); };
   $$("#view-library [data-open-ex]").forEach(el=> el.onclick=()=> openExercise(el.dataset.openEx));
-  $$("#view-library [data-fav]").forEach(b=> b.onclick=()=>{
+  $$("#view-library [data-ref]").forEach(el=> el.onclick=()=> openRefMove(el.dataset.ref));
+  $$("#view-library [data-fav]").forEach(b=> b.onclick=(ev)=>{ ev.stopPropagation();
     const id=b.dataset.fav, f=state.prefs.favs;
     f.includes(id)? state.prefs.favs=f.filter(x=>x!==id) : f.push(id);
-    save(); renderLibrary();
-  });
+    save(); renderLibrary(); });
+}
+function renderLibraryReview(){
+  const list=needsReview();
+  $("#view-library").innerHTML = `
+    <button class="backbar" id="lib-back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M15 5l-7 7 7 7"/></svg>All categories</button>
+    <div class="eyebrow" style="margin:14px 0 9px">Video check · ${list.length}</div>
+    <div class="exl">${list.map(e=>drillRow(e,exerciseUsage())).join("")}</div>`;
+  bindLibrary();
 }
 function renderLibraryProgression(usage){
   const cats = lib.cat ? CATS.filter(c=>c.id===lib.cat) : CATS;
@@ -2858,7 +3012,7 @@ function renderLibraryProgression(usage){
       </div>`;
     }).join("")}`;
   $("#lib-mode").onclick = ()=>{ lib.mode="browse"; renderLibrary(); };
-  $$("#view-library [data-fc]").forEach(c=> c.onclick=()=>{ lib.cat = lib.cat===c.dataset.fc?"":c.dataset.fc; renderLibrary(); });
+  $$("#view-library [data-fc]").forEach(b=> b.onclick=()=>{ lib.cat = lib.cat===b.dataset.fc?"":b.dataset.fc; renderLibrary(); });
   $$("#view-library [data-open-ex]").forEach(el=> el.onclick=()=> openExercise(el.dataset.openEx));
 }
 
