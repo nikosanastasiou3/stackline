@@ -225,8 +225,11 @@ function renderToday(){
   const ov = dayOverride(today);
   const isRest = ov && ov.type==="rest";
   const isOwn  = ov && ov.type==="own";
-  const clsName = ov && ov.label ? ov.label
-                : isRest ? "Rest day" : isOwn ? "Own training" : plan.cls;
+  const clsName = isRest ? "Rest day"
+                : (ov && ov.label) ? ov.label
+                : isOwn ? "Own training"
+                : (ov && ov.type==="other") ? "Different class"
+                : plan.cls;
   const dayLog = logByDate(today), clsLog = classLogFor(today);
   const runDone = dayLog && (dayLog.routineId===routine.id);
   const deskN = deskToday();
@@ -1580,7 +1583,7 @@ function openClassLog(date){
   date = date || todayISO();
   const existing = classLogFor(date);
   const L = existing ? JSON.parse(JSON.stringify(existing))
-                     : {date:date, cls:plan.cls, items:[], notes:""};
+                     : {date:date, cls:plan0.cls, items:[], notes:""};
   let picking = false, query = "";
 
   const itemRow = (it,i)=> `
@@ -1835,28 +1838,47 @@ function setDayOverride(date, type, label){
   save();
 }
 function openDayOverride(date){
-  const cur = dayOverride(date);
+  const cur = dayOverride(date) || {type:"", label:""};
   const plan = planFor(new Date(date+"T12:00:00").getDay());
-  openSheet("What kind of day is this?",
-   `<p class="sub" style="margin-bottom:12px">${fmtDate(date)} — normally <b>${esc(plan.cls)}</b>.</p>
-    <div class="exl">
-      ${[["","As scheduled",plan.cls],
-         ["other","Different class","Swapped for another class"],
-         ["own","Own training","No class — training on your own"],
-         ["rest","Rest day","Not training today"]].map(o=>`
-        <button class="exi" data-dt="${o[0]}" style="width:100%;text-align:left;font:inherit;color:inherit;${(cur?cur.type:"")===o[0]?"border-color:var(--teal)":""}">
+  const OPTS = [["","As scheduled",plan.cls],
+                ["other","Different class","Swapped for another class"],
+                ["own","Own training","No class — training on your own"],
+                ["rest","Rest day","Not training today"]];
+  let type = cur.type, label = cur.label||"";
+  const draw = ()=>{
+    openSheet("What kind of day is this?",
+     `<p class="sub" style="margin-bottom:12px">${fmtDate(date)} — normally <b>${esc(plan.cls)}</b>.</p>
+      <div class="exl">${OPTS.map(o=>`
+        <button class="exi" data-dt="${o[0]}" style="width:100%;text-align:left;font:inherit;color:inherit;${type===o[0]?"border-color:var(--teal)":""}">
           <div class="bd"><div class="nm">${o[1]}</div><div class="mt">${esc(o[2])}</div></div>
-          ${(cur?cur.type:"")===o[0]?'<span class="tag teal">now</span>':""}
-        </button>`).join("")}
-    </div>
-    <label class="f">Label (optional)</label>
-    <input type="text" id="dt-label" placeholder="e.g. Skills class instead" value="${esc(cur&&cur.label||"")}">`,
-   `<button class="btn primary block" id="dt-done">Done</button>`);
-  $$("#sheet-body [data-dt]").forEach(b=> b.onclick=()=>{
-    setDayOverride(date, b.dataset.dt, $("#dt-label").value.trim());
-    closeSheet(); render(curView); toast("Day updated");
-  });
-  $("#dt-done").onclick=()=>{ setDayOverride(date, (cur?cur.type:""), $("#dt-label").value.trim()); closeSheet(); render(curView); };
+          ${type===o[0]?'<span class="tag teal">selected</span>':""}
+        </button>`).join("")}</div>
+      ${type==="other"?`
+        <label class="f">Which class instead?</label>
+        <input type="text" id="dt-label" value="${esc(label)}" placeholder="e.g. Calisthenics skills">
+        <div class="wrap" style="margin-top:8px">${
+          [...new Set(getSchedule().map(s=>s.cls))].filter(x=>x&&x!==plan.cls)
+            .map(x=>`<button class="chip ${label===x?"on":""}" data-dq="${esc(x)}">${esc(x)}</button>`).join("")}</div>`
+      : type==="own"? `<label class="f">Call it something? (optional)</label>
+        <input type="text" id="dt-label" value="${esc(label)}" placeholder="e.g. Open gym — press work">`
+      : ""}`,
+     `<button class="btn ghost" id="dt-cancel">Cancel</button>
+      <button class="btn primary" style="flex:1" id="dt-done">${type===""?"Keep as scheduled":"Save"}</button>`);
+    $$("#sheet-body [data-dt]").forEach(b=> b.onclick=()=>{
+      type=b.dataset.dt; if(type!=="other"&&type!=="own") label="";
+      if($("#dt-label")) label=$("#dt-label").value;
+      draw(); });
+    $$("#sheet-body [data-dq]").forEach(b=> b.onclick=()=>{ label=b.dataset.dq; draw(); });
+    $("#dt-cancel").onclick=closeSheet;
+    $("#dt-done").onclick=()=>{
+      if($("#dt-label")) label=$("#dt-label").value.trim();
+      if(type==="other" && !label){ toast("Name the class you did instead"); return; }
+      setDayOverride(date, type, label);
+      closeSheet(); render(curView);
+      toast(type? "Day updated" : "Back to your normal schedule");
+    };
+  };
+  draw();
 }
 
 /* ============================================================
