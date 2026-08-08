@@ -1579,7 +1579,6 @@ const classLogFor = d => (state.classLogs||[]).find(x=>x.date===d);
 function openClassLog(date){
   date = date || todayISO();
   const existing = classLogFor(date);
-  const plan = planFor(new Date(date+"T12:00:00").getDay());
   const L = existing ? JSON.parse(JSON.stringify(existing))
                      : {date:date, cls:plan.cls, items:[], notes:""};
   let picking = false, query = "";
@@ -1625,7 +1624,13 @@ function openClassLog(date){
       <label class="f">Focus — optional</label>
       <div class="wrap">${["Hips","Hamstrings","Shoulders","Spine","Full body","Balance","Breathing"].map(f=>
         `<button class="chip ${(L.focus||[]).includes(f)?"on":""}" data-cf="${f}">${f}</button>`).join("")}</div>
-      <div class="notice teal" style="margin-top:12px">${ICONS.info}<span>Logged as one session. It still counts toward your week — it just isn't broken into exercises.</span></div>`
+      <label class="f">Worth remembering — optional</label>
+      <div class="cllist">${L.highlights.map((h,i)=>`
+        <div class="clitem"><div class="row between" style="gap:8px">
+          <input type="text" data-hl="${i}" value="${esc(h)}" placeholder="e.g. pigeon pose — deepest yet" style="flex:1;padding:9px 11px">
+          <button class="iconbtn" style="width:30px;height:30px" data-hlrm="${i}">✕</button></div></div>`).join("")}</div>
+      <button class="btn small" style="margin-top:8px" id="cl-addhl">＋ Add a highlight</button>
+      <div class="notice teal" style="margin-top:12px">${ICONS.info}<span>Counts as a session and marks the day trained. It won't add exercise volume or personal bests — highlights are how you keep the parts worth tracking.</span></div>`
     : (L.items.length? `<label class="f">What you did</label><div class="cllist">${L.items.map(itemRow).join("")}</div>`
       : `<div class="empty" style="padding:20px">${ICONS.build}Nothing added yet.</div>`)}
 
@@ -1647,7 +1652,12 @@ function openClassLog(date){
    `${existing?'<button class="btn danger" id="cl-del">Delete</button>':""}
     <button class="btn primary" style="flex:1" id="cl-save">Save class</button>`);
 
-  const rerender = ()=>{ closeSheet(); state._clDraft = L; openClassLogFrom(L, date, existing); };
+  const rerender = ()=>{
+    L.cls = ($("#cl-cls")||{}).value || L.cls;
+    if($("#cl-dur")) L.duration = $("#cl-dur").value;
+    if($("#cl-notes")) L.notes = $("#cl-notes").value;
+    openClassLog(date, L);
+  };
   const add = (name, unnamed)=>{ L.items.push({name:name, variation:"", assist:"none", numbers:"", unnamed:!!unnamed}); rerender(); };
 
   const resBox = $("#cl-res");
@@ -1672,6 +1682,9 @@ function openClassLog(date){
     };
   };
   const focusSet = new Set(L.focus||[]);
+  $$("#sheet-body [data-hl]").forEach(inp=> inp.oninput=e=>{ L.highlights[+inp.dataset.hl]=e.target.value; });
+  $$("#sheet-body [data-hlrm]").forEach(b=> b.onclick=()=>{ L.highlights.splice(+b.dataset.hlrm,1); rerender(); });
+  const ahl=$("#cl-addhl"); if(ahl) ahl.onclick=()=>{ L.highlights.push(""); rerender(); };
   $$("#sheet-body [data-mode]").forEach(b=> b.onclick=()=>{
     L.mode = b.dataset.mode; L.cls=$("#cl-cls").value; rerender(); });
   $$("#sheet-body [data-cf]").forEach(b=> b.onclick=()=>{
@@ -1700,20 +1713,16 @@ function openClassLog(date){
     state.meta_classU=Date.now(); save(); closeSheet(); render(curView); toast("Class log deleted"); };
   $("#cl-save").onclick=()=>{
     const nd=$("#cl-date").value||date;
-    L.cls=$("#cl-cls").value.trim()||plan.cls;
+    L.cls=$("#cl-cls").value.trim()||plan0.cls;
     L.notes=$("#cl-notes").value.trim();
     if(nd!==date){ state.classLogs=(state.classLogs||[]).filter(x=>x.date!==date); L.date=nd; date=nd; }
     L.duration = $("#cl-dur")? $("#cl-dur").value.trim() : (L.duration||"");
     L.focus = [...focusSet];
     if(L.mode!=="summary" && !L.items.length && !L.notes){ toast("Add at least one exercise"); return; }
+    L.highlights=(L.highlights||[]).map(h=>h.trim()).filter(Boolean);
     state.classLogs=(state.classLogs||[]).filter(x=>x.date!==date).concat([L]).sort((a,b)=>a.date<b.date?-1:1);
     state.meta_classU=Date.now(); save(); closeSheet(); render(curView); toast("Class logged ✓");
   };
-}
-function openClassLogFrom(L, date, existing){
-  state.classLogs=(state.classLogs||[]).filter(x=>x.date!==date);
-  if(existing || L.items.length) state.classLogs.push(L);
-  openClassLog(date);
 }
 /* personal bests across logged class work */
 function personalBests(){
@@ -2247,7 +2256,7 @@ function viewHistory(){
      <button class="btn small" id="pg-addclass">＋ Log a past day</button></div>
    <div class="card">${(state.classLogs||[]).length
      ? (state.classLogs||[]).slice(-15).reverse().map(cl=>`<div class="kv" data-editcl="${cl.date}" style="cursor:pointer">
-         <b>${fmtDate(cl.date)}</b><span>${esc(cl.cls)} · ${cl.items.length} exercise${cl.items.length!==1?"s":""}</span></div>`).join("")
+         <b>${fmtDate(cl.date)}</b><span>${esc(cl.cls)} · ${cl.mode==="summary"?esc(cl.duration||"session"):cl.items.length+" exercise"+(cl.items.length!==1?"s":"")}</span></div>`).join("")
      : '<span class="sub" style="font-size:.82rem">No sessions logged yet.</span>'}</div>
    <div class="eyebrow" style="margin:20px 0 10px">Check-ins</div>
    <div class="card">${logs.length? logs.slice(-15).reverse().map(l=>{
@@ -2298,9 +2307,16 @@ function classCSV(){
   const head=["date","class","order","exercise","variation","assistance","numbers","notes"];
   const q=v=>'"'+String(v==null?"":v).replace(/"/g,'""')+'"';
   const rows=[head.join(",")];
-  (state.classLogs||[]).forEach(cl=>(cl.items||[]).forEach((it,i)=>{
-    rows.push([cl.date,cl.cls,i+1,it.name,it.variation||"",(ASSIST.find(a=>a[0]===it.assist)||[])[1]||"",it.numbers||"",cl.notes||""].map(q).join(","));
-  }));
+  (state.classLogs||[]).forEach(cl=>{
+    if(cl.mode==="summary"){
+      rows.push([cl.date,cl.cls,"","(whole session)","","",cl.duration||"",
+        [(cl.focus||[]).join("; "),(cl.highlights||[]).join("; "),cl.notes||""].filter(Boolean).join(" | ")].map(q).join(","));
+      return;
+    }
+    (cl.items||[]).forEach((it,i)=>{
+      rows.push([cl.date,cl.cls,i+1,it.name,it.variation||"",(ASSIST.find(a=>a[0]===it.assist)||[])[1]||"",it.numbers||"",cl.notes||""].map(q).join(","));
+    });
+  });
   return rows.join("\n");
 }
 function logsCSV(){
