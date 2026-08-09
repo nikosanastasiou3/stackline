@@ -1232,6 +1232,7 @@ const MUSCLES = {
   "first-knuckle-pushups":{work:{p:["forearms"],s:["triceps"]}},
   "reverse-wrist-pushups":{work:{p:["forearms"],s:[]}},
   // --- compression / press ---
+  "skin-the-cat":         {work:{p:["lats","delts"],s:["abs","forearms"]}, stretch:{p:["pecs"],s:["delts_front"]}},
   "pancake":              {stretch:{p:["adductors","hamstrings"],s:["erectors","calves"]}},
   "seated-pike-lifts":    {work:{p:["hipflexors","abs"],s:["quads"]}, stretch:{p:["hamstrings"],s:[]}},
   "straddle-liftoffs":    {work:{p:["hipflexors","abs","delts"],s:["triceps","adductors","serratus"]}},
@@ -1423,9 +1424,9 @@ const HOWTO = {
   "Hold for the set time, then come up gently."],
  check:"The stretch should be felt in your armpits and upper back. If you feel it pinching in your lower back, tuck your hips more and lift the surface higher."},
 
-"oh-lat-stretch":{desc:"You put one hand high on a wall or doorframe, then sink your armpit down and away. It lengthens the lat, which is usually what pulls your arms forward in a handstand.",
- steps:["Stand facing a wall, an arm's length away.","Place one hand flat on the wall well above head height, thumb pointing up.","Step the same-side foot back and bend slightly at the hips so your torso lowers.","Exhale and pull your ribs down toward your hips — do not let them flare forward.","Sink your armpit toward the floor. You should feel it along the side of your ribs, from armpit to hip.","Hold, breathing into your side ribs, then swap sides."],
- check:"If you feel it in your lower back rather than your side, your ribs are flared. Tuck them down and reduce the lean until the stretch moves back into the armpit."},
+"oh-lat-stretch":{desc:"You place both hands on a wall overhead and hinge at the hips, letting your chest sink down through your arms. It opens both lats at once, in the same line your handstand needs.",
+ steps:["Stand facing a wall, about an arm's length away.","Place both hands flat on the wall, roughly shoulder-width apart, arms overhead.","Walk your feet back and hinge at the hips until your arms are fully extended and your torso lowers toward horizontal.","Exhale and pull your ribs down toward your hips — don't let your lower back sag.","Let your chest sink down through your arms, keeping your ears roughly in line with your upper arms.","Hold, breathing steadily, then walk your feet back in to stand up."],
+ check:"The stretch should run from your armpits down your sides. If you feel it in your lower back, you're hinging too far or letting the ribs pop — sink less and pull the ribs down harder."},
 
 "lat-pnf":{desc:"The overhead lat stretch with a short push-then-relax cycle added. The brief contraction lets you sink noticeably deeper on the release.",
  steps:["Set up in the overhead lat stretch with your hand high on a wall.","Sink into the stretch and hold for 20 seconds, breathing normally.","Press your hand down into the wall at about 20–30% of your strength, as if trying to pull your arm back down. Hold 5–6 seconds.","Stop pushing and relax completely for a breath.","Sink further into the stretch — you should find noticeably more range. Hold 10–15 seconds.","Repeat for 3 rounds, then swap sides."],
@@ -1486,6 +1487,15 @@ const HOWTO = {
 "reverse-wrist-pushups":{desc:"The opposite of the first-knuckle push-up: you load the back of the hand to build extensor strength and balance out all the flexion handstands demand.",
  steps:["Kneel and place the backs of your hands on the floor, fingers pointing toward each other or toward your knees.","Start with very little weight over the hands — this position is unfamiliar.","Press the backs of your hands into the floor and lift your wrists slightly upward.","Lower slowly back down under control.","Do 8–10 slow reps.","If both hands at once is too much, work one hand at a time."],
  check:"Go gently. Wrist extensors are usually undertrained, so early sessions should feel easy. Never force the range."},
+
+"skin-the-cat":{desc:"Hanging from rings or a bar, you tuck your knees through your arms and rotate your whole body backward until you're hanging upside down behind your hands, then reverse it.",
+ steps:["Hang from rings (preferred) or a bar with straight arms, palms facing away from you. Set the rings low enough that your feet can touch the floor at the bottom.",
+  "Depress your shoulder blades — pull them down away from your ears — before you start moving.",
+  "Tuck your knees to your chest and begin rotating backward, keeping your arms completely straight throughout.",
+  "Let your hips pass between your hands as you continue rotating, turning your grip as the rings allow.",
+  "Keep rotating until your body hangs inverted behind your hands, arms extended overhead behind you. Only go as far as feels controlled.",
+  "Pause briefly, then reverse the motion — tuck the knees back through and roll forward to the starting hang."],
+ check:"If your arms bend at any point, stop and regress — bent arms shift the work into the biceps and you lose the entire shoulder-mobility benefit. Sharp pain in the shoulder means stop completely; mild stretch and muscle fatigue are normal."},
 
 "pancake":{desc:"You sit with your legs wide apart and fold forward with a flat back. It opens the hamstrings and inner thighs, which is where the press handstand starts from.",
  steps:["Sit on the floor and take your legs as wide as is comfortable, kneecaps pointing at the ceiling.","Sit up tall on your sit bones. If you are rolling backward, sit on a folded towel or cushion.","Place your hands on the floor in front of you.","Keeping your back flat, hinge forward from the hips — imagine leading with your chest, not your head.","Walk your hands forward only as far as you can go without your lower back rounding.","Hold, breathing steadily, then walk back up."],

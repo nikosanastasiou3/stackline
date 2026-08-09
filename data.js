@@ -121,19 +121,19 @@ const EXERCISES = [
 
 /* ---- LATS ---- */
 { id:"oh-lat-stretch", name:"Overhead wall lat stretch", cats:["lats","overhead"], fatigue:"low", level:1,
-  targets:"Lats and the long head of triceps in an overhead reach.",
+  targets:"Both lats and the long head of triceps, in a two-hand overhead reach against a wall.",
   why:"Tight lats pull the arms forward and drag the back into a banana. Lengthening them lets the arms stack over the torso instead of in front of it.",
   when:["after","recovery"],
-  dosage:"2–3 × 30–45 s per side. Breathe into the side ribs, not the low back.",
-  progression:"Once 45 s is easy without ribs flaring, move to the PNF version (Level 3) for a bigger single-session gain.",
-  regression:"Reduce lean; keep the elbow slightly bent.",
-  mistakes:"Flaring ribs to fake range; holding the breath; sinking into the lower back instead of the armpit.",
-  cues:"Exhale ribs down, then sink the armpit toward the wall. Feel it from armpit to hip.",
+  dosage:"2–3 × 30–45 s. Both hands on the wall, breathing into the sides — not the low back.",
+  progression:"Once 45 s is easy without the lower back sagging, try the one-arm version below for a deeper stretch on each side individually, or move to the PNF version (Level 3) for a bigger single-session gain.",
+  regression:"Stand closer to the wall and hinge less at the hips.",
+  mistakes:"Letting the lower back sag to fake range; holding the breath; shoulders creeping up toward the ears instead of staying long.",
+  cues:"Ribs pulled down, hinge at the hips, let the chest sink down through straight arms.",
   pairs:"Follow with wall slides to convert the new range into active control.",
-  source:"Standard hand-balancing lat opener, taught in essentially the same form across handstand coaching content.",
+  source:"Standard hand-balancing lat opener. Cross-checked against The Prehab Guys and multiple lat-stretch guides: both one-arm and two-arm wall versions are widely taught. Two-arm is the more common default and slightly gentler; one-arm gives a deeper, more targeted stretch per side with a rotation bias. Kept as separate options here rather than treated as identical.",
   upgrades:[
     {type:"measurable", label:"Mark the wall", detail:"Tape your fingertip reach during a full lean — the mark inching further out is your honest number."},
-    {type:"harder", label:"Add a side-bend, or move up", detail:"Side-bend away from the working arm for a deeper line, or progress to the PNF version below for a bigger single-session gain."},
+    {type:"harder", label:"One arm at a time", detail:"Place just one hand on the wall, step the same-side foot back, and add a slight lean away. This isolates each lat individually and typically finds more depth than the two-hand version."},
   ],
   media:[
     {t:"video", label:"Overhead Lat Stretch for Handstands", src:"YouTube", url:"https://www.youtube.com/watch?v=UvZMX-cDqZg"},
@@ -591,6 +591,28 @@ const EXERCISES = [
     {t:"video", label:"Pike compression and L-sit context", src:"Antranik · YouTube", url:"https://www.youtube.com/watch?v=yQXnOuQqKYc"},
     {t:"gif",   label:"Form reference", src:"Image search", url:gg("L-sit parallettes form")},
   ]},
+
+{ id:"skin-the-cat", name:"Skin the cat", cats:["overhead","lats"], fatigue:"med", level:3,
+  targets:"Shoulder extension mobility, lats, and core compression, in a full rotating hang on rings or a bar.",
+  why:"This is the overhead-mobility ceiling test turned upside down: if your shoulders can't reach full extension behind you in a hang, they won't stack cleanly in a handstand either. It's also the entry skill for the back lever and German hang.",
+  when:["skill"],
+  dosage:"3–5 slow reps. Rings set low enough that your feet can touch the floor at the bottom for assistance and a safe bail.",
+  progression:"Once tucked reps are smooth and controlled, straighten the legs for a straddle or full-leg version — considerably more demanding on compression and shoulder mobility. From there, a slow straddle negative (lowering only, no return) is the version most often used to build press and back-lever strength.",
+  regression:"Keep the rings low enough that your feet stay near the floor throughout, keep the knees tucked tight, and only rotate as far as feels controlled — partial reps are the standard way to build range gradually.",
+  mistakes:"Bending the arms during the rotation, which shifts load onto the biceps and removes the shoulder-mobility benefit that's the whole point; using a kip or swing to force the rotation instead of a slow, controlled tuck; forcing full shoulder extension before you actually have the range for it.",
+  cues:"Straight arms the entire time. Depress the shoulder blades before you start, then let the rotation come from a tight tuck, not a kick.",
+  pairs:"A good bridge between your overhead lat stretch work and real ring strength skills — do it once your shoulders are already warm.",
+  source:"Cross-checked across Calixpert, Caliverse, GymnastGem and Movement Athlete — all converge on the same setup (low rings for a safe bail), the same primary fault (bent arms), and the same regression (partial range, tucked knees) and progression path (straight legs, then negatives).",
+  upgrades:[
+    {type:"harder", label:"Straddle negative", detail:"Lower slowly into the straddled position instead of returning to the start — this is the version that builds real press and back-lever strength, and the one your coach is already programming."},
+    {type:"measurable", label:"Log how far you rotate", detail:"Note whether you reach full shoulder extension or stop partway — the range itself is the number to track."},
+  ],
+  media:[
+    {t:"video", label:"SKIN the CAT tutorial & progression exercises on rings", src:"YouTube", url:"https://www.youtube.com/watch?v=eAHkE3BfcAg"},
+    {t:"article",label:"How To Do Skin The Cat", src:"Calixpert", url:"https://www.calixpert.com/exercises/skin-the-cat"},
+    {t:"article",label:"Skin the Cat Exercise — ring & bar progressions", src:"GymnastGem", url:"https://gymnastgem.com/skin-the-cat/"},
+  ]},
+
 
 /* ---- PRESS-SPECIFIC ---- */
 { id:"press-walks", name:"Press walks (weight-shift drill)", cats:["compression","line"], fatigue:"low", level:2,
@@ -1100,6 +1122,7 @@ const VIDEO = {
   "ball-side-bend":       {yt:"", title:"", src:"", status:"missing", why:"No dedicated clip found for the seated overhead side bend on a ball."},
   "ball-marching":        {yt:"", title:"", src:"", status:"missing", why:"No dedicated clip found for seated ball marching."},
   "press-walks":          {yt:"", title:"", src:"", status:"missing", why:"No good dedicated clip found for the press walk / weight-shift drill. Needs one picking."},
+  "skin-the-cat":       {yt:"eAHkE3BfcAg", title:"SKIN the CAT tutorial & progression exercises on rings", src:"YouTube", status:"ok"},
   "kickup-practice":      {yt:"mfHcZQ-H_W4", title:"Nail Your Kick Up To Handstand! (Simple Drill)", src:"Bodyweight Warrior", status:"ok"},
   "finger-balance":       {yt:"OYehg2ruMN0", title:"How to Balance a Handstand: Heel pulls", src:"YouTube", status:"ok"},
   "freestanding-holds":   {yt:"Z1BEEzg5L6Q", title:"Handstand Kick Up Tutorial — All the Levels", src:"YouTube", status:"review", why:"Broad tutorial rather than freestanding-hold specific. Needs a timestamp or a better clip."}
