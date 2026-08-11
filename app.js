@@ -1126,6 +1126,10 @@ function openDrillEditor(editId){
   $("#dl-save").onclick=()=>{
     const name=$("#dl-name").value.trim();
     if(!name){ toast("Give the drill a name"); $("#dl-name").focus(); return; }
+    if(TREES.some(t=>t.name.toLowerCase()===name.toLowerCase())){
+      toast("That's a skill name — add a qualifier, e.g. \"Tuck "+name+"\" or \""+name+" hold\"");
+      $("#dl-name").focus(); return;
+    }
     if(!catSet.size){ toast("Pick at least one category"); return; }
     const raw=$("#dl-yt").value.trim();
     const m=raw.match(/(?:v=|shorts\/|youtu\.be\/|embed\/)([A-Za-z0-9_-]{11})/);
@@ -2018,6 +2022,22 @@ function openTree(id){
     const st = t.stages.find(s=>s.n===p.current)||t.stages[0];
     openSessionBuilder(st.drills.slice(), t.name+" — stage "+p.current);
   };
+}
+
+
+/* ============================================================
+   Naming guardrail: a skill's display name is reserved. No
+   catalog movement or promoted drill may ever be named exactly
+   that bare word — every promotion must carry a qualifier
+   (tuck/straddle/full, negative/banded/weighted, hold/raise…).
+   Returns a list of collisions; empty means clean.
+============================================================ */
+function nameCollisions(){
+  const reserved = new Set(TREES.map(t=>t.name.toLowerCase()));
+  const bad=[];
+  catalogFlat().forEach(m=>{ if(reserved.has(m.name.toLowerCase())) bad.push({type:"catalog", name:m.name, fam:m.fam}); });
+  EX_ALL().forEach(e=>{ if(reserved.has(e.name.toLowerCase())) bad.push({type:"drill", name:e.name, id:e.id}); });
+  return bad;
 }
 
 /* ============================================================
