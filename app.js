@@ -33,6 +33,7 @@ function metaBlob(){
     daySwaps:   {data: state.daySwaps,    u: state.meta_deskU   || Date.now()},
     classLogs:  {data: state.classLogs,   u: state.meta_classU  || Date.now()},
     customMoves:{data: state.customMoves, u: state.meta_classU  || Date.now()},
+    customWorkouts:{data: state.customWorkouts, u: state.meta_classU || Date.now()},
     schedule:   {data: state.schedule,    u: state.meta_schedU  || Date.now()}
   };
 }
@@ -81,6 +82,7 @@ async function syncPull(){
         state.classLogs = cloud.classLogs.data||[]; state.meta_classU = cloud.classLogs.u;
       }
       if(cloud.customMoves && (cloud.customMoves.u||0) > (state.meta_classU||0)) state.customMoves = cloud.customMoves.data||[];
+      if(cloud.customWorkouts && (cloud.customWorkouts.u||0) > (state.meta_classU||0)) state.customWorkouts = cloud.customWorkouts.data||[];
       if(cloud.schedule && (cloud.schedule.u||0) > (state.meta_schedU||0)){
         state.schedule = cloud.schedule.data||null; state.meta_schedU = cloud.schedule.u; }
       saveLocalOnly(); takeSnapshot(); applyTheme(); render(curView);
@@ -731,8 +733,9 @@ function exerciseUsage(){
   const m={}; state.logs.forEach(l=> (l.done||[]).forEach(id=> m[id]=(m[id]||0)+1)); return m;
 }
 const lvlBadge = lvl => `<span class="tag" style="background:var(--surface2)">Lv ${lvl}</span>`;
-let libCat = null, libSub = null;
+let libCat = null, libSub = null, libTop = "cats";
 function renderLibrary(){
+  if(libTop==="workouts") return renderWorkouts();
   if(lib.mode==="progression"){ renderLibraryProgression(exerciseUsage()); return; }
   if(libCat) return renderLibraryCategory();
   const usage = exerciseUsage();
@@ -750,7 +753,9 @@ function renderLibrary(){
     bindLibrary();
     return;
   }
-  $("#view-library").innerHTML = libSearchBar() +
+  $("#view-library").innerHTML =
+    `<div class="segrow"><button class="seg on" id="lib-top-cats">Categories</button><button class="seg" id="lib-top-work">Workouts</button></div>` +
+    libSearchBar() +
     `${needsReview().length? `<button class="btn small block" id="lib-review" style="margin-bottom:12px">⚑ ${needsReview().length} drills need a video check</button>`:""}
      <div class="catgrid">${TAXONOMY.map(t=>{
        const n = taxContents(t.id);
@@ -761,6 +766,7 @@ function renderLibrary(){
          <div class="subs">${(t.subs||[]).slice(0,4).map(s=>`<span>${esc(s.name)}</span>`).join("")}</div>
        </button>`;}).join("")}</div>
      <div class="notice teal" style="margin-top:14px">${ICONS.info}<span>Tap a category to see every drill and movement in it. Teal shows what it trains; amber shows what it lengthens.</span></div>`;
+  $("#lib-top-work").onclick=()=>{ libTop="workouts"; renderLibrary(); };
   bindLibrary();
 }
 function libSearchBar(){
@@ -1241,6 +1247,20 @@ const MUSCLES = {
   "tuck-back-lever":      {work:{p:["lats","delts"],s:["abs","forearms","biceps"]}},
   "skin-the-cat-straddle-negative": {work:{p:["lats","delts"],s:["abs","forearms"]}, stretch:{p:["pecs"],s:["delts_front"]}},
   "ring-shoulder-stand":  {work:{p:["delts","triceps","abs"],s:["traps_upper","forearms"]}},
+  "bodyweight-squat":     {work:{p:["quads","glutes"],s:["hamstrings","erectors"]}},
+  "bulgarian-split-squat":{work:{p:["quads","glutes"],s:["hamstrings"]}},
+  "shrimp-squat":         {work:{p:["quads","glutes"],s:["hamstrings","calves"]}},
+  "pistol-squat":         {work:{p:["quads","glutes"],s:["hamstrings","hipflexors"]}},
+  "jump-squat":           {work:{p:["quads","glutes"],s:["calves","hamstrings"]}},
+  "wall-sit":             {work:{p:["quads"],s:["glutes"]}},
+  "glute-bridge":         {work:{p:["glutes"],s:["hamstrings"]}},
+  "hip-thrust":           {work:{p:["glutes"],s:["hamstrings","quads"]}},
+  "single-leg-deadlift":  {work:{p:["hamstrings","glutes"],s:["erectors"]}},
+  "nordic-curl":          {work:{p:["hamstrings"],s:["glutes","erectors"]}},
+  "reverse-lunge":        {work:{p:["quads","glutes"],s:["hamstrings"]}},
+  "step-up":              {work:{p:["quads","glutes"],s:["hamstrings"]}},
+  "calf-raise":           {work:{p:["calves"],s:[]}},
+  "glute-activation-circuit": {work:{p:["glutes"],s:["hipflexors"]}},
   "pancake":              {stretch:{p:["adductors","hamstrings"],s:["erectors","calves"]}},
   "seated-pike-lifts":    {work:{p:["hipflexors","abs"],s:["quads"]}, stretch:{p:["hamstrings"],s:[]}},
   "straddle-liftoffs":    {work:{p:["hipflexors","abs","delts"],s:["triceps","adductors","serratus"]}},
@@ -1540,6 +1560,131 @@ const HOWTO = {
   "Finish by straightening your arms, ending in a straight, stacked, inverted position over the rings.",
   "Hold briefly, then reverse the fold with control to return to support."],
  check:"If the rings are swinging rather than staying stacked under you, you're moving too fast or too far from center — slow down and keep the movement directly beneath the rings' hang point."},
+
+"bodyweight-squat":{desc:"You lower your hips down and back like sitting into a chair, then stand back up — the foundational lower-body pattern everything else builds from.",
+ steps:["Stand with feet roughly shoulder-width apart, toes turned out slightly.",
+  "Push your hips back first, as if reaching for a chair behind you — don't start by bending the knees.",
+  "Bend the knees and continue lowering, keeping your knees tracking out over your toes, not caving inward.",
+  "Keep your chest reasonably upright and your weight balanced through the middle of your feet.",
+  "Lower to a depth you can control without your lower back rounding excessively.",
+  "Drive back up through your heels and mid-foot to standing, squeezing the glutes at the top."],
+ check:"Watch your knees in a mirror or on video. If they're drifting inward as you stand up, that's the one thing worth fixing before anything else in this category."},
+
+"bulgarian-split-squat":{desc:"With your rear foot elevated behind you on a bench, you lower straight down on the front leg and drive back up — a deep, mostly single-leg squat.",
+ steps:["Stand a stride's length in front of a bench, facing away from it.",
+  "Place the top of your rear foot on the bench behind you.",
+  "Keep most of your weight on the front leg throughout — the back leg is mainly for balance.",
+  "Lower straight down, letting the back knee travel toward the floor, until the front thigh is roughly parallel to the ground.",
+  "Keep your torso fairly upright, front knee tracking over the foot, not caving inward.",
+  "Push through the front heel to stand back up. Complete all reps on one side before switching."],
+ check:"If your front foot is too close to the bench, your knee will travel too far past your toes. Step further forward until the shin stays close to vertical at the bottom."},
+
+"shrimp-squat":{desc:"Standing on one leg with the other held bent behind you, you squat down keeping your weight centered over the middle of your foot, then stand back up.",
+ steps:["Stand on one leg. Reach back and hold the ankle of your other foot behind you with the same-side hand, knee bent.",
+  "Keep your weight centered over the middle of your standing foot — not rocked back on the heel.",
+  "Slowly bend the standing knee, lowering your hips down and slightly forward.",
+  "Let the bent rear knee travel down toward the floor as you descend, staying close behind the standing leg.",
+  "Lower until you're near the bottom, using light support from a wall or chair if you need it while learning.",
+  "Drive back up through the standing leg to return to start."],
+ check:"If you're falling backward, your weight has drifted onto your heel — shift it back toward the middle of your foot and try a smaller range until that feels stable."},
+
+"pistol-squat":{desc:"Standing on one leg with the other extended straight out in front of you, you squat all the way down and stand back up — the full single-leg squat.",
+ steps:["Stand on one leg, extending the other leg straight out in front of you, off the floor.",
+  "Reach both arms forward as a counterbalance.",
+  "Slowly bend the standing knee, sitting your hips back and down as if lowering onto a low box.",
+  "Keep the heel of your standing foot flat on the floor the entire way down.",
+  "Lower as far as you can control — full depth if you have it, a partial range if you don't yet.",
+  "Drive back up through the standing leg, keeping the free leg extended throughout."],
+ check:"If your heel lifts off the floor at the bottom, that's almost always an ankle mobility limit, not a strength one. Work on ankle range, or start from the shrimp squat instead."},
+
+"jump-squat":{desc:"A regular squat that finishes by exploding upward into a vertical jump, then landing softly back into the next rep.",
+ steps:["Set up as for a regular bodyweight squat, feet shoulder-width apart.",
+  "Lower into the squat under control — don't rush this part.",
+  "At the bottom, explosively drive through your feet and jump straight up, extending fully through the hips, knees, and ankles.",
+  "Swing your arms upward to help generate power.",
+  "Land softly with bent knees, absorbing the impact rather than landing stiff-legged.",
+  "Flow straight into the next squat without pausing, or reset fully between reps if you're chasing maximum height each time."],
+ check:"If your knees are caving inward on landing, stop the set. That's the fault most likely to cause a problem, and it means you need to slow down and focus on a soft, controlled landing before adding more reps."},
+
+"wall-sit":{desc:"You slide down a wall into a seated position with your knees bent around 90 degrees, and hold it — a pure isometric quad hold.",
+ steps:["Stand with your back against a wall, feet shoulder-width apart.",
+  "Walk your feet forward and slide your back down the wall.",
+  "Stop when your knees and hips are both bent to roughly 90 degrees, thighs close to parallel with the floor.",
+  "Check that your head, upper back, and lower back are all touching the wall.",
+  "Hold the position, keeping your weight through your heels rather than your toes.",
+  "To exit, press your palms into the wall or slide your feet back in and stand up."],
+ check:"If your lower back is arching away from the wall, you've gone too low or your feet are too far forward — raise the angle slightly until all three contact points hold."},
+
+"glute-bridge":{desc:"Lying on your back with knees bent, you drive your hips up toward the ceiling and squeeze at the top — the foundational glute movement.",
+ steps:["Lie on your back, knees bent, feet flat on the floor about hip-width apart, heels fairly close to your glutes.",
+  "Rest your arms by your sides for stability.",
+  "Drive through your heels and lift your hips up off the floor.",
+  "Continue until your body forms a straight line from your knees to your shoulders — no further.",
+  "Squeeze your glutes hard at the top and hold for a moment.",
+  "Lower back down under control rather than dropping."],
+ check:"If you're arching your lower back to gain extra height, you've gone past full hip extension — stop at the straight line and squeeze harder instead of lifting higher."},
+
+"hip-thrust":{desc:"With your shoulders on a bench and feet planted on the floor, you drive your hips up into full extension through a much bigger range than a floor-based glute bridge.",
+ steps:["Sit on the floor with your upper back against the edge of a bench, knees bent, feet flat on the floor.",
+  "Position your feet so that at the top of the movement your shins will be roughly vertical.",
+  "Brace your core and tuck your chin slightly.",
+  "Drive through your heels, lifting your hips up until your body forms a straight line from knees to shoulders.",
+  "Squeeze your glutes hard at the top, without arching the lower back further.",
+  "Lower back down under control until your hips are just short of the floor, then repeat."],
+ check:"Look straight ahead throughout, not up at the ceiling — that head position naturally helps keep the lower back from over-arching at the top."},
+
+"single-leg-deadlift":{desc:"Standing on one leg, you hinge forward at the hip while the other leg reaches straight back behind you, then return to standing.",
+ steps:["Stand on one leg with a very slight bend in the knee.",
+  "Keeping your back flat, begin hinging forward at the hip.",
+  "As your torso lowers, let your free leg extend straight back behind you for balance and counterweight.",
+  "Keep your hips square to the floor — don't let them rotate open.",
+  "Lower until you feel a stretch in the hamstring of your standing leg, or until your torso is roughly parallel to the floor.",
+  "Reverse the movement, driving your hips forward to return to standing."],
+ check:"If your standing knee is bending a lot, you've turned this into a squat rather than a hinge. Keep it nearly straight and let the movement come from the hip."},
+
+"nordic-curl":{desc:"Kneeling with your feet anchored, you lower your torso toward the floor as slowly as you can control using only your hamstrings, catching yourself with your hands at the bottom.",
+ steps:["Kneel on a soft surface with your ankles firmly anchored — under a bar, a heavy piece of furniture, or held by a partner.",
+  "Start upright, with your body in a straight line from knees to head.",
+  "Keeping your hips fully extended — no folding at the hip — begin leaning forward.",
+  "Resist the fall with your hamstrings for as long as you possibly can, lowering as slowly as your strength allows.",
+  "When you can no longer resist, let yourself down the rest of the way and catch yourself gently with your hands.",
+  "Push lightly off the floor with your hands and use your hamstrings to help pull yourself back to the start."],
+ check:"If your hips are bending or your bottom is kicking backward during the descent, you're cheating the range with your hips instead of your hamstrings. Reset and keep hips, knees, and shoulders in one line."},
+
+"reverse-lunge":{desc:"You step backward into a split stance, lowering the back knee toward the floor, then drive back up to standing.",
+ steps:["Stand tall with feet hip-width apart.",
+  "Step one foot backward into a long stride, landing on the ball of that foot.",
+  "Bend both knees, lowering your back knee toward the floor while your front shin stays close to vertical.",
+  "Keep your torso upright rather than leaning forward.",
+  "Push through your front heel to drive back up to standing, bringing the back foot forward to reset.",
+  "Alternate legs, or complete all reps on one side before switching."],
+ check:"If your front knee is traveling well past your toes, your stance is too short — take a longer step backward."},
+
+"step-up":{desc:"You plant one foot fully on a raised surface and drive your whole bodyweight up onto it, using that leg alone as much as possible.",
+ steps:["Stand facing a sturdy box, bench, or step at a height you can control.",
+  "Plant one foot fully on the surface — the whole foot, not just the toes.",
+  "Keeping most of your weight on that working leg, drive up through it until you're standing on the step.",
+  "Avoid pushing off with the trailing leg — let the working leg do as much of the work as possible.",
+  "Step back down under control, leading with the same or opposite leg depending on which you're training.",
+  "Complete all reps on one side before switching, or alternate legs each rep."],
+ check:"If you're noticeably pushing off the bottom leg to help yourself up, the step is too high for now — lower it until the working leg can do the job on its own."},
+
+"calf-raise":{desc:"Standing tall, you rise up onto the balls of your feet and squeeze, then lower back down through a full range to a stretch at the bottom.",
+ steps:["Stand with feet hip-width apart, holding a wall or support lightly for balance if needed.",
+  "Keeping your legs straight, push through the balls of your feet and rise up as high as you can onto your toes.",
+  "Pause and squeeze at the top for a moment.",
+  "Lower back down slowly and under control.",
+  "Let your heels drop below the level of your toes at the bottom if you're on a raised edge, for a full stretch.",
+  "Repeat without bouncing between reps."],
+ check:"If you're bouncing quickly from rep to rep, you're using momentum rather than the calf muscle itself. Slow down and control both directions."},
+
+"glute-activation-circuit":{desc:"A short circuit of four small movements — fire hydrants, clamshells, kickbacks, and lateral band walks — that wakes up the outer hip muscles a heavy squat or lunge often leaves dormant.",
+ steps:["Fire hydrant: on hands and knees, lift one bent knee out to the side to hip height, pause, then lower. Complete all reps, then switch sides.",
+  "Clamshell: lying on your side with knees bent and stacked, lift the top knee open like a clamshell while keeping your feet together, then lower. Complete all reps, then switch sides.",
+  "Kickback: from the fire hydrant position, extend the lifted leg straight back behind you, squeeze, then return to the bent position and lower. Complete all reps, then switch sides.",
+  "Banded lateral walk: with a light band above your knees or ankles, take small steps sideways in a partial squat, keeping tension on the band throughout. Walk one direction, then back.",
+  "Move through all four with small, controlled ranges — this is activation, not a strength session."],
+ check:"If you feel this in your lower back rather than the outer hip on each movement, the range is too big or the pace is too fast. Shrink the range and slow down."},
 
 "pancake":{desc:"You sit with your legs wide apart and fold forward with a flat back. It opens the hamstrings and inner thighs, which is where the press handstand starts from.",
  steps:["Sit on the floor and take your legs as wide as is comfortable, kneecaps pointing at the ceiling.","Sit up tall on your sit bones. If you are rolling backward, sit on a folded towel or cushion.","Place your hands on the floor in front of you.","Keeping your back flat, hinge forward from the hips — imagine leading with your chest, not your head.","Walk your hands forward only as far as you can go without your lower back rounding.","Hold, breathing steadily, then walk back up."],
@@ -2037,7 +2182,118 @@ function nameCollisions(){
   const bad=[];
   catalogFlat().forEach(m=>{ if(reserved.has(m.name.toLowerCase())) bad.push({type:"catalog", name:m.name, fam:m.fam}); });
   EX_ALL().forEach(e=>{ if(reserved.has(e.name.toLowerCase())) bad.push({type:"drill", name:e.name, id:e.id}); });
+  WORKOUTS.concat(state.customWorkouts||[]).forEach(w=>{ if(reserved.has(w.name.toLowerCase())) bad.push({type:"workout", name:w.name, id:w.id}); });
   return bad;
+}
+
+
+/* ---------- Workouts screen ---------- */
+function renderWorkouts(){
+  const all = WORKOUTS.concat(state.customWorkouts||[]);
+  $("#view-library").innerHTML =
+    `<div class="segrow"><button class="seg" id="lib-top-cats">Categories</button><button class="seg on" id="lib-top-work">Workouts</button></div>
+     <div class="row between" style="margin-bottom:12px;gap:10px">
+       <div class="eyebrow" style="flex:1;margin:0">Full sessions — exercises, sets, reps</div>
+       <button class="btn small primary" id="wk-new">＋ Create</button>
+     </div>
+     ${all.map(w=>{
+       const t = taxById(w.tax);
+       return `<div class="card">
+         <div class="row between" style="gap:10px">
+           <div style="flex:1;min-width:0"><div class="h-md">${esc(w.name)}</div>
+             <div class="sub" style="font-size:.78rem;margin-top:2px">${esc(w.blurb||"")}</div></div>
+           ${t?`<span class="tag teal">${esc(t.name)}</span>`:""}
+         </div>
+         <div class="exl" style="margin-top:10px">${w.items.map((it,i)=>{
+           const r = workoutRef(it.ref);
+           return `<div class="exi" style="padding:8px 10px">
+             <div class="ic" style="width:26px;height:26px;font-size:.66rem">${i+1}</div>
+             <div class="bd"><div class="nm" style="font-size:.83rem">${esc(r.name)}</div>
+             <div class="mt">${it.sets} × ${esc(it.reps)}</div></div>
+             ${r.isDrill?'':'<span class="tag">ref</span>'}
+           </div>`;}).join("")}</div>
+         <div class="row" style="margin-top:11px;gap:7px">
+           <button class="btn small primary" data-wstart="${w.id}">${ICONS.play}Start</button>
+           ${w.seeded?"":`<button class="btn small" data-wedit="${w.id}">Edit</button>
+             <button class="btn small danger" data-wdel="${w.id}">Delete</button>`}
+         </div>
+       </div>`;}).join("")}`;
+  $("#lib-top-cats").onclick=()=>{ libTop="cats"; renderLibrary(); };
+  $("#wk-new").onclick=()=> openWorkoutEditor();
+  $$("#view-library [data-wstart]").forEach(b=> b.onclick=()=>{
+    const w = workoutById(b.dataset.wstart);
+    const items = w.items.map(it=>{ const r=workoutRef(it.ref);
+      return {name:r.name, ref:r.isDrill?it.ref:null, numbers:it.sets+"×"+it.reps, variation:"", assist:"none"}; });
+    openSessionBuilder([], w.name);
+    sess.items = items; renderSessionBuilder();
+  });
+  $$("#view-library [data-wedit]").forEach(b=> b.onclick=()=> openWorkoutEditor(b.dataset.wedit));
+  $$("#view-library [data-wdel]").forEach(b=> b.onclick=()=>{
+    openSheet("Delete workout?", `<p class="sub">"${esc(workoutById(b.dataset.wdel).name)}" will be removed.</p>`,
+      `<button class="btn ghost" id="wd-no">Keep</button><button class="btn danger" style="flex:1" id="wd-yes">Delete</button>`);
+    $("#wd-no").onclick=closeSheet;
+    $("#wd-yes").onclick=()=>{ state.customWorkouts=(state.customWorkouts||[]).filter(x=>x.id!==b.dataset.wdel);
+      state.meta_classU=Date.now(); save(); closeSheet(); renderWorkouts(); toast("Deleted"); };
+  });
+}
+function openWorkoutEditor(editId){
+  const w0 = editId ? workoutById(editId) : null;
+  const W = w0 ? JSON.parse(JSON.stringify(w0)) : {id:"", name:"", tax:"", blurb:"", items:[]};
+  const draw = ()=>{
+    openSheet(w0?"Edit workout":"New workout",
+     `<label class="f">Name</label><input type="text" id="wk-name" value="${esc(W.name)}" placeholder="e.g. Push Day">
+      <label class="f">Focus — optional</label>
+      <select id="wk-tax"><option value="">—</option>${TAXONOMY.map(t=>`<option value="${t.id}" ${W.tax===t.id?"selected":""}>${t.name}</option>`).join("")}</select>
+      <label class="f">Blurb — optional</label><input type="text" id="wk-blurb" value="${esc(W.blurb||"")}" placeholder="One line about this session">
+      <label class="f">Exercises</label>
+      <div class="cllist">${W.items.map((it,i)=>{ const r=workoutRef(it.ref);
+        return `<div class="clitem"><div class="row between" style="gap:8px">
+          <div class="bd"><div class="nm">${i+1}. ${esc(r.name)}</div></div>
+          <button class="iconbtn" style="width:30px;height:30px" data-wrm="${i}">✕</button></div>
+          <div class="row" style="gap:7px;margin-top:8px">
+            <div class="stepper"><button data-wst="${i}|-1">−</button><input data-wsets="${i}" value="${it.sets}"><button data-wst="${i}|1">+</button></div>
+            <input type="text" data-wreps="${i}" value="${esc(it.reps)}" placeholder="reps, e.g. 10 or 30s" style="flex:1">
+          </div></div>`;}).join("")}</div>
+      <div class="sec" style="margin-top:14px"><div class="eyebrow teal">Add an exercise</div>
+        <div class="searchbar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+          <input type="text" id="wk-q" placeholder="Search drills and movements…"></div>
+        <div id="wk-res"></div></div>`,
+     `${w0?'<button class="btn danger" id="wk-del">Delete</button>':""}
+      <button class="btn primary" style="flex:1" id="wk-save">Save workout</button>`);
+    $$("#sheet-body [data-wrm]").forEach(b=> b.onclick=()=>{ W.items.splice(+b.dataset.wrm,1); draw(); });
+    $$("#sheet-body [data-wst]").forEach(b=> b.onclick=()=>{ const [i,d]=b.dataset.wst.split("|");
+      W.items[+i].sets=Math.max(1,W.items[+i].sets+ +d); draw(); });
+    $$("#sheet-body [data-wsets]").forEach(inp=> inp.onchange=e=> W.items[+inp.dataset.wsets].sets=Math.max(1,+e.target.value||1));
+    $$("#sheet-body [data-wreps]").forEach(inp=> inp.oninput=e=> W.items[+inp.dataset.wreps].reps=e.target.value);
+    const res=$("#wk-res");
+    $("#wk-q").oninput=()=>{
+      const q=$("#wk-q").value.trim().toLowerCase(); if(!q){ res.innerHTML=""; return; }
+      const drills = EX_ALL().filter(e=>e.name.toLowerCase().includes(q)).slice(0,6).map(e=>({name:e.name, ref:e.id}));
+      const moves = searchCatalog(q).slice(0,8).map(x=>({name:x.name, ref:x.name}));
+      const all = drills.concat(moves);
+      res.innerHTML = all.length? `<div class="exl" style="margin-top:8px">${all.map((x,i)=>`
+        <div class="exi" data-wadd="${i}" style="padding:9px 11px"><div class="bd"><div class="nm">${esc(x.name)}</div></div></div>`).join("")}</div>` : "";
+      res.querySelectorAll("[data-wadd]").forEach(b=> b.onclick=()=>{
+        const x=all[+b.dataset.wadd]; W.items.push({ref:x.ref, sets:3, reps:"10"});
+        W.name=$("#wk-name").value; W.tax=$("#wk-tax").value; W.blurb=$("#wk-blurb").value;
+        draw();
+      });
+    };
+    if(w0) $("#wk-del").onclick=()=>{
+      state.customWorkouts=(state.customWorkouts||[]).filter(x=>x.id!==editId);
+      state.meta_classU=Date.now(); save(); closeSheet(); renderWorkouts(); toast("Deleted"); };
+    $("#wk-save").onclick=()=>{
+      const name=$("#wk-name").value.trim();
+      if(!name){ toast("Name the workout"); return; }
+      if(TREES.some(t=>t.name.toLowerCase()===name.toLowerCase())){ toast("That's a skill name — pick something else"); return; }
+      if(!W.items.length){ toast("Add at least one exercise"); return; }
+      W.name=name; W.tax=$("#wk-tax").value; W.blurb=$("#wk-blurb").value.trim();
+      W.id = W.id || ("cw-"+Date.now().toString(36));
+      state.customWorkouts=(state.customWorkouts||[]).filter(x=>x.id!==W.id).concat([W]);
+      state.meta_classU=Date.now(); save(); closeSheet(); renderWorkouts(); toast(w0?"Workout updated":"Workout saved");
+    };
+  };
+  draw();
 }
 
 /* ============================================================
