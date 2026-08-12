@@ -293,6 +293,11 @@ function renderToday(){
       <div class="bd"><div class="nm">Build a session</div><div class="mt">Pick your own exercises</div></div>
       <span class="go">Build</span>
     </button>
+    <button class="trow" data-job="quickdrill">
+      <div class="mark opt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></div>
+      <div class="bd"><div class="nm">Quick add a drill</div><div class="mt">Coach showed you something new today?</div></div>
+      <span class="go">Add</span>
+    </button>
   </div>`;
 
   const wb=$("#t-why"); if(wb) wb.onclick=()=> $("#t-whybox").classList.toggle("on");
@@ -304,6 +309,7 @@ function renderToday(){
     else if(k==="checkin") openLogForm(today);
     else if(k==="desk") show("today"), openDeskPicker();
     else if(k==="session") openSessionBuilder([], "Own session");
+    else if(k==="quickdrill") openQuickCapture();
   });
 }
 function openDeskPicker(){
@@ -757,6 +763,7 @@ function renderLibrary(){
     `<div class="segrow"><button class="seg on" id="lib-top-cats">Categories</button><button class="seg" id="lib-top-work">Workouts</button></div>` +
     libSearchBar() +
     `${needsReview().length? `<button class="btn small block" id="lib-review" style="margin-bottom:12px">⚑ ${needsReview().length} drills need a video check</button>`:""}
+     ${uncategorizedDrills().length? `<button class="btn small block" id="lib-uncat" style="margin-bottom:12px">📋 ${uncategorizedDrills().length} drill${uncategorizedDrills().length>1?"s":""} need categorizing</button>`:""}
      <div class="catgrid">${TAXONOMY.map(t=>{
        const n = taxContents(t.id);
        return `<button class="ccard" data-tax="${t.id}">
@@ -808,11 +815,21 @@ function renderLibraryCategory(){
       <button class="chip ${!libSub?"on":""}" data-sub="">All</button>
       ${(t.subs||[]).map(s=>`<button class="chip ${libSub===s.id?"on":""}" data-sub="${s.id}">${esc(s.name)}</button>`).join("")}
     </div>
-    <div class="eyebrow" style="margin:14px 0 9px">Your drills · ${drills.length}</div>
+    <div class="row between" style="margin:14px 0 9px">
+      <div class="eyebrow" style="flex:1;margin:0">Your drills · ${drills.length}</div>
+      <button class="btn small" id="lib-cat-newdrill">＋ New drill here</button>
+    </div>
     <div class="exl">${drills.length? drills.map(e=>drillRow(e,usage)).join("")
-      : '<p class="tiny">No detailed drills here yet — promote a movement below to build one.</p>'}</div>
+      : '<p class="tiny">No detailed drills here yet — promote a movement below, or add your own.</p>'}</div>
     <div class="eyebrow" style="margin:20px 0 9px">Movements · ${moves.length}</div>
     <div class="exl">${moves.length? moves.map(refRow).join("") : '<p class="tiny">None.</p>'}</div>`;
+  const ndb = document.getElementById("lib-cat-newdrill");
+  if(ndb) ndb.onclick = ()=>{
+    // resolve the taxonomy tab (e.g. "pull") to the underlying bottleneck
+    // category the drill editor actually understands (e.g. "lats")
+    const rep = (t.cats||[])[0] || null;
+    openDrillEditor(null, rep);
+  };
   bindLibrary();
 }
 function bindLibrary(){
@@ -823,12 +840,16 @@ function bindLibrary(){
   $$("#view-library [data-sub]").forEach(b=> b.onclick=()=>{ libSub=b.dataset.sub||null; renderLibraryCategory(); });
   const bk=$("#lib-back"); if(bk) bk.onclick=()=>{ libCat=null; libSub=null; renderLibrary(); };
   const rv=$("#lib-review"); if(rv) rv.onclick=()=>{ lib.q=""; libCat=null; renderLibraryReview(); };
+  const uc=$("#lib-uncat"); if(uc) uc.onclick=()=>{ lib.q=""; libCat=null; renderLibraryUncategorized(); };
   $$("#view-library [data-open-ex]").forEach(el=> el.onclick=()=> openExercise(el.dataset.openEx));
   $$("#view-library [data-ref]").forEach(el=> el.onclick=()=> openRefMove(el.dataset.ref));
   $$("#view-library [data-fav]").forEach(b=> b.onclick=(ev)=>{ ev.stopPropagation();
     const id=b.dataset.fav, f=state.prefs.favs;
     f.includes(id)? state.prefs.favs=f.filter(x=>x!==id) : f.push(id);
     save(); renderLibrary(); });
+}
+function uncategorizedDrills(){
+  return (state.customDrills||[]).filter(d=> !d.cats || d.cats.length===0);
 }
 function renderLibraryReview(){
   const list=needsReview();
@@ -837,6 +858,21 @@ function renderLibraryReview(){
     <div class="eyebrow" style="margin:14px 0 9px">Video check · ${list.length}</div>
     <div class="exl">${list.map(e=>drillRow(e,exerciseUsage())).join("")}</div>`;
   bindLibrary();
+}
+function renderLibraryUncategorized(){
+  const list = uncategorizedDrills();
+  $("#view-library").innerHTML = `
+    <button class="backbar" id="lib-back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M15 5l-7 7 7 7"/></svg>All categories</button>
+    <div class="eyebrow" style="margin:14px 0 9px">Needs a category · ${list.length}</div>
+    <p class="tiny" style="margin-bottom:10px">Quick-added drills land here until you sort them into a category.</p>
+    <div class="exl">${list.map(d=>`
+      <div class="exi" data-editquick="${d.id}">
+        <div class="ic" style="background:var(--surface2);color:var(--faint)">?</div>
+        <div class="bd"><div class="nm">${esc(d.name)}</div><div class="mt">${esc(d.source||"")}</div></div>
+        <span class="tag amber">sort me</span>
+      </div>`).join("")}</div>`;
+  document.getElementById("lib-back").onclick = ()=>{ libCat=null; renderLibrary(); };
+  document.querySelectorAll("[data-editquick]").forEach(el=> el.onclick = ()=> openDrillEditor(el.dataset.editquick));
 }
 function renderLibraryProgression(usage){
   const cats = lib.cat ? CATS.filter(c=>c.id===lib.cat) : CATS;
@@ -865,7 +901,7 @@ function renderLibraryProgression(usage){
 }
 
 
-function openRefMove(name){
+function openRefMove(name, back){
   const all = catalogFlat().find(x=>x.name===name) || {name:name, fam:"—", lvl:0};
   const uses = [];
   (state.classLogs||[]).forEach(cl=> (cl.items||[]).forEach(it=>{ if(it.name===name) uses.push({d:cl.date, n:it.numbers, a:it.assist}); }));
@@ -882,7 +918,8 @@ function openRefMove(name){
       :`<p class="tiny" style="margin-top:14px">Not logged yet.</p>`}
     ${inTrees.length?`<div class="sec"><div class="eyebrow">Feeds into</div>
       <div class="wrap">${inTrees.map(t=>`<button class="chip" data-gotree="${t.id}">${esc(t.name)}</button>`).join("")}</div></div>`:""}`,
-   `<button class="btn primary block" id="ref-promote">${ICONS.build}Promote to a full drill</button>`);
+   `<button class="btn primary block" id="ref-promote">${ICONS.build}Promote to a full drill</button>`,
+   back);
   $$("#sheet-body [data-gotree]").forEach(b=> b.onclick=()=> openTree(b.dataset.gotree));
   $("#ref-promote").onclick=()=>{ closeSheet(); show("builder"); openDrillEditor(); setTimeout(()=>{ const f=$("#dl-name"); if(f) f.value=name; },60); };
 }
@@ -1073,10 +1110,42 @@ function openExercise(id, back){
    Only name + category are required so a drill can be captured
    in ~20 seconds after class and fleshed out later.
 ============================================================ */
-function openDrillEditor(editId){
+
+/* Fast, one-field capture — for "coach showed me this today, jot it down
+   before I forget." Lands uncategorized in Library's review queue until
+   there's time to flesh it out properly with the full editor. */
+function openQuickCapture(){
+  openSheet("Quick add a drill",
+   `<p class="sub" style="margin-bottom:12px">Just the name for now. You can add cues, video and a category later from Library.</p>
+    <label class="f">Drill name</label>
+    <input type="text" id="qc-name" placeholder="e.g. Ring straddle hold from today">`,
+   `<button class="btn ghost" id="qc-cancel">Cancel</button>
+    <button class="btn primary" style="flex:1" id="qc-save">Save for later</button>`);
+  $("#qc-name").focus();
+  $("#qc-cancel").onclick = closeSheet;
+  $("#qc-save").onclick = ()=>{
+    const name = $("#qc-name").value.trim();
+    if(!name){ toast("Give it a name"); return; }
+    if(TREES.some(t=>t.name.toLowerCase()===name.toLowerCase())){
+      toast("That's a skill name — add a qualifier, e.g. \"Tuck "+name+"\"");
+      return;
+    }
+    const entry = {
+      id:"cx-"+Date.now().toString(36), custom:true, name:name, cats:[], level:2, fatigue:"low",
+      when:["skill"], dosage:"", cues:"", targets:"", why:"", mistakes:"", progression:"", regression:"",
+      pairs:"", source:"Added on "+fmtDate(todayISO())+" — not reviewed yet.",
+      yt:"", videoTitle:"", upgrades:[], media:[]
+    };
+    state.customDrills = (state.customDrills||[]).concat([entry]);
+    state.meta_drillsU = Date.now(); save(); closeSheet();
+    toast("Saved — flesh it out in Library whenever you like");
+  };
+}
+
+function openDrillEditor(editId, presetCat){
   const ex = editId ? (state.customDrills||[]).find(d=>d.id===editId) : null;
   const d = Object.assign({
-    id:"", name:"", cats:[], level:2, fatigue:"low", when:["skill"],
+    id:"", name:"", cats: presetCat?[presetCat]:[], level:2, fatigue:"low", when:["skill"],
     targets:"", why:"", dosage:"", cues:"", mistakes:"", progression:"", regression:"", pairs:"",
     source:"", yt:"", videoTitle:"", upgrades:[]
   }, ex||{});
@@ -1086,7 +1155,7 @@ function openDrillEditor(editId){
     (ta? `<textarea id="${id}" placeholder="${esc(ph)}">${esc(val)}</textarea>`
        : `<input type="text" id="${id}" placeholder="${esc(ph)}" value="${esc(val)}">`);
   openSheet(ex?"Edit drill":"New drill",
-   `<div class="notice teal">${ICONS.info}<span>Only the name and a category are required. Everything else can wait — add it when you have time.</span></div>
+   `<div class="notice teal">${ICONS.info}<span>Only the name is required. Skip the category if you are not sure yet, it will wait in Library under Needs review.</span></div>
     <div class="sec" style="margin-top:14px"><div class="eyebrow teal">Essentials</div>
       ${f("dl-name","Drill name", d.name, "e.g. Straddle pulse on blocks")}
       <label class="f">Category — tap all that apply</label><div class="wrap">${catChips}</div>
@@ -1136,7 +1205,7 @@ function openDrillEditor(editId){
       toast("That's a skill name — add a qualifier, e.g. \"Tuck "+name+"\" or \""+name+" hold\"");
       $("#dl-name").focus(); return;
     }
-    if(!catSet.size){ toast("Pick at least one category"); return; }
+    // category is optional now — an uncategorized drill just waits in the review queue
     const raw=$("#dl-yt").value.trim();
     const m=raw.match(/(?:v=|shorts\/|youtu\.be\/|embed\/)([A-Za-z0-9_-]{11})/);
     const entry = {
@@ -1984,7 +2053,7 @@ function renderSessionBuilder(){
       ${sess.items.length>10?`<div class="notice" style="margin-top:12px">${ICONS.info}<span>${sess.items.length} exercises is a long session. Consider splitting it across days.</span></div>`:""}
     </div>`,
    `<button class="btn ghost" id="ss-cancel">Close</button>
-    <button class="btn primary" style="flex:1" id="ss-save">Save session</button>`);
+    <button class="btn primary" style="flex:1" id="ss-save">Start session</button>`);
   const res=$("#ss-res");
   const show=()=>{
     const q=$("#ss-q").value.trim().toLowerCase();
@@ -2026,10 +2095,10 @@ function renderSessionBuilder(){
   $("#ss-save").onclick=()=>{
     if(!sess.items.length){ toast("Add at least one exercise"); return; }
     const d=$("#ss-date").value||todayISO();
-    const entry={date:d, cls:$("#ss-title").value.trim()||"Own session", items:sess.items.map(x=>({
-      name:x.name, variation:x.variation||"", assist:x.assist||"none", numbers:x.numbers||""})), notes:"", own:true};
-    state.classLogs=(state.classLogs||[]).filter(x=>x.date!==d).concat([entry]).sort((a,b)=>a.date<b.date?-1:1);
-    state.meta_classU=Date.now(); save(); closeSheet(); render(curView); toast("Session logged ✓");
+    const title=$("#ss-title").value.trim()||"Own session";
+    const items = sess.items.map(x=>({name:x.name, ref:x.ref, numbers:x.numbers||"", variation:x.variation||"", assist:x.assist||"none"}));
+    sess=null; closeSheet();
+    openSessionRunner(items, title, d);
   };
 }
 /* ---------- day override ---------- */
@@ -2082,6 +2151,62 @@ function openDayOverride(date){
     };
   };
   draw();
+}
+
+
+/* ============================================================
+   SESSION RUNNER — the live, "show me the plan, let me check
+   things off" view for a session or Workout. Distinct from
+   class logging, which is retrospective. This is prospective:
+   see it, do it, tick it, then log what actually happened.
+============================================================ */
+let sessRun = null;
+function openSessionRunner(items, title, date){
+  sessRun = {title:title, date:date||todayISO(),
+    items: items.map(it=> Object.assign({}, it)), done:new Set()};
+  renderSessionRunner();
+}
+function renderSessionRunner(){
+  if(!sessRun) return;
+  const items = sessRun.items;
+  const rows = items.map((it,i)=>{
+    const done = sessRun.done.has(i);
+    const e = it.ref ? exById(it.ref) : null;
+    const cue = e ? esc((e.cues||"").split(".")[0])+"." : "";
+    return `<div class="exi ${done?"done":""}" data-i="${i}">
+      <div class="check ${done?"on":""}" data-chk="${i}">${ICONS.check}</div>
+      <div class="bd" data-open="${i}"><div class="nm">${esc(it.name)}${e?"":' <span class="tag">ref</span>'}</div>
+        <div class="mt">${esc(it.numbers||"")}</div>
+        ${cue?`<div class="tiny" style="margin-top:3px">${cue}</div>`:""}</div>
+    </div>`;
+  }).join("");
+  openSheet(sessRun.title,
+    `<div class="row between" style="margin-bottom:12px">
+       <span class="sub">${fmtDate(sessRun.date)}</span>
+       <span class="tag teal" id="sr-count">${sessRun.done.size} / ${items.length}</span></div>
+     <div class="exl">${rows}</div>
+     <div class="notice teal" style="margin-top:14px">${ICONS.info}<span>Tap a name for cues and video. Tick as you go — this is your live tracker for the session.</span></div>`,
+    `<button class="btn ghost" id="sr-cancel">Close</button>
+     <button class="btn primary" style="flex:1" id="sr-finish">Finish & log</button>`);
+  $$("#sheet-body [data-chk]").forEach(cb=> cb.onclick=()=>{
+    const i=+cb.dataset.chk;
+    sessRun.done.has(i)?sessRun.done.delete(i):sessRun.done.add(i);
+    cb.classList.toggle("on"); cb.closest(".exi").classList.toggle("done");
+    $("#sr-count").textContent = sessRun.done.size+" / "+items.length;
+  });
+  $$("#sheet-body [data-open]").forEach(el=> el.onclick=()=>{
+    const it = items[+el.dataset.open];
+    if(it.ref && exById(it.ref)) openExercise(it.ref, renderSessionRunner);
+    else openRefMove(it.name, renderSessionRunner);
+  });
+  $("#sr-cancel").onclick = ()=>{ sessRun=null; closeSheet(); };
+  $("#sr-finish").onclick = ()=>{
+    const entry = {date: sessRun.date, cls: sessRun.title, mode:"items",
+      items: items.map(x=>({name:x.name, variation:x.variation||"", assist:x.assist||"none", numbers:x.numbers||""})),
+      notes:"", highlights:[], focus:[], own:true};
+    state.classLogs=(state.classLogs||[]).filter(x=>x.date!==entry.date).concat([entry]).sort((a,b)=>a.date<b.date?-1:1);
+    state.meta_classU=Date.now(); sessRun=null; save(); closeSheet(); render(curView); toast("Session logged ✓");
+  };
 }
 
 /* ============================================================
@@ -2224,8 +2349,7 @@ function renderWorkouts(){
     const w = workoutById(b.dataset.wstart);
     const items = w.items.map(it=>{ const r=workoutRef(it.ref);
       return {name:r.name, ref:r.isDrill?it.ref:null, numbers:it.sets+"×"+it.reps, variation:"", assist:"none"}; });
-    openSessionBuilder([], w.name);
-    sess.items = items; renderSessionBuilder();
+    openSessionRunner(items, w.name, todayISO());
   });
   $$("#view-library [data-wedit]").forEach(b=> b.onclick=()=> openWorkoutEditor(b.dataset.wedit));
   $$("#view-library [data-wdel]").forEach(b=> b.onclick=()=>{
