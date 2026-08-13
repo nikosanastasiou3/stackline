@@ -272,6 +272,7 @@ function renderToday(){
     <div class="row" style="gap:8px;margin-top:12px;flex-wrap:wrap">
       <span class="streakpill">🔥 <b>${streak()||0}</b> day streak</span>
       <button class="streakpill" id="t-daytype" style="cursor:pointer">⇄ Change day</button>
+      ${!isOwn?`<button class="streakpill" id="t-owntoday" style="cursor:pointer">🏋️ Training on my own today</button>`:""}
     </div>
   </div>
 
@@ -302,6 +303,11 @@ function renderToday(){
 
   const wb=$("#t-why"); if(wb) wb.onclick=()=> $("#t-whybox").classList.toggle("on");
   $("#t-daytype").onclick=()=> openDayOverride(today);
+  const ot=$("#t-owntoday");
+  if(ot) ot.onclick=()=>{
+    setDayOverride(today, "own", "");
+    openSessionBuilder([], "Own training");
+  };
   $$("#view-today [data-job]").forEach(b=> b.onclick=()=>{
     const k=b.dataset.job;
     if(k==="routine") startRoutine(routine.id, today);
@@ -2045,11 +2051,7 @@ function renderSessionBuilder(){
         <input type="text" id="ss-q" placeholder="Search drills and movements…">
       </div>
       <div id="ss-res"></div>
-      <div class="tiny" style="margin:12px 0 6px">Or pull in a whole block</div>
-      <div class="wrap">${state.routines.map(r=>`<button class="chip" data-sr="${r.id}">${esc(r.name)}</button>`).join("")}</div>
-      <div class="tiny" style="margin:12px 0 6px">Skill stages — adds drills, target movements and support</div>
-      <div class="wrap">${TREES.map(t=>{const p=treeProgress(t);
-        return `<button class="chip" data-sk="${t.id}">${esc(t.name)} · stage ${p.current}</button>`;}).join("")}</div>
+      <button class="btn small" id="ss-block" style="margin-top:12px">${ICONS.build}From a routine or skill</button>
       ${sess.items.length>10?`<div class="notice" style="margin-top:12px">${ICONS.info}<span>${sess.items.length} exercises is a long session. Consider splitting it across days.</span></div>`:""}
     </div>`,
    `<button class="btn ghost" id="ss-cancel">Close</button>
@@ -2075,22 +2077,32 @@ function renderSessionBuilder(){
   $("#ss-q").oninput=show;
   $$("#sheet-body [data-srm]").forEach(b=> b.onclick=()=>{ sess.items.splice(+b.dataset.srm,1); renderSessionBuilder(); });
   $$("#sheet-body [data-snum]").forEach(inp=> inp.oninput=e=> sess.items[+inp.dataset.snum].numbers=e.target.value);
-  $$("#sheet-body [data-sk]").forEach(b=> b.onclick=()=>{
-    const t=treeById(b.dataset.sk); const p=treeProgress(t);
-    const st=t.stages.find(s=>s.n===p.current)||t.stages[0];
-    const have=new Set(sess.items.map(x=>x.name));
-    (st.match||[]).forEach(m=>{ if(!have.has(m)){ sess.items.push({name:m, ref:null, numbers:"", variation:"", assist:"none"}); have.add(m); } });
-    (st.drills||[]).forEach(d=>{ const e=exById(d); if(e&&!have.has(e.name)){ sess.items.push({name:e.name, ref:d, numbers:"", variation:"", assist:"none"}); have.add(e.name); } });
-    (t.support.strength||[]).slice(0,2).forEach(m=>{ if(!have.has(m)){ sess.items.push({name:m, ref:null, numbers:"", variation:"", assist:"none"}); have.add(m); } });
-    sess.title = sess.items.length && sess.title==="Own session" ? t.name+" stage "+p.current : sess.title;
-    renderSessionBuilder(); toast(t.name+" stage "+p.current+" added");
-  });
-  $$("#sheet-body [data-sr]").forEach(b=> b.onclick=()=>{
-    const r=routineById(b.dataset.sr);
-    r.items.forEach(it=>{ const e=exById(it.ex); if(e) sess.items.push({name:e.name, ref:e.id,
-      numbers:(it.sets+"×"+(it.hold&&it.hold!=="—"?it.hold:it.reps)), variation:"", assist:"none"}); });
-    renderSessionBuilder();
-  });
+  const sb2=$("#ss-block");
+  if(sb2) sb2.onclick=()=>{
+    openSheet("Add from…",
+     `<div class="eyebrow teal" style="margin-bottom:9px">Routines</div>
+      <div class="wrap">${state.routines.map(r=>`<button class="chip" data-sr="${r.id}">${esc(r.name)}</button>`).join("")}</div>
+      <div class="eyebrow teal" style="margin:16px 0 9px">Skills — pick a stage</div>
+      <div class="wrap">${TREES.map(t=>`<button class="chip" data-sk="${t.id}">${esc(t.name)}</button>`).join("")}</div>`,
+     null, renderSessionBuilder);
+    $$("#sheet-body [data-sr]").forEach(b=> b.onclick=()=>{
+      const r=routineById(b.dataset.sr);
+      r.items.forEach(it=>{ const e=exById(it.ex); if(e) sess.items.push({name:e.name, ref:e.id,
+        numbers:(it.sets+"×"+(it.hold&&it.hold!=="—"?it.hold:it.reps)), variation:"", assist:"none"}); });
+      renderSessionBuilder();
+    });
+    $$("#sheet-body [data-sk]").forEach(b=> b.onclick=()=>{
+      pickSkillStage(b.dataset.sk, (st, n)=>{
+        const t = treeById(b.dataset.sk);
+        const have=new Set(sess.items.map(x=>x.name));
+        (st.match||[]).forEach(m=>{ if(!have.has(m)){ sess.items.push({name:m, ref:null, numbers:"", variation:"", assist:"none"}); have.add(m); } });
+        (st.drills||[]).forEach(d=>{ const e=exById(d); if(e&&!have.has(e.name)){ sess.items.push({name:e.name, ref:d, numbers:"", variation:"", assist:"none"}); have.add(e.name); } });
+        (t.support.strength||[]).slice(0,2).forEach(m=>{ if(!have.has(m)){ sess.items.push({name:m, ref:null, numbers:"", variation:"", assist:"none"}); have.add(m); } });
+        sess.title = sess.items.length && sess.title==="Own session" ? t.name+" stage "+n : sess.title;
+        renderSessionBuilder(); toast(t.name+" stage "+n+" added");
+      });
+    });
+  };
   $("#ss-cancel").onclick=closeSheet;
   $("#ss-save").onclick=()=>{
     if(!sess.items.length){ toast("Add at least one exercise"); return; }
@@ -2205,7 +2217,28 @@ function renderSessionRunner(){
       items: items.map(x=>({name:x.name, variation:x.variation||"", assist:x.assist||"none", numbers:x.numbers||""})),
       notes:"", highlights:[], focus:[], own:true};
     state.classLogs=(state.classLogs||[]).filter(x=>x.date!==entry.date).concat([entry]).sort((a,b)=>a.date<b.date?-1:1);
-    state.meta_classU=Date.now(); sessRun=null; save(); closeSheet(); render(curView); toast("Session logged ✓");
+    state.meta_classU=Date.now(); save(); render(curView); toast("Session logged ✓");
+    offerSaveAsWorkout(sessRun.title, items);
+    sessRun=null;
+  };
+}
+/* After logging, a lightweight offer to turn a hand-built session into a
+   reusable Workout — so assembling something once doesn't mean rebuilding
+   it from scratch next time. */
+function offerSaveAsWorkout(title, items){
+  openSheet("Save this as a Workout?",
+   `<p class="sub" style="margin-bottom:12px">Next time it is one tap from Library instead of rebuilding it.</p>
+    <label class="f">Name</label><input type="text" id="saw-name" value="${esc(title)}">`,
+   `<button class="btn ghost" id="saw-skip">Skip</button>
+    <button class="btn primary" style="flex:1" id="saw-save">Save as Workout</button>`);
+  $("#saw-skip").onclick = closeSheet;
+  $("#saw-save").onclick = ()=>{
+    const name = $("#saw-name").value.trim() || title;
+    if(TREES.some(t=>t.name.toLowerCase()===name.toLowerCase())){ toast("That is a skill name — pick something else"); return; }
+    const w = {id:"cw-"+Date.now().toString(36), name:name, tax:"", blurb:"Built "+fmtDate(todayISO()),
+      items: items.map(it=>({ref: it.ref || it.name, sets:1, reps: it.numbers||"as done"}))};
+    state.customWorkouts = (state.customWorkouts||[]).concat([w]);
+    state.meta_classU = Date.now(); save(); closeSheet(); toast("Saved to Workouts");
   };
 }
 
@@ -2236,6 +2269,30 @@ function renderSkills(){
     <div class="notice teal" style="margin-top:14px">${ICONS.info}<span>Your stage is worked out from what you log in class. Log a movement and the ladder moves on its own.</span></div>`;
   $$("#view-skills [data-tree]").forEach(el=> el.onclick=()=> openTree(el.dataset.tree));
 }
+
+/* Shared stage picker — used wherever you're about to build a session from
+   a skill, so you're never locked to the auto-detected "current" stage.
+   Training a lower stage on purpose (technique work, an easier day) or
+   testing a higher one is always your call. */
+function pickSkillStage(treeId, onPick){
+  const t = treeById(treeId); if(!t) return;
+  const p = treeProgress(t);
+  openSheet("Which stage of "+t.name+"?",
+   `<p class="sub" style="margin-bottom:12px">Your current stage is highlighted. Pick any stage to build from.</p>
+    <div class="exl">${t.stages.map(s=>{
+      const info = p.stages.find(x=>x.stage.n===s.n);
+      return `<button class="exi" data-pick="${s.n}" style="width:100%;text-align:left;font:inherit;color:inherit;${s.n===p.current?"border-color:var(--teal)":""}">
+        <div class="ic">${s.n}</div>
+        <div class="bd"><div class="nm">${esc(s.name)}</div><div class="mt">${esc(s.target)}</div></div>
+        ${s.n===p.current?'<span class="tag teal">current</span>':info.count?'<span class="tag amber">tried</span>':''}
+      </button>`;}).join("")}</div>`);
+  document.querySelectorAll("#sheet-body [data-pick]").forEach(b=> b.onclick=()=>{
+    const n = +b.dataset.pick;
+    closeSheet();
+    onPick(t.stages.find(s=>s.n===n) || t.stages[0], n);
+  });
+}
+
 function openTree(id){
   const t = treeById(id); if(!t) return;
   const p = treeProgress(t);
@@ -2246,16 +2303,18 @@ function openTree(id){
     <div class="sec" style="margin-top:16px"><div class="eyebrow teal">The ladder</div>
       ${t.stages.map(s=>{
         const info = p.stages.find(x=>x.stage.n===s.n);
-        const state_ = s.n<p.current?"done":s.n===p.current?"now":"todo";
+        const state_ = s.n<p.current?"done":s.n===p.current?"now":(info.count>0?"tried":"todo");
+        const barLabel = s.pass && s.pass.type==="count" ? "logged "+s.pass.value+"×" : "reach "+s.pass.value;
         return `<div class="stg ${state_}">
           <div class="stgn">${s.n}</div>
           <div class="stgb">
             <div class="row between" style="gap:8px"><b>${esc(s.name)}</b>
-              ${info.count?`<span class="tag teal">${info.count}× logged</span>`:""}</div>
+              ${info.passed?`<span class="tag teal">✓ cleared</span>`
+                :info.count?`<span class="tag amber">${info.count}× logged, not yet — need to ${barLabel}</span>`:""}</div>
             <div class="tiny" style="margin-top:2px">Target: ${esc(s.target)}</div>
-            ${info.best?`<div class="tiny" style="color:var(--teal);margin-top:3px">Best: ${esc(info.best.raw)} · ${fmtDate(info.best.date)}</div>`:""}
+            ${info.best?`<div class="tiny" style="color:${info.passed?"var(--teal)":"var(--amber)"};margin-top:3px">Best: ${esc(info.best.raw)} · ${fmtDate(info.best.date)}</div>`:""}
             <div class="sub" style="font-size:.79rem;margin-top:6px">${esc(s.crit)}</div>
-            ${state_==="now"?`<div class="tiny" style="margin-top:6px;font-style:italic">${esc(s.why)}</div>`:""}
+            ${state_==="now"||state_==="tried"?`<div class="tiny" style="margin-top:6px;font-style:italic">${esc(s.why)}</div>`:""}
             ${s.drills.length?`<div class="wrap" style="margin-top:8px">${s.drills.map(d=>{const e=exById(d);return e?`<button class="chip" data-drill="${d}">${esc(e.name)}</button>`:"";}).join("")}</div>`:""}
           </div></div>`;}).join("")}
     </div>
@@ -2289,8 +2348,7 @@ function openTree(id){
     else state.prefs.treeStage[id] = +b.dataset.setstage;
     save(); openTree(id); render(curView); });
   $("#tree-build").onclick=()=>{
-    const st = t.stages.find(s=>s.n===p.current)||t.stages[0];
-    openSessionBuilder(st.drills.slice(), t.name+" — stage "+p.current);
+    pickSkillStage(id, (st, n)=> openSessionBuilder(st.drills.slice(), t.name+" — stage "+n));
   };
 }
 

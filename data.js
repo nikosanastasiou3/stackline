@@ -1637,27 +1637,27 @@ const TREES = [
   prereq:"Wrists that tolerate bodyweight, and the shoulder range to get your arms fully overhead without arching.",
   reality:"Most people without a gymnastics background reach a 5–10 second hold in 2–4 months of near-daily practice, and 30 seconds in 4–12 months. Frequency matters far more than session length — short daily practice beats one long weekly session.",
   stages:[
-   {n:1, name:"Own the shape on the floor", target:"Hold a clean hollow and a clean arch for 30 s",
+   {n:1, name:"Own the shape on the floor", target:"Hold a clean hollow and a clean arch for 30 s", pass:{type:"min",value:30},
     match:["Hollow body hold","Plank","Arch hold (superman)","Wall plank"],
     crit:"30 s hollow with the lower back flat, and 30 s arch without lumbar pinching.",
     why:"If the line breaks on the floor, it will break upside down — you just cannot see it there.",
     drills:["hollow-line","bodyline-drill","wrist-prep","scapular-pushups","tspine-ext","hollow-line"]},
-   {n:2, name:"Hold the line on the wall", target:"3 × 30 s chest-to-wall with ribs closed",
+   {n:2, name:"Hold the line on the wall", target:"3 × 30 s chest-to-wall with ribs closed", pass:{type:"min",value:30},
     match:["Chest-to-wall handstand","Wall walk","Back-to-wall handstand"],
     crit:"30 s chest-to-wall, hips and ribs close to the wall, shoulders pushing tall.",
     why:"The wall gives honest feedback. This is where your shoulder line actually gets built.",
     drills:["wf-hold","wf-shrugs","pike-shrugs","wall-slides","oh-lat-stretch","scap-wall-slides","bench-lat-opener","wrist-prep"]},
-   {n:3, name:"Find the balance point", target:"Toe pulls and heel pulls held 3–5 s",
+   {n:3, name:"Find the balance point", target:"Toe pulls and heel pulls held 3–5 s", pass:{type:"min",value:3},
     match:["Toe pulls","Heel pulls","Handstand kick-up"],
     crit:"Pull the heels off the wall with your fingers and hold 3–5 s, repeatedly and on purpose.",
     why:"Balance is fingertip pressure, not hip correction. This is where you learn the actual mechanism.",
     drills:["wall-toe-finger-pulls","finger-balance","kickup-practice","first-knuckle-pushups","wf-hold","wrist-prep","reverse-wrist-pushups"]},
-   {n:4, name:"Freestanding holds", target:"Consistent 10 s freestanding, kick-up 8/10",
+   {n:4, name:"Freestanding holds", target:"Consistent 10 s freestanding, kick-up 8/10", pass:{type:"min",value:10},
     match:["Freestanding handstand hold","Handstand kick-up","Tuck handstand"],
     crit:"Catch balance 8 times out of 10 attempts, and hold 10 s or more without a wall.",
     why:"Entry consistency is what turns practice time into handstand time rather than kick-up time.",
     drills:["freestanding-holds","kickup-practice","finger-balance","wf-shrugs","hollow-line","wrist-prep","bodyline-drill"]},
-   {n:5, name:"Own it", target:"30 s freestanding, straight line, calm",
+   {n:5, name:"Own it", target:"30 s freestanding, straight line, calm", pass:{type:"min",value:30},
     match:["Freestanding handstand hold","Handstand walk","Handstand pirouette","Straddle handstand"],
     crit:"30 s held with a straight line and relaxed breathing, most attempts.",
     why:"From here progress is shapes, walking and one-arm work rather than more mobility.",
@@ -1673,27 +1673,27 @@ const TREES = [
   prereq:"A reasonably stable handstand, plus enough pancake range to get your hips over your hands.",
   reality:"Most people need 6–12 months of dedicated work after a stable handstand. Coaches genuinely disagree on the entry point, but straddle-before-pike, elevated-before-floor and negatives-as-the-strength-driver are near universal.",
   stages:[
-   {n:1, name:"Build compression", target:"Pancake chest low, seated pike lifts 3×10",
+   {n:1, name:"Build compression", target:"Pancake chest low, seated pike lifts 3×10", pass:{type:"min",value:10},
     match:["Pancake","Pancake compression","Seated pike lift","Pike fold"],
     crit:"Chest close to the floor in a flat-backed pancake, and 10 clean seated pike lifts.",
     why:"Passive range gets your hips forward; active compression is what peels your feet off the floor.",
     drills:["pancake","seated-pike-lifts","lsit-parallettes","hollow-line","oh-lat-stretch","wrist-prep"]},
-   {n:2, name:"Own the takeoff", target:"Straddle lift-off held 5 s",
+   {n:2, name:"Own the takeoff", target:"Straddle lift-off held 5 s", pass:{type:"min",value:5},
     match:["Straddle lift-off","Press walk","L-sit","Straddle L-sit"],
     crit:"Lift both feet off the floor from a straddle and hold 5 s with straight arms.",
     why:"This is the press takeoff isolated. The forward shoulder lean does the work, not the legs.",
     drills:["straddle-liftoffs","press-walks","lsit-parallettes","seated-pike-lifts","pancake","scapular-pushups"]},
-   {n:3, name:"Control the descent", target:"4+ second straddle negative, 3×3",
+   {n:3, name:"Control the descent", target:"4+ second straddle negative, 3×3", pass:{type:"min",value:4},
     match:["Straddle press negative","Stalder press negative","Skin the cat straddle negative"],
     crit:"Lower from handstand to floor in 4 seconds or more with locked arms, repeatedly.",
     why:"The strongest single press builder — you build strength through the exact path you will press up.",
     drills:["straddle-negatives","elevated-press","straddle-liftoffs","pancake","wf-shrugs","lsit-parallettes"]},
-   {n:4, name:"Press from height", target:"Box press, lowering the height over months",
+   {n:4, name:"Press from height", target:"Box press, lowering the height over months", pass:{type:"count",value:3},
     match:["Box press","Elevated press"],
     crit:"Press smoothly from an elevated surface without jumping, and log the height each time.",
     why:"Removes the hardest few centimetres so you can feel the real pressing action.",
     drills:["elevated-press","straddle-negatives","press-walks","lsit-parallettes","pancake","seated-pike-lifts"]},
-   {n:5, name:"Full press", target:"Straddle press from the floor",
+   {n:5, name:"Full press", target:"Straddle press from the floor", pass:{type:"count",value:3},
     match:["Straddle press","Pike press","Stalder press"],
     crit:"Floor to handstand, straight arms, no jump, more than half of attempts.",
     why:"Pike press is the next milestone once straddle is consistent.",
@@ -1709,23 +1709,23 @@ const TREES = [
   prereq:"Solid pull-ups and a strong hollow body position.",
   reality:"Typically a year or more from first tuck to full lever. Straight-arm strength builds slowly and tendons adapt slower than muscle — patience matters more here than effort.",
   stages:[
-   {n:1, name:"Tuck", target:"Tuck front lever 3×10 s", match:["Tuck front lever"],
+   {n:1, name:"Tuck", target:"Tuck front lever 3×10 s", pass:{type:"min",value:10}, match:["Tuck front lever"],
     crit:"10 s tucked with the back parallel to the floor and arms straight.",
     why:"Teaches straight-arm scapular retraction, which is the whole skill in miniature.",
     drills:["hollow-line","scapular-pushups","bodyline-drill"]},
-   {n:2, name:"Advanced tuck", target:"Advanced tuck 3×8 s", match:["Advanced tuck front lever","Tuck front lever raise"],
+   {n:2, name:"Advanced tuck", target:"Advanced tuck 3×8 s", pass:{type:"min",value:8}, match:["Advanced tuck front lever","Tuck front lever raise"],
     crit:"Hips open toward horizontal, back flat, 8 s.",
     why:"The first real jump in leverage.",
     drills:["hollow-line","bodyline-drill"]},
-   {n:3, name:"One leg", target:"One-leg front lever 5 s each side", match:["One-leg front lever"],
+   {n:3, name:"One leg", target:"One-leg front lever 5 s each side", pass:{type:"min",value:5}, match:["One-leg front lever"],
     crit:"5 s per side without the hips dropping.",
     why:"Half the leverage of straddle, and it exposes side-to-side differences.",
     drills:["hollow-line"]},
-   {n:4, name:"Straddle", target:"Straddle front lever 5 s", match:["Straddle front lever","Front lever pull-out"],
+   {n:4, name:"Straddle", target:"Straddle front lever 5 s", pass:{type:"min",value:5}, match:["Straddle front lever","Front lever pull-out"],
     crit:"5 s straddled and horizontal.",
     why:"The last step before full.",
     drills:["pancake","hollow-line"]},
-   {n:5, name:"Full", target:"Full front lever 5 s", match:["Full front lever","Half-lay front lever","Front lever row","Ice cream maker"],
+   {n:5, name:"Full", target:"Full front lever 5 s", pass:{type:"min",value:5}, match:["Full front lever","Half-lay front lever","Front lever row","Ice cream maker"],
     crit:"5 s fully extended and horizontal.",
     why:"From here it becomes rows, pull-outs and dynamic work.",
     drills:[]}],
@@ -1739,19 +1739,19 @@ const TREES = [
   prereq:"Around 8–10 strict pull-ups and 8–10 dips.",
   reality:"With the strength prerequisites in place it is often a matter of weeks, because the transition is largely technique. Without them it can be many months.",
   stages:[
-   {n:1, name:"Strength base", target:"8 strict pull-ups, 8 dips", match:["Pull-up","Dip","Chin-up"],
+   {n:1, name:"Strength base", target:"8 strict pull-ups, 8 dips", pass:{type:"min",value:8}, match:["Pull-up","Dip","Chin-up"],
     crit:"8 strict pull-ups and 8 clean dips in a set.", why:"Below this the transition is not a technique problem, it is a strength problem.",
     drills:["scapular-pushups"]},
-   {n:2, name:"Explosive pull", target:"Pull to sternum height", match:["High pull-up (chest to bar)","Explosive pull-up","Chest-to-bar pull-up"],
+   {n:2, name:"Explosive pull", target:"Pull to sternum height", pass:{type:"count",value:3}, match:["High pull-up (chest to bar)","Explosive pull-up","Chest-to-bar pull-up"],
     crit:"Pull the bar to sternum level, not just chin.", why:"You need height to have time to transition.",
     drills:[]},
-   {n:3, name:"Learn the transition", target:"Baby or jumping muscle-up", match:["Baby muscle-up (low bar)","Jumping muscle-up","False grip hang"],
+   {n:3, name:"Learn the transition", target:"Baby or jumping muscle-up", pass:{type:"count",value:3}, match:["Baby muscle-up (low bar)","Jumping muscle-up","False grip hang"],
     crit:"Get over the bar with legs assisting, repeatedly.", why:"The transition is a distinct skill and worth drilling on its own.",
     drills:[]},
-   {n:4, name:"Negatives", target:"Slow negative muscle-up ×3", match:["Negative muscle-up"],
+   {n:4, name:"Negatives", target:"Slow negative muscle-up ×3", pass:{type:"count",value:3}, match:["Negative muscle-up"],
     crit:"Lower from support back under the bar under control.", why:"Builds strength through the exact transition path.",
     drills:[]},
-   {n:5, name:"Full", target:"Strict bar muscle-up", match:["Bar muscle-up","Ring muscle-up","Ring muscle-up transition"],
+   {n:5, name:"Full", target:"Strict bar muscle-up", pass:{type:"count",value:1}, match:["Bar muscle-up","Ring muscle-up","Ring muscle-up transition"],
     crit:"Clean muscle-up without kipping.", why:"Rings are the next step, and considerably harder.",
     drills:[]}],
   support:{strength:["Pull-up","Weighted pull-up","Dip","Straight-bar dip","Ring row","False grip pull-up"],
@@ -1764,19 +1764,19 @@ const TREES = [
   prereq:"Strong straight-arm scapular protraction, healthy wrists and elbows.",
   reality:"One of the slowest calisthenics skills — commonly two years or more to straddle. Connective tissue is the limiting factor, so consistency beats intensity by a wide margin.",
   stages:[
-   {n:1, name:"Lean", target:"Planche lean 3×20 s", match:["Planche lean","Pseudo planche hold","Frog stand"],
+   {n:1, name:"Lean", target:"Planche lean 3×20 s", pass:{type:"min",value:20}, match:["Planche lean","Pseudo planche hold","Frog stand"],
     crit:"20 s with shoulders well past the hands and hips level.", why:"Builds the straight-arm loading the whole skill depends on.",
     drills:["scapular-pushups","wrist-prep","first-knuckle-pushups","reverse-wrist-pushups","pec-doorway"]},
-   {n:2, name:"Tuck", target:"Tuck planche 3×15 s", match:["Tuck planche"],
+   {n:2, name:"Tuck", target:"Tuck planche 3×15 s", pass:{type:"min",value:15}, match:["Tuck planche"],
     crit:"15 s tucked, back rounded, hips at shoulder height.", why:"First time the whole bodyweight sits on straight arms.",
     drills:["scapular-pushups"]},
-   {n:3, name:"Advanced tuck", target:"Advanced tuck 3×10 s", match:["Advanced tuck planche"],
+   {n:3, name:"Advanced tuck", target:"Advanced tuck 3×10 s", pass:{type:"min",value:10}, match:["Advanced tuck planche"],
     crit:"10 s with the back flat and hips opening.", why:"The step where most people stall for months. That is normal.",
     drills:[]},
-   {n:4, name:"Straddle", target:"Straddle planche 5 s", match:["Straddle planche","One-leg planche"],
+   {n:4, name:"Straddle", target:"Straddle planche 5 s", pass:{type:"min",value:5}, match:["Straddle planche","One-leg planche"],
     crit:"5 s straddled and horizontal.", why:"Requires significant additional straight-arm strength.",
     drills:["pancake"]},
-   {n:5, name:"Full", target:"Full planche 5 s", match:["Full planche","Planche push-up"],
+   {n:5, name:"Full", target:"Full planche 5 s", pass:{type:"min",value:5}, match:["Full planche","Planche push-up"],
     crit:"5 s fully extended.", why:"Elite level. Years, not months.",
     drills:[]}],
   support:{strength:["Pseudo planche push-up","Scapular push-up","Ring support hold","Dip","L-sit"],
@@ -1789,19 +1789,19 @@ const TREES = [
   prereq:"Strong lateral core, plus solid pressing and pulling strength.",
   reality:"Typically 6–18 months. Grip and the top-arm press are the usual limiters rather than core strength, which surprises most people.",
   stages:[
-   {n:1, name:"Vertical hold", target:"Vertical flag 3×15 s", match:["Vertical flag hold"],
+   {n:1, name:"Vertical hold", target:"Vertical flag 3×15 s", pass:{type:"min",value:15}, match:["Vertical flag hold"],
     crit:"Hold the body vertical alongside the pole, feet off the ground.", why:"Teaches the press-pull setup with minimal leverage.",
     drills:["scapular-pushups","hollow-line"]},
-   {n:2, name:"Chamber hold", target:"Tuck flag 3×10 s", match:["Chamber hold (tuck flag)","Spotted flag hold"],
+   {n:2, name:"Chamber hold", target:"Tuck flag 3×10 s", pass:{type:"min",value:10}, match:["Chamber hold (tuck flag)","Spotted flag hold"],
     crit:"Knees tucked, hips level with the shoulders, 10 s.", why:"First real lateral load.",
     drills:["hollow-line","bodyline-drill"]},
-   {n:3, name:"One leg out", target:"One leg extended 5 s each side", match:["Chamber hold (tuck flag)"],
+   {n:3, name:"One leg out", target:"One leg extended 5 s each side", pass:{type:"min",value:5}, match:["Chamber hold (tuck flag)"],
     crit:"Extend one leg while holding position.", why:"Gradual leverage increase without jumping to straddle.",
     drills:[]},
-   {n:4, name:"Straddle", target:"Straddle flag 5 s", match:["Straddle flag","Flag negative"],
+   {n:4, name:"Straddle", target:"Straddle flag 5 s", pass:{type:"min",value:5}, match:["Straddle flag","Flag negative"],
     crit:"5 s straddled and horizontal.", why:"Shortened lever version of the full skill.",
     drills:["pancake"]},
-   {n:5, name:"Full", target:"Full human flag 5 s", match:["Full human flag"],
+   {n:5, name:"Full", target:"Full human flag 5 s", pass:{type:"min",value:5}, match:["Full human flag"],
     crit:"5 s fully extended and horizontal.", why:"From here it is holds for time and dynamic entries.",
     drills:[]}],
   support:{strength:["Pull-up","Dip","Side plank","Hanging leg raise","Copenhagen plank","Ring row"],
@@ -1823,6 +1823,19 @@ function stageEvidence(tree, stage){
   }));
   return hits;
 }
+/* A stage is only "reached" when the evidence actually clears its bar, not
+   merely when something matching its name has been logged at all. Two bar
+   types: "min" (best logged number must reach or beat the target — holds,
+   reps) and "count" (attempted enough times — for stages whose real
+   criterion is not a single growing number, like a success ratio or a
+   height that should shrink). Falls back to a single attempt if a stage
+   has no explicit bar defined, so nothing silently breaks. */
+function stagePassed(stageInfo){
+  const pass = stageInfo.stage.pass || {type:"count", value:1};
+  if(!stageInfo.count) return false;
+  if(pass.type==="count") return stageInfo.count >= pass.value;
+  return !!(stageInfo.best && stageInfo.best.top >= pass.value);
+}
 function treeProgress(tree){
   const out = tree.stages.map(st=>{
     const ev = stageEvidence(tree, st);
@@ -1831,10 +1844,12 @@ function treeProgress(tree){
       const top=n.length?Math.max(...n):0;
       return top>(b?b.top:0) ? {top:top, raw:h.it.numbers, date:h.date} : b;
     }, null);
-    return {stage:st, count:ev.length, best:best, last:ev.length?ev[ev.length-1].date:null};
+    const info = {stage:st, count:ev.length, best:best, last:ev.length?ev[ev.length-1].date:null};
+    info.passed = stagePassed(info);
+    return info;
   });
   let cur = 1;
-  out.forEach(s=>{ if(s.count>0) cur = Math.max(cur, s.stage.n); });
+  out.forEach(s=>{ if(s.passed) cur = Math.max(cur, s.stage.n); });
   const manual = (state.prefs.treeStage||{})[tree.id];
   return {stages:out, current: manual || cur, manual: !!manual};
 }
@@ -1970,6 +1985,33 @@ const WORKOUTS = [
      {ref:"Ring row", sets:3, reps:"10"},
      {ref:"tuck-back-lever", sets:3, reps:"10s hold"},
      {ref:"oh-lat-stretch", sets:2, reps:"30s each side"},
+   ]},
+ { id:"w-push", name:"Push Day", tax:"push", seeded:true,
+   blurb:"Activation, then compound pressing before accessory and straight-arm work — chest, shoulders, triceps.",
+   items:[
+     {ref:"scapular-pushups", sets:2, reps:"10"},
+     {ref:"Dip", sets:4, reps:"8-10"},
+     {ref:"Diamond push-up", sets:3, reps:"10-12"},
+     {ref:"Pseudo planche push-up", sets:3, reps:"6-8"},
+     {ref:"pec-doorway-upgraded", sets:2, reps:"40s each side"},
+   ]},
+ { id:"w-press-practice", name:"Press Handstand Practice", tax:"skills", seeded:true,
+   blurb:"Wrist prep, compression, takeoff, then negatives and attempts — the actual press-training sequence, not a random pile of press drills.",
+   items:[
+     {ref:"wrist-prep", sets:1, reps:"~2 min"},
+     {ref:"pancake", sets:2, reps:"45s"},
+     {ref:"straddle-liftoffs", sets:3, reps:"5s hold"},
+     {ref:"straddle-negatives", sets:4, reps:"3, slow"},
+     {ref:"elevated-press", sets:1, reps:"4-6 attempts"},
+   ]},
+ { id:"w-handstand-practice", name:"Freestanding Handstand Practice", tax:"skills", seeded:true,
+   blurb:"Wrist prep, the wall for line, the balance mechanism, then real freestanding attempts — front-loaded while you are fresh.",
+   items:[
+     {ref:"wrist-prep", sets:1, reps:"~2 min"},
+     {ref:"wf-hold", sets:3, reps:"20-30s"},
+     {ref:"wall-toe-finger-pulls", sets:3, reps:"5-8"},
+     {ref:"kickup-practice", sets:1, reps:"8-10 attempts"},
+     {ref:"freestanding-holds", sets:1, reps:"8-10 attempts"},
    ]},
 ];
 function workoutById(id){ return (WORKOUTS.concat(state.customWorkouts||[])).find(w=>w.id===id); }
@@ -2115,6 +2157,7 @@ let state = {
   schedule: null,   // null = use DEFAULT_SCHEDULE
   classLogs: [],   // {date, cls, items:[{name,variation,assist,numbers}], notes}
   customMoves: [],
+  customWorkouts: [],
   daySwaps: {},   // {"YYYY-MM-DD": {originalExId: replacementExId}} — today only, never edits the routine
   logs: [],            // {date, routineId, done:[exIds], dosage:{}, line, mob, energy, tight:[], pain, notes, mediaNote}
   milestones: [],      // {date, text}
@@ -2133,7 +2176,8 @@ async function loadState(){
     state.customDrills = d.customDrills||[]; state.meta_drillsU = d.meta_drillsU||0;
     state.deskLogs = d.deskLogs||[]; state.meta_deskU = d.meta_deskU||0;
     state.daySwaps = d.daySwaps||{};
-    state.classLogs = d.classLogs||[]; state.customMoves = d.customMoves||[]; state.meta_classU = d.meta_classU||0;
+    state.classLogs = d.classLogs||[]; state.customMoves = d.customMoves||[]; state.customWorkouts = d.customWorkouts||[]; state.meta_classU = d.meta_classU||0;
+    state.schedule = d.schedule||null; state.meta_schedU = d.meta_schedU||0;
     state.prefs = Object.assign(state.prefs, d.prefs||{});
     if(Array.isArray(d.routines)){
       // keep seeds fresh but preserve user edits/custom routines
@@ -2149,7 +2193,8 @@ async function loadState(){
 // (only present inside Claude's own preview) is best-effort and fire-and-forget on top.
 function saveLocalOnly(){
   const raw = JSON.stringify({routines:state.routines, logs:state.logs, milestones:state.milestones,
-                              prefs:state.prefs, customDrills:state.customDrills, deskLogs:state.deskLogs, meta_deskU:state.meta_deskU, daySwaps:state.daySwaps, classLogs:state.classLogs, customMoves:state.customMoves, meta_classU:state.meta_classU,
+                              prefs:state.prefs, customDrills:state.customDrills, deskLogs:state.deskLogs, meta_deskU:state.meta_deskU, daySwaps:state.daySwaps, classLogs:state.classLogs, customMoves:state.customMoves, customWorkouts:state.customWorkouts, meta_classU:state.meta_classU,
+                              schedule:state.schedule, meta_schedU:state.meta_schedU,
                               meta_routinesU:state.meta_routinesU, meta_milestonesU:state.meta_milestonesU, meta_drillsU:state.meta_drillsU});
   try{ localStorage.setItem(SKEY, raw); }catch(e){}
   try{ if(window.storage && window.storage.set){ window.storage.set(SKEY, raw).catch(()=>{}); } }catch(e){}
