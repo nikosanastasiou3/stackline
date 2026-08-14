@@ -403,16 +403,18 @@ body.tint-rest{background-color:var(--bg);background-image:none}
   border-radius:7px;padding:2px 7px;font-size:.6rem;font-weight:800;color:var(--teal)}
 
 .wk-hero{position:relative;border-radius:20px;padding:16px;box-shadow:var(--shadow-lg);overflow:hidden;margin-bottom:12px;
-  background:linear-gradient(135deg,var(--teal-mid) 0%,var(--surface) 65%);border:1px solid var(--teal-mid)}
-.wk-hero .figs{position:absolute;right:8px;bottom:8px;width:78px;display:flex;gap:2px;opacity:.7;pointer-events:none;z-index:1}
+  background:linear-gradient(135deg,var(--teal-mid) 0%,var(--surface) 65%);border:1px solid var(--teal-mid);
+  display:flex;flex-direction:column;min-height:172px}
+.wk-hero .figs{position:absolute;right:14px;top:50%;transform:translateY(-50%);height:150px;display:flex;gap:4px;
+  opacity:.92;pointer-events:none;z-index:1;filter:drop-shadow(0 4px 10px rgba(0,0,0,.2))}
 .wk-hero .figs svg{height:100%;width:auto}
 .wk-hero .top{display:flex;justify-content:space-between;align-items:flex-start;position:relative;z-index:2}
 .wk-hero .tag2{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:3px 9px;
   font-size:.6rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--teal)}
 .wk-hero .dur2{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:4px 9px;
   font-family:"Archivo";font-weight:800;font-size:.75rem}
-.wk-hero h3{font-family:"Archivo";font-size:1.15rem;font-weight:800;margin-top:8px;position:relative;z-index:2;max-width:60%}
-.wk-hero .fx2{font-size:.79rem;color:var(--muted);margin-top:2px;position:relative;z-index:2;max-width:60%}
+.wk-hero h3{font-family:"Archivo";font-size:1.15rem;font-weight:800;margin-top:8px;position:relative;z-index:2;max-width:52%}
+.wk-hero .fx2{font-size:.79rem;color:var(--muted);margin-top:2px;position:relative;z-index:2;max-width:52%}
 
 .thead{background:linear-gradient(150deg,var(--surface) 0%,var(--surface2) 100%);border:1px solid var(--line);
   border-radius:20px;padding:18px;box-shadow:var(--shadow-lg);position:relative;overflow:hidden}

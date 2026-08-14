@@ -2459,7 +2459,7 @@ function renderSkills(){
     const st = t.stages.find(s=>s.n===p.current) || t.stages[0];
     const pct = Math.round(((p.current-1)/(t.stages.length-1))*100);
     return `<div class="wk-hero" data-tree="${t.id}" style="cursor:pointer">
-      <div class="figs">${routineMuscleMap({items:(st.drills||[]).map(id=>({ex:id}))}, 78)}</div>
+      <div class="figs">${routineMuscleMap({items:(st.drills||[]).map(id=>({ex:id}))}, 150)}</div>
       <div class="top"><span class="tag2">${t.depth==="full"?"detailed":"outline"}</span>
         <span class="dur2">Stage ${p.current}/${t.stages.length}</span></div>
       <h3>${esc(t.name)}</h3>
@@ -2588,7 +2588,7 @@ function renderWorkouts(){
        const t = taxById(w.tax);
        const totalMin = w.items.reduce((n,it)=> n + (it.sets||1)*0.6, 0);
        return `<div class="wk-hero">
-         <div class="figs">${routineMuscleMap({items:w.items.map(it=>({ex:it.ref}))}, 78)}</div>
+         <div class="figs">${routineMuscleMap({items:w.items.map(it=>({ex:it.ref}))}, 150)}</div>
          <div class="top"><span class="tag2">${t?esc(t.name):"Workout"}</span>
            <span class="dur2">${Math.max(1,Math.round(totalMin))} min</span></div>
          <h3>${esc(w.name)}</h3>
