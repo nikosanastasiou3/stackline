@@ -339,10 +339,13 @@ ul.bul{padding-left:18px;font-size:.85rem;line-height:1.6}
 .clitem .nm{font-weight:600;font-size:.87rem}
 
 /* ---- Today v3: ambient tint, date strip, hero card, recently-used ---- */
-.ambient{position:fixed;inset:0;z-index:-1;pointer-events:none;transition:background .6s ease}
-.ambient.skill{background:radial-gradient(ellipse 140% 55% at 50% -8%, var(--amber-mid), transparent 62%)}
-.ambient.recovery{background:radial-gradient(ellipse 140% 55% at 50% -8%, var(--teal-mid), transparent 62%)}
-.ambient.rest{background:none}
+/* Applied directly to body's own background instead of a fixed overlay —
+   body already paints an opaque --bg, and with no ancestor establishing a
+   stacking context the z-index:-1 overlay trick was unreliable. This way
+   the tint IS the background, so there's nothing for it to lose to. */
+body.tint-skill{background:radial-gradient(ellipse 140% 46% at 50% 0%, var(--amber-mid), transparent 60%),var(--bg)}
+body.tint-recovery{background:radial-gradient(ellipse 140% 46% at 50% 0%, var(--teal-mid), transparent 60%),var(--bg)}
+body.tint-rest{background:var(--bg)}
 .datestrip{display:flex;align-items:stretch;justify-content:space-between;background:var(--surface);border:1px solid var(--line);
   border-radius:16px;padding:10px 5px;box-shadow:var(--shadow);gap:2px}
 .dcell{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;

@@ -175,6 +175,7 @@ function show(v){
   $$(".view").forEach(x=>x.classList.remove("on"));
   $("#view-"+v).classList.add("on");
   $$("nav.tabs button").forEach(b=>b.classList.toggle("on", b.dataset.v===v));
+  if(v!=="today") document.body.classList.remove("tint-skill","tint-recovery","tint-rest");
   render(v);
   window.scrollTo({top:0});
 }
@@ -286,8 +287,6 @@ function renderToday(){
   const recents = recentlyUsed(6);
 
   $("#view-today").innerHTML = `
-  <div class="ambient ${amb}" id="today-ambient"></div>
-
   <div class="datestrip">${dots.map((d,i)=>`
     <button class="dcell ${i===todayI?"today":""}" data-dateiso="${d.iso}"><div class="dow">${dowLbl[i]}</div>
       <div class="num">${new Date(d.iso+"T12:00:00").getDate()}</div>
@@ -344,6 +343,8 @@ function renderToday(){
       <div class="ic">${ICONS.build}</div><div class="nm">${esc(r.name)}</div><div class="mt">Logged ${r.count}× recently</div></div>`).join("")}</div>` : ""}
   `;
 
+  document.body.classList.remove("tint-skill","tint-recovery","tint-rest");
+  document.body.classList.add("tint-"+amb);
   $$("#view-today [data-dateiso]").forEach(el=> el.onclick=()=> openClassLog(el.dataset.dateiso));
   const wb=$("#t-why"); if(wb) wb.onclick=()=> $("#t-whybox").classList.toggle("on");
   $("#t-daytype").onclick=()=> openDayOverride(today);
