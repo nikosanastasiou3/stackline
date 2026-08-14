@@ -320,12 +320,13 @@ function renderToday(){
   ${jobs.length? `<div class="eyebrow">Rest of today</div><div class="tlist">${jobs.map(row).join("")}</div>` : ""}
 
   <div class="eyebrow">Optional</div>
-  <div class="tlist">
-    <button class="trow" data-job="desk">
-      <div class="mark ${deskN?"on":"opt"}">${deskN?ICONS.check:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>'}</div>
-      <div class="bd"><div class="nm">Desk resets</div><div class="mt">${deskN?deskN+" done today":"90 seconds at work"}</div></div>
-      <span class="go">＋ Add</span>
-    </button>
+  <div class="mini-hero" data-job="desk">
+    ${deskN?`<span class="count">${deskN} today</span>`:""}
+    <div class="figs">${routineMuscleMap({items:DESK_SETS[0].pick.map(id=>({ex:id}))}, 52)}</div>
+    <div class="bd"><div class="nm">Desk resets</div><div class="mt">${deskN?"90s · keep it going":"Chest, hips, neck, spine — 90s"}</div></div>
+    <button class="go">${deskN?"Add more":"Add"} →</button>
+  </div>
+  <div class="tlist" style="margin-top:9px">
     <button class="trow" data-job="session">
       <div class="mark opt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></div>
       <div class="bd"><div class="nm">Build a session</div><div class="mt">Pick your own exercises</div></div>
@@ -355,7 +356,7 @@ function renderToday(){
   $$("#view-today [data-job]").forEach(b=> b.onclick=()=>{
     const k=b.dataset.job;
     if(k==="class") isOwn? openSessionBuilder([], "Own training") : openClassLog(today);
-    else if(k==="desk") openDeskPicker();
+    else if(k==="desk") openDeskSet("defaults");
     else if(k==="session") openSessionBuilder([], "Own session");
     else if(k==="quickdrill") openQuickCapture();
   });
@@ -1312,22 +1313,39 @@ function openDrillEditor(editId, presetCat){
 
 
 /* ---------- desk resets: tracked separately from training ---------- */
+/* "defaults" is the evidence-backed core — the five areas research
+   consistently names as most affected by sitting (chest, hips, neck,
+   thoracic, lumbar). No day-of-week rotation: sources on office micro-
+   breaks specifically say variety should come from frequency within a
+   day, not from theming across days — that idea belongs to gym splits,
+   not desk breaks. Everything else is available as an instant, one-tap
+   add-on below the defaults, never a separate routine to build. */
 const DESK_SETS = [
+  {id:"defaults", name:"Daily core", note:"The five areas the research says matter most.",
+   pick:["desk-chest-opener","desk-hipflexor-seated","desk-chin-tucks","desk-chair-tspine","desk-cat-cow"]},
   {id:"chair", name:"At the chair", note:"No standing up required.", pick:["desk-chair-tspine","desk-hipflexor-seated","desk-chest-opener"]},
   {id:"ball",  name:"On the ball",  note:"Swap the chair for a few minutes.", pick:["ball-tspine-drape","ball-pelvic-tilts","ball-side-bend"]},
   {id:"hips",  name:"Hips reset",   note:"The one that helps your line most.", pick:["desk-hipflexor-seated","desk-fig4","desk-standing-hipflexor"]},
   {id:"neck",  name:"Neck & wrists",note:"After a long typing block.",  pick:["desk-chin-tucks","desk-wrist-reset","desk-twist"]}
 ];
+const DESK_EXTRAS = ["desk-fig4","desk-twist","desk-wrist-reset","desk-standing-hipflexor",
+  "ball-tspine-drape","ball-pelvic-tilts","ball-side-bend","ball-marching",
+  "desk-hamstring","desk-triceps","desk-ankles","desk-glute-squeeze","desk-chair-squat"];
 const deskToday = () => (state.deskLogs||[]).filter(d=>d.date===todayISO()).length;
 function deskStreak(){
   let n=0, skip=!(state.deskLogs||[]).some(d=>d.date===todayISO());
   for(let i=skip?1:0;i<90;i++){ if((state.deskLogs||[]).some(d=>d.date===todayISO(-i))) n++; else break; }
   return n;
 }
-function openDeskSet(setId){
+let deskDraft = null;
+function openDeskSet(setId, keepDraft){
   const set = DESK_SETS.find(s=>s.id===setId); if(!set) return;
-  const drills = set.pick.map(exById).filter(Boolean);
-  const done=new Set();
+  if(!keepDraft || !deskDraft) deskDraft = set.pick.slice();
+  const drills = deskDraft.map(exById).filter(Boolean);
+  const doneKey = "dk-done-set-"+setId;
+  const done = openDeskSet._done && openDeskSet._forSet===setId ? openDeskSet._done : new Set();
+  openDeskSet._done = done; openDeskSet._forSet = setId;
+  const extras = DESK_EXTRAS.filter(id=> !deskDraft.includes(id));
   openSheet(set.name,
     `<p class="sub" style="margin-bottom:12px;font-size:.85rem">${esc(set.note)} About 90 seconds.</p>
      <div class="exl">${drills.map((e,i)=>`
@@ -1336,7 +1354,10 @@ function openDeskSet(setId){
          <div class="bd" data-open-ex="${e.id}"><div class="nm">${esc(e.name)}</div>
            <div class="mt">${esc(e.dosage)}</div>
            <div class="tiny" style="margin-top:3px">${e.discreet==="obvious"?'<span style="color:var(--amber)">Needs a private spot</span>':esc((e.cues||"").split(".")[0])+"."}</div></div>
+         <button class="iconbtn" style="width:30px;height:30px" data-dkrm="${i}" aria-label="Remove">✕</button>
        </div>`).join("")}</div>
+     ${extras.length? `<div class="tiny" style="margin:12px 0 6px">Feeling it today? Add more — one tap, no editor.</div>
+       <div class="wrap">${extras.map(id=>{ const e=exById(id); return e? `<button class="chip" data-dkadd="${id}">＋ ${esc(e.name)}</button>`:"";}).join("")}</div>`:""}
      <div class="notice teal" style="margin-top:14px">${ICONS.info}<span>Desk resets are tracked separately — they never affect your training adherence.</span></div>`,
     `<button class="btn ghost" id="dk-close">Close</button>
      <button class="btn primary" style="flex:1" id="dk-done">Done ✓</button>`);
@@ -1344,11 +1365,17 @@ function openDeskSet(setId){
     const i=+b.dataset.dk; done.has(i)?done.delete(i):done.add(i);
     b.classList.toggle("on"); b.closest(".exi").classList.toggle("done");
   });
-  $$("#sheet-body [data-open-ex]").forEach(el=> el.onclick=()=> openExercise(el.dataset.openEx, ()=>openDeskSet(setId)));
-  $("#dk-close").onclick=closeSheet;
+  $$("#sheet-body [data-dkrm]").forEach(b=> b.onclick=()=>{
+    const i=+b.dataset.dkrm; deskDraft.splice(i,1); openDeskSet(setId, true);
+  });
+  $$("#sheet-body [data-dkadd]").forEach(b=> b.onclick=()=>{
+    deskDraft.push(b.dataset.dkadd); openDeskSet(setId, true);
+  });
+  $$("#sheet-body [data-open-ex]").forEach(el=> el.onclick=()=> openExercise(el.dataset.openEx, ()=>openDeskSet(setId, true)));
+  $("#dk-close").onclick=()=>{ deskDraft=null; closeSheet(); };
   $("#dk-done").onclick=()=>{
     state.deskLogs = (state.deskLogs||[]).concat([{date:todayISO(), set:setId, n:done.size||drills.length, t:Date.now()}]);
-    state.meta_deskU = Date.now(); save(); closeSheet(); render(curView);
+    state.meta_deskU = Date.now(); deskDraft=null; save(); closeSheet(); render(curView);
     toast("Desk reset logged · "+deskToday()+" today");
   };
 }
@@ -1410,6 +1437,12 @@ const MUSCLES = {
   "step-up":              {work:{p:["quads","glutes"],s:["hamstrings"]}},
   "calf-raise":           {work:{p:["calves"],s:[]}},
   "glute-activation-circuit": {work:{p:["glutes"],s:["hipflexors"]}},
+  "desk-cat-cow":       {work:{p:["erectors"],s:["abs"]}, stretch:{p:["erectors"],s:[]}},
+  "desk-hamstring":     {stretch:{p:["hamstrings"],s:["glutes"]}},
+  "desk-triceps":       {stretch:{p:["triceps"],s:["lats"]}},
+  "desk-ankles":        {work:{p:["calves"],s:[]}},
+  "desk-glute-squeeze": {work:{p:["glutes"],s:[]}},
+  "desk-chair-squat":   {work:{p:["quads","glutes"],s:["hamstrings"]}},
   "pull-up":              {work:{p:["lats","biceps"],s:["forearms","traps_lower"]}},
   "ring-row":             {work:{p:["lats","biceps"],s:["traps_lower","abs"]}},
   "dip":                  {work:{p:["triceps","pecs"],s:["delts_front"]}},
@@ -1884,6 +1917,60 @@ const HOWTO = {
   "Press back up to full lockout, making sure your shoulders stay protracted — pushed forward — rather than relaxing back.",
   "Hold the lean at the top for a moment before the next rep."],
  check:"If your shoulders drift back to a normal, stacked-over-the-wrists position at any point, you've lost the exercise — it becomes a regular push-up. The forward lean has to be held for the entire rep, not just at the bottom."},
+
+"desk-cat-cow":{desc:"Seated tall in your chair, you alternate between arching your back and rounding it, moving your spine through the same flexion-extension pattern sitting locks out of it all day.",
+ steps:["Sit toward the front of your chair, feet flat on the floor, hands resting on your thighs.",
+  "Inhale, and arch your back — lift your chest, let your shoulder blades draw together, and look slightly up. This is cow.",
+  "Exhale, and round your back the opposite way — tuck your chin toward your chest and pull your belly in. This is cat.",
+  "Move slowly, letting each breath drive the movement rather than rushing through it.",
+  "Try to feel the motion travel through your whole spine, not just your upper back.",
+  "Repeat for 8-10 slow rounds."],
+ check:"If only your upper back seems to move and your lower spine stays locked, slow down further and focus on letting the movement start from the hips."},
+
+"desk-hamstring":{desc:"Sitting at the edge of your chair, you extend one leg straight out and hinge forward from the hips, stretching the back of that thigh.",
+ steps:["Sit at the edge of your chair.",
+  "Extend one leg straight out in front of you, heel on the floor, toes pointing up.",
+  "Sit up tall first, rolling your pelvis slightly forward.",
+  "Keeping your back flat, hinge forward from the hips, reaching your chest toward the extended thigh.",
+  "Hold once you feel a stretch along the back of the leg — don't push into pain.",
+  "Return upright and swap legs."],
+ check:"If you're rounding your lower back to reach further, you've gone too far — sit back up slightly until the back is flat again."},
+
+"desk-triceps":{desc:"Reaching one arm overhead and folding the elbow behind your head, you stretch the triceps and the side of that arm.",
+ steps:["Sit or stand tall.",
+  "Raise one arm straight overhead.",
+  "Bend that elbow, letting your hand drop behind your head, fingers reaching toward the opposite shoulder blade.",
+  "Use your other hand to gently support the raised elbow, guiding it back and slightly in.",
+  "Keep the shoulder of the working arm pulled down, away from your ear.",
+  "Hold, breathing normally, then release and swap sides."],
+ check:"If your shoulder is creeping up toward your ear, that's tension substituting for range — relax it back down, even if that means less depth."},
+
+"desk-ankles":{desc:"Lifting one foot slightly and moving it through slow circles and pumps, keeping blood moving through legs that have been still.",
+ steps:["Sit tall with both feet flat on the floor.",
+  "Lift one foot slightly, keeping the heel near the floor or fully off it.",
+  "Circle your ankle slowly in one direction, trying to trace as full a circle as you can with your toes.",
+  "Do 10 slow circles, then switch directions for 10 more.",
+  "Follow with 15 pumps — pointing the toes up, then down, through a full range.",
+  "Repeat with the other foot."],
+ check:"If you're just wiggling the foot rather than tracing an actual circle, slow down and exaggerate the range at each point of the circle."},
+
+"desk-glute-squeeze":{desc:"A held, isometric contraction of the glutes while seated — no movement, just a hard squeeze and release.",
+ steps:["Sit tall in your chair with feet flat on the floor.",
+  "Without moving anything visibly, squeeze both glutes together as hard as you can.",
+  "Hold that contraction for 10-15 seconds, breathing normally throughout.",
+  "Fully release.",
+  "Rest a moment, then repeat.",
+  "Do 8-10 reps."],
+ check:"If you can't feel a real contraction, you're likely holding your breath instead of actually squeezing — relax, breathe, and commit to a harder, more deliberate squeeze."},
+
+"desk-chair-squat":{desc:"Hovering just above your chair seat without fully sitting down, then standing back up — a light squat pattern using your own chair as the target depth.",
+ steps:["Stand in front of your chair as if about to sit down.",
+  "Push your hips back and bend your knees, lowering under control.",
+  "Stop just before your seat touches the chair — hover there for a moment.",
+  "Keep your chest up and your weight through your heels during the hover.",
+  "Drive back up through your heels to standing.",
+  "Repeat for 8-10 reps without using your hands for balance."],
+ check:"If you're pushing off the desk or armrests to stand back up, that's doing the work your legs should be doing — keep your arms free through the whole set."},
 
 "pancake":{desc:"You sit with your legs wide apart and fold forward with a flat back. It opens the hamstrings and inner thighs, which is where the press handstand starts from.",
  steps:["Sit on the floor and take your legs as wide as is comfortable, kneecaps pointing at the ceiling.","Sit up tall on your sit bones. If you are rolling backward, sit on a folded towel or cushion.","Place your hands on the floor in front of you.","Keeping your back flat, hinge forward from the hips — imagine leading with your chest, not your head.","Walk your hands forward only as far as you can go without your lower back rounding.","Hold, breathing steadily, then walk back up."],
@@ -2371,15 +2458,13 @@ function renderSkills(){
     const p = treeProgress(t);
     const st = t.stages.find(s=>s.n===p.current) || t.stages[0];
     const pct = Math.round(((p.current-1)/(t.stages.length-1))*100);
-    return `<div class="card" data-tree="${t.id}" style="cursor:pointer">
-      <div class="row between" style="gap:10px">
-        <div style="flex:1;min-width:0">
-          <div class="h-md">${esc(t.name)}</div>
-          <div class="sub" style="font-size:.79rem;margin-top:2px">Stage ${p.current} of ${t.stages.length} · ${esc(st.name)}</div>
-        </div>
-        ${t.depth==="full"?'<span class="tag teal">detailed</span>':'<span class="tag">outline</span>'}
-      </div>
-      <div class="ladder">${t.stages.map(s=>`<i class="${s.n<p.current?"done":s.n===p.current?"now":""}"></i>`).join("")}</div>
+    return `<div class="wk-hero" data-tree="${t.id}" style="cursor:pointer">
+      <div class="figs">${routineMuscleMap({items:(st.drills||[]).map(id=>({ex:id}))}, 78)}</div>
+      <div class="top"><span class="tag2">${t.depth==="full"?"detailed":"outline"}</span>
+        <span class="dur2">Stage ${p.current}/${t.stages.length}</span></div>
+      <h3>${esc(t.name)}</h3>
+      <div class="fx2">${esc(st.name)}</div>
+      <div class="ladder" style="margin-top:10px">${t.stages.map(s=>`<i class="${s.n<p.current?"done":s.n===p.current?"now":""}"></i>`).join("")}</div>
       <div class="row between" style="margin-top:7px"><span class="tiny">${pct}% through the ladder</span>
         <span class="tiny">${p.manual?"set by you":"from your logs"}</span></div>
     </div>`;}).join("");
@@ -2501,15 +2586,16 @@ function renderWorkouts(){
      </div>
      ${all.map(w=>{
        const t = taxById(w.tax);
-       return `<div class="card">
-         <div class="row between" style="gap:10px">
-           <div style="flex:1;min-width:0"><div class="h-md">${esc(w.name)}</div>
-             <div class="sub" style="font-size:.78rem;margin-top:2px">${esc(w.blurb||"")}</div></div>
-           ${t?`<span class="tag teal">${esc(t.name)}</span>`:""}
-         </div>
+       const totalMin = w.items.reduce((n,it)=> n + (it.sets||1)*0.6, 0);
+       return `<div class="wk-hero">
+         <div class="figs">${routineMuscleMap({items:w.items.map(it=>({ex:it.ref}))}, 78)}</div>
+         <div class="top"><span class="tag2">${t?esc(t.name):"Workout"}</span>
+           <span class="dur2">${Math.max(1,Math.round(totalMin))} min</span></div>
+         <h3>${esc(w.name)}</h3>
+         <div class="fx2">${esc(w.blurb||"")}</div>
          <div class="exl" style="margin-top:10px">${w.items.map((it,i)=>{
            const r = workoutRef(it.ref);
-           return `<div class="exi" style="padding:8px 10px">
+           return `<div class="exi" style="padding:8px 10px;background:var(--surface)">
              <div class="ic" style="width:26px;height:26px;font-size:.66rem">${i+1}</div>
              <div class="bd"><div class="nm" style="font-size:.83rem">${esc(r.name)}</div>
              <div class="mt">${it.sets} × ${esc(it.reps)}</div></div>

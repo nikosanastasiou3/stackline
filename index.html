@@ -343,18 +343,22 @@ ul.bul{padding-left:18px;font-size:.85rem;line-height:1.6}
    body already paints an opaque --bg, and with no ancestor establishing a
    stacking context the z-index:-1 overlay trick was unreliable. This way
    the tint IS the background, so there's nothing for it to lose to. */
-body.tint-skill{background:radial-gradient(ellipse 140% 46% at 50% 0%, var(--amber-mid), transparent 60%),var(--bg)}
-body.tint-recovery{background:radial-gradient(ellipse 140% 46% at 50% 0%, var(--teal-mid), transparent 60%),var(--bg)}
-body.tint-rest{background:var(--bg)}
-.datestrip{display:flex;align-items:stretch;justify-content:space-between;background:var(--surface);border:1px solid var(--line);
-  border-radius:16px;padding:10px 5px;box-shadow:var(--shadow);gap:2px}
-.dcell{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;
-  padding:7px 2px;border-radius:11px;border:0;background:none;font:inherit;color:inherit;cursor:pointer;height:auto}
-.dcell .dow{font-size:.58rem;color:var(--faint);font-weight:700;text-transform:uppercase}
-.dcell .num{font-family:"Archivo";font-size:.98rem;font-weight:800;margin-top:3px;color:var(--ink)}
+/* Strengthened: cards cover most of a phone screen, so a subtle wash was
+   invisible in practice. Bigger reach, taller, and using the stronger --mid
+   colour twice (once fully opaque near the top, fading out) instead of
+   fading immediately, so it is visible in the margins around cards too. */
+body.tint-skill{background-color:var(--bg);background-image:linear-gradient(180deg, var(--amber-mid) 0%, transparent 55%)}
+body.tint-recovery{background-color:var(--bg);background-image:linear-gradient(180deg, var(--teal-mid) 0%, transparent 55%)}
+body.tint-rest{background-color:var(--bg);background-image:none}
+.datestrip{display:flex;align-items:center;justify-content:space-between;background:var(--surface);border:1px solid var(--line);
+  border-radius:14px;padding:8px 4px;box-shadow:var(--shadow);gap:1px}
+.dcell{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;
+  padding:5px 1px;border-radius:9px;border:0;background:none;font:inherit;color:inherit;cursor:pointer}
+.dcell .dow{font-size:.54rem;color:var(--faint);font-weight:700;text-transform:uppercase}
+.dcell .num{font-family:"Archivo";font-size:.9rem;font-weight:800;margin-top:2px;color:var(--ink)}
 .dcell.today{background:var(--teal-soft)}
 .dcell.today .num{color:var(--teal)}
-.dcell .dot{width:4px;height:4px;border-radius:50%;background:var(--teal);margin:5px auto 0}
+.dcell .dot{width:3.5px;height:3.5px;border-radius:50%;background:var(--teal);margin:4px auto 0}
 .dcell .dot.empty{background:transparent}
 .hero{position:relative;border-radius:22px;padding:18px;box-shadow:var(--shadow-lg);overflow:hidden;margin-top:10px;
   background:linear-gradient(135deg,var(--amber-mid) 0%,var(--surface) 65%);border:1px solid var(--amber-mid)}
@@ -383,6 +387,32 @@ body.tint-rest{background:var(--bg)}
 .rchip .ic svg{width:14px;height:14px}
 .rchip .nm{font-size:.76rem;font-weight:700;line-height:1.25}
 .rchip .mt{font-size:.63rem;color:var(--faint);margin-top:3px}
+
+.mini-hero{position:relative;border-radius:16px;padding:12px 13px;box-shadow:var(--shadow);overflow:hidden;
+  background:linear-gradient(120deg,var(--amber-soft) 0%,var(--surface) 70%);border:1px solid var(--line);
+  display:flex;align-items:center;gap:11px;cursor:pointer;width:100%;font:inherit;color:inherit;text-align:left}
+.mini-hero .figs{width:38px;height:46px;display:flex;gap:1px;flex:none;opacity:.85;pointer-events:none}
+.mini-hero .figs svg{height:100%;width:auto}
+.mini-hero .bd{flex:1;min-width:0}
+.mini-hero .nm{font-weight:700;font-size:.86rem}
+.mini-hero .mt{font-size:.72rem;color:var(--muted);margin-top:1px}
+.mini-hero .go{flex:none;background:var(--teal);color:#fff;border:0;border-radius:10px;padding:8px 12px;
+  font-weight:700;font-size:.75rem;font-family:inherit;pointer-events:none}
+[data-theme="dark"] .mini-hero .go{color:#0E1B18}
+.mini-hero .count{position:absolute;top:7px;right:7px;background:var(--surface);border:1px solid var(--line);
+  border-radius:7px;padding:2px 7px;font-size:.6rem;font-weight:800;color:var(--teal)}
+
+.wk-hero{position:relative;border-radius:20px;padding:16px;box-shadow:var(--shadow-lg);overflow:hidden;margin-bottom:12px;
+  background:linear-gradient(135deg,var(--teal-mid) 0%,var(--surface) 65%);border:1px solid var(--teal-mid)}
+.wk-hero .figs{position:absolute;right:8px;bottom:8px;width:78px;display:flex;gap:2px;opacity:.7;pointer-events:none;z-index:1}
+.wk-hero .figs svg{height:100%;width:auto}
+.wk-hero .top{display:flex;justify-content:space-between;align-items:flex-start;position:relative;z-index:2}
+.wk-hero .tag2{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:3px 9px;
+  font-size:.6rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--teal)}
+.wk-hero .dur2{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:4px 9px;
+  font-family:"Archivo";font-weight:800;font-size:.75rem}
+.wk-hero h3{font-family:"Archivo";font-size:1.15rem;font-weight:800;margin-top:8px;position:relative;z-index:2;max-width:60%}
+.wk-hero .fx2{font-size:.79rem;color:var(--muted);margin-top:2px;position:relative;z-index:2;max-width:60%}
 
 .thead{background:linear-gradient(150deg,var(--surface) 0%,var(--surface2) 100%);border:1px solid var(--line);
   border-radius:20px;padding:18px;box-shadow:var(--shadow-lg);position:relative;overflow:hidden}
