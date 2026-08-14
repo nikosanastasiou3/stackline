@@ -221,6 +221,33 @@ function streak(){
   for(let i = skipToday?1:0; i<90; i++){ if(logByDate(todayISO(-i))) n++; else break; }
   return n;
 }
+function weekDots(){
+  // Mon..Sun, marks a day if any class log, check-in, or desk log happened
+  const today = new Date(); const dow=(today.getDay()+6)%7;
+  const monday = new Date(today); monday.setDate(today.getDate()-dow);
+  const days=[]; for(let i=0;i<7;i++){ const d=new Date(monday); d.setDate(monday.getDate()+i);
+    days.push(d.toISOString().slice(0,10)); }
+  return days.map(iso=>{
+    const has = (state.classLogs||[]).some(c=>c.date===iso) || (state.logs||[]).some(l=>l.date===iso) || (state.deskLogs||[]).some(d=>d.date===iso);
+    return {iso, has};
+  });
+}
+function recentlyUsed(n){
+  const seen=new Map();
+  (state.classLogs||[]).slice().reverse().forEach(cl=> (cl.items||[]).forEach(it=>{
+    if(!seen.has(it.name)) seen.set(it.name, {name:it.name, ref: exById(it.name)? null : null, count:0});
+  }));
+  // count occurrences too
+  (state.classLogs||[]).forEach(cl=> (cl.items||[]).forEach(it=>{
+    const cur = seen.get(it.name); if(cur) cur.count++;
+  }));
+  return [...seen.values()].slice(0, n||6);
+}
+function ambientKind(kind, isRest){
+  if(isRest) return "rest";
+  if(kind==="mobility"||kind==="rest") return "recovery";
+  return "skill";
+}
 function renderToday(){
   const today = todayISO();
   const {plan, routine, notes} = recommendToday();
@@ -235,52 +262,63 @@ function renderToday(){
   const dayLog = logByDate(today), clsLog = classLogFor(today);
   const runDone = dayLog && (dayLog.routineId===routine.id);
   const deskN = deskToday();
+  const amb = ambientKind(plan.kind, isRest);
 
-  // the day's jobs
+  // the day's jobs (check-in removed — it now happens at the end of finishing a routine)
   const jobs = [];
-  if(!isRest) jobs.push({k:"routine", nm:routine.name, mt:routine.minutes+" min · "+routine.items.length+" drills",
-    done:runDone, act:runDone?"Redo":"Start", primary:!runDone});
   if(!isRest) jobs.push({k:"class",
     nm: isOwn ? "Own training session" : clsName,
     mt: clsLog ? clsLog.items.length+" exercise"+(clsLog.items.length!==1?"s":"")+" logged" : (isOwn?"Build a session and log it":"Not logged yet"),
     done: !!clsLog, act: clsLog?"Edit":(isOwn?"Build":"Log")});
-  jobs.push({k:"checkin", nm:"Day check-in", mt: dayLog?("Line "+(dayLog.line??"–")+" · overhead "+(dayLog.mob??"–")+" · energy "+(dayLog.energy??"–")):"Shoulder line, overhead, energy",
-    done: !!dayLog, act: dayLog?"Edit":"Log"});
-  const doneN = jobs.filter(j=>j.done).length, totalN = jobs.length;
-  const pct = totalN? doneN/totalN : 0, circ = 2*Math.PI*15.5;
+  const doneN = jobs.filter(j=>j.done).length + (runDone?1:0), totalN = jobs.length + (isRest?0:1);
 
-  const row = j => `<button class="trow ${j.done?"done":""} ${j.primary?"primary":""}" data-job="${j.k}">
-      <div class="mark ${j.done?"on":""}">${j.done?ICONS.check:(j.primary?'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l11-6.5-11-6.5Z"/></svg>':"")}</div>
+  const row = j => `<button class="trow ${j.done?"done":""}" data-job="${j.k}">
+      <div class="mark ${j.done?"on":""}">${j.done?ICONS.check:""}</div>
       <div class="bd"><div class="nm">${esc(j.nm)}</div><div class="mt">${esc(j.mt)}</div></div>
       <span class="go">${j.act} <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="m9 6 6 6-6 6"/></svg></span>
     </button>`;
 
+  const dots = weekDots();
+  const dowLbl = ["MON","TUE","WED","THU","FRI","SAT","SUN"];
+  const todayI = (new Date().getDay()+6)%7;
+  const levelMarks = (n)=> [1,2,3,4].map(i=>
+    `<svg viewBox="0 0 24 24" fill="${i<=n?'var(--amber)':'none'}" stroke="${i<=n?'none':'var(--line2)'}" stroke-width="2"><circle cx="12" cy="12" r="9"/></svg>`).join("");
+  const recents = recentlyUsed(6);
+
   $("#view-today").innerHTML = `
-  <div class="thead">
-    <div class="tring">
-      <svg viewBox="0 0 36 36"><circle cx="18" cy="18" r="15.5" fill="none" stroke="var(--line)" stroke-width="3.4"/>
-        <circle cx="18" cy="18" r="15.5" fill="none" stroke="var(--teal)" stroke-width="3.4" stroke-linecap="round"
-          stroke-dasharray="${circ.toFixed(1)}" stroke-dashoffset="${(circ*(1-pct)).toFixed(1)}"/></svg>
-      <div class="lbl"><b>${doneN}/${totalN}</b><span>DONE</span></div>
-    </div>
-    <div class="day">${new Date().toLocaleDateString(undefined,{weekday:"long", day:"numeric", month:"long"})}</div>
-    <h2>${esc(clsName)}</h2>
-    ${!isRest?`<button class="whybtn" id="t-why">${esc(plan.focus)} — why?
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 16v-4m0-4v.01"/></svg></button>
-      <div class="whybox" id="t-whybox">${esc(plan.why)}
-        ${notes.map(n=>`<div style="margin-top:8px">${esc(n)}</div>`).join("")}</div>`:""}
-    <div class="row" style="gap:8px;margin-top:12px;flex-wrap:wrap">
-      <span class="streakpill">🔥 <b>${streak()||0}</b> day streak</span>
-      <button class="streakpill" id="t-daytype" style="cursor:pointer">⇄ Change day</button>
-      ${!isOwn?`<button class="streakpill" id="t-owntoday" style="cursor:pointer">🏋️ Training on my own today</button>`:""}
-    </div>
+  <div class="ambient ${amb}" id="today-ambient"></div>
+
+  <div class="datestrip">${dots.map((d,i)=>`
+    <div class="dcell ${i===todayI?"today":""}"><div class="dow">${dowLbl[i]}</div>
+      <div class="num">${new Date(d.iso+"T12:00:00").getDate()}</div>
+      <div class="dot ${d.has?"":"empty"}"></div></div>`).join("")}</div>
+
+  <div class="eyebrow" style="margin-top:16px">Today</div>
+  <div class="hero ${amb==="recovery"?"recovery":amb==="rest"?"restday":""}">
+    ${!isRest? `<div class="figs">${taxMap(taxById(taxOfDrill(exById(routine.items[0]?routine.items[0].ex:"")||{cats:[]}))||taxById("mobility"), 120)}</div>`:""}
+    <div class="top"><span class="day">${new Date().toLocaleDateString(undefined,{weekday:"long", day:"numeric", month:"long"})}</span>
+      ${!isRest?`<span class="dur">${routine.minutes} min</span>`:""}</div>
+    <h2>${isRest? "Rest day" : esc(routine.name)}</h2>
+    <div class="fx">${isRest? "Nothing scheduled" : esc(clsName)}</div>
+    ${!isRest?`<div class="marks"><span>${esc((plan.focus||"").toUpperCase())}</span>${levelMarks(routine.fatigue==="high"?4:routine.fatigue==="med"?2:1)}</div>`:""}
+    ${!isRest?`<button class="hero-cta" id="t-startprimary">${runDone?"Redo":"Start now"}
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="m9 6 6 6-6 6"/></svg></button>`
+      :`<button class="hero-cta" id="t-deskcta">Desk resets, if you want
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="m9 6 6 6-6 6"/></svg></button>`}
+  </div>
+  <button class="whybtn" id="t-why">${esc(plan.focus||"")} — why?
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 16v-4m0-4v.01"/></svg></button>
+  <div class="whybox" id="t-whybox">${esc(plan.why)}${notes.map(n=>`<div style="margin-top:8px">${esc(n)}</div>`).join("")}</div>
+
+  <div class="row" style="gap:8px;margin-top:12px;flex-wrap:wrap">
+    <span class="streakpill">🔥 <b>${streak()||0}</b> day streak</span>
+    <button class="streakpill" id="t-daytype" style="cursor:pointer">⇄ Change day</button>
+    ${!isOwn?`<button class="streakpill" id="t-owntoday" style="cursor:pointer">🏋️ Training on my own today</button>`:""}
   </div>
 
-  ${isRest? `<div class="notice teal" style="margin-top:16px">${ICONS.info}<span>Rest day. Nothing scheduled — desk resets below if you want them.</span></div>`:""}
   ${(!isRest && plan.kind==="mobility")? `<div class="notice" style="margin-top:16px">${ICONS.info}<span>Your class today is already a mobility session — the block below is only a short top-up, not a second session.</span></div>`:""}
 
-  <div class="eyebrow">Today</div>
-  <div class="tlist">${jobs.map(row).join("")}</div>
+  ${jobs.length? `<div class="eyebrow">Rest of today</div><div class="tlist">${jobs.map(row).join("")}</div>` : ""}
 
   <div class="eyebrow">Optional</div>
   <div class="tlist">
@@ -299,25 +337,32 @@ function renderToday(){
       <div class="bd"><div class="nm">Quick add a drill</div><div class="mt">Coach showed you something new today?</div></div>
       <span class="go">Add</span>
     </button>
-  </div>`;
+  </div>
+
+  ${recents.length? `<div class="eyebrow">Recently used</div>
+    <div class="scrollrow">${recents.map(r=>`<div class="rchip" data-recent="${esc(r.name)}">
+      <div class="ic">${ICONS.build}</div><div class="nm">${esc(r.name)}</div><div class="mt">Logged ${r.count}× recently</div></div>`).join("")}</div>` : ""}
+  `;
 
   const wb=$("#t-why"); if(wb) wb.onclick=()=> $("#t-whybox").classList.toggle("on");
   $("#t-daytype").onclick=()=> openDayOverride(today);
   const ot=$("#t-owntoday");
-  if(ot) ot.onclick=()=>{
-    setDayOverride(today, "own", "");
-    openSessionBuilder([], "Own training");
-  };
+  if(ot) ot.onclick=()=>{ setDayOverride(today, "own", ""); openSessionBuilder([], "Own training"); };
+  const sp=$("#t-startprimary"); if(sp) sp.onclick=()=> startRoutine(routine.id, today);
+  const dc=$("#t-deskcta"); if(dc) dc.onclick=()=> openDeskPicker();
   $$("#view-today [data-job]").forEach(b=> b.onclick=()=>{
     const k=b.dataset.job;
-    if(k==="routine") startRoutine(routine.id, today);
-    else if(k==="class") isOwn? openSessionBuilder([], "Own training") : openClassLog(today);
-    else if(k==="checkin") openLogForm(today);
-    else if(k==="desk") show("today"), openDeskPicker();
+    if(k==="class") isOwn? openSessionBuilder([], "Own training") : openClassLog(today);
+    else if(k==="desk") openDeskPicker();
     else if(k==="session") openSessionBuilder([], "Own session");
     else if(k==="quickdrill") openQuickCapture();
   });
+  $$("#view-today [data-recent]").forEach(el=> el.onclick=()=>{
+    const e = EX_ALL().find(x=>x.name===el.dataset.recent);
+    if(e) openExercise(e.id); else openRefMove(el.dataset.recent);
+  });
 }
+
 function openDeskPicker(){
   openSheet("Desk resets",
     `<p class="sub" style="margin-bottom:12px">About 90 seconds. Tracked separately from training.</p>
@@ -925,7 +970,7 @@ function openRefMove(name, back){
       :`<p class="tiny" style="margin-top:14px">Not logged yet.</p>`}
     ${inTrees.length?`<div class="sec"><div class="eyebrow">Feeds into</div>
       <div class="wrap">${inTrees.map(t=>`<button class="chip" data-gotree="${t.id}">${esc(t.name)}</button>`).join("")}</div></div>`:""}`,
-   `${sessionAddContext?`<button class="btn primary" style="flex:1" id="ref-addsess">${ICONS.build}Add to this session</button>`
+   `${pickContext?`<button class="btn primary" style="flex:1" id="ref-addsess">${ICONS.build}${esc(pickContext.label)}</button>`
       :`<button class="btn primary block" id="ref-promote">${ICONS.build}Promote to a full drill</button>`}`,
    back);
   $$("#sheet-body [data-gotree]").forEach(b=> b.onclick=()=> openTree(b.dataset.gotree));
@@ -933,7 +978,7 @@ function openRefMove(name, back){
   if(rp) rp.onclick=()=>{ closeSheet(); show("builder"); openDrillEditor(); setTimeout(()=>{ const f=$("#dl-name"); if(f) f.value=name; },60); };
   const ras=document.getElementById("ref-addsess");
   if(ras) ras.onclick=()=>{
-    sessionAddContext(name, null);
+    pickContext.add(name, null);
     toast(name+" added");
     if(back) back();
   };
@@ -1066,8 +1111,8 @@ function openExercise(id, back){
     ${!HT?`<div class="notice" style="margin-top:14px">${ICONS.info}<span>Step-by-step instructions for this drill haven't been written yet.</span></div>`:""}`,
    `<button class="btn ${state.prefs.favs.includes(id)?"":"ghost"}" id="ex-fav">★</button>
     ${e.custom?'<button class="btn" id="ex-edit">Edit</button>':""}
-    ${sessionAddContext
-      ? `<button class="btn primary" style="flex:1" id="ex-addsess">${ICONS.build}Add to this session</button>`
+    ${pickContext
+      ? `<button class="btn primary" style="flex:1" id="ex-addsess">${ICONS.build}${esc(pickContext.label)}</button>`
       : `<button class="btn primary" style="flex:1" id="ex-add">${ICONS.build}Add to routine draft</button>`}`, back);
   $$("#sheet-body [data-acc]").forEach(b=> b.onclick=()=> b.parentElement.classList.toggle("open"));
   $$("#sheet-body .navrow[data-go]").forEach(b=>{ if(b.dataset.go!=="none") b.onclick=()=> openExercise(b.dataset.go, back); });
@@ -1118,10 +1163,11 @@ function openExercise(id, back){
   $$("#sheet-body [data-nav-ex]").forEach(b=> b.onclick=()=> openExercise(b.dataset.navEx, back));
   $("#ex-custom-save").onclick=()=>{ const v=$("#ex-custom").value.trim(); if(v) state.prefs.customMedia[id]=v; else delete state.prefs.customMedia[id]; save(); openExercise(id, back); toast(v?"Custom link saved":"Custom link removed"); };
   $("#ex-fav").onclick=()=>{ const f=state.prefs.favs; f.includes(id)?state.prefs.favs=f.filter(x=>x!==id):f.push(id); save(); openExercise(id, back); };
-  $("#ex-add").onclick=()=>{ addToDraft(id); closeSheet(); show("builder"); };
-  const exAddSess = document.getElementById("ex-addsess");
+  const exAdd = $("#ex-add");
+  if(exAdd) exAdd.onclick=()=>{ addToDraft(id); closeSheet(); show("builder"); };
+  const exAddSess = $("#ex-addsess");
   if(exAddSess) exAddSess.onclick=()=>{
-    sessionAddContext(e.name, id);
+    pickContext.add(e.name, id);
     toast(e.name+" added");
     if(back) back();
   };
@@ -1170,7 +1216,9 @@ function openQuickCapture(){
    a drill/movement card can offer "Add to this session" instead of the
    normal Library actions, and land you back in the builder — with your
    in-progress session and search still intact — instead of losing it. */
-let sessionAddContext = null;
+let pickContext = null; // {label, add(name, ref)} — set only while an "add an exercise"
+                         // flow (session builder, workout editor, routine draft) has a
+                         // drill/reference card open for review.
 
 function openDrillEditor(editId, presetCat){
   const ex = editId ? (state.customDrills||[]).find(d=>d.id===editId) : null;
@@ -2150,10 +2198,10 @@ function renderSessionBuilder(){
     res.querySelectorAll("[data-sadd]").forEach(b=> b.onclick=()=>{
       const x=all[+b.dataset.sadd];
       sess.title=$("#ss-title").value; sess.date=$("#ss-date").value;
-      sessionAddContext = (name, ref)=>{
+      pickContext = {label:"Add to this session", add:(name, ref)=>{
         if(!sess.items.some(it=>it.name===name)) sess.items.push({name:name, ref:ref, numbers:"", variation:"", assist:"none"});
-      };
-      const backToBuilder = ()=>{ sessionAddContext=null; renderSessionBuilder(); };
+      }};
+      const backToBuilder = ()=>{ pickContext=null; renderSessionBuilder(); };
       if(x.ref) openExercise(x.ref, backToBuilder);
       else openRefMove(x.name, backToBuilder);
     });
@@ -2163,37 +2211,23 @@ function renderSessionBuilder(){
   $$("#sheet-body [data-snum]").forEach(inp=> inp.oninput=e=> sess.items[+inp.dataset.snum].numbers=e.target.value);
   const sb2=$("#ss-block");
   if(sb2) sb2.onclick=()=>{
-    openSheet("Add from…",
-     `<div class="eyebrow teal" style="margin-bottom:9px">Routines</div>
-      <div class="wrap">${state.routines.map(r=>`<button class="chip" data-sr="${r.id}">${esc(r.name)}</button>`).join("")}</div>
-      <div class="eyebrow teal" style="margin:16px 0 9px">Skills — pick a stage</div>
-      <div class="wrap">${TREES.map(t=>`<button class="chip" data-sk="${t.id}">${esc(t.name)}</button>`).join("")}</div>`,
-     null, renderSessionBuilder);
-    $$("#sheet-body [data-sr]").forEach(b=> b.onclick=()=>{
-      const r=routineById(b.dataset.sr);
-      r.items.forEach(it=>{ const e=exById(it.ex); if(e) sess.items.push({name:e.name, ref:e.id,
-        numbers:(it.sets+"×"+(it.hold&&it.hold!=="—"?it.hold:it.reps)), variation:"", assist:"none"}); });
-      renderSessionBuilder();
-    });
-    $$("#sheet-body [data-sk]").forEach(b=> b.onclick=()=>{
-      pickSkillStage(b.dataset.sk, (st, n)=>{
-        const t = treeById(b.dataset.sk);
-        const have=new Set(sess.items.map(x=>x.name));
-        (st.match||[]).forEach(m=>{ if(!have.has(m)){ sess.items.push({name:m, ref:null, numbers:"", variation:"", assist:"none"}); have.add(m); } });
-        (st.drills||[]).forEach(d=>{ const e=exById(d); if(e&&!have.has(e.name)){ sess.items.push({name:e.name, ref:d, numbers:"", variation:"", assist:"none"}); have.add(e.name); } });
-        (t.support.strength||[]).slice(0,2).forEach(m=>{ if(!have.has(m)){ sess.items.push({name:m, ref:null, numbers:"", variation:"", assist:"none"}); have.add(m); } });
-        sess.title = sess.items.length && sess.title==="Own session" ? t.name+" stage "+n : sess.title;
-        renderSessionBuilder(); toast(t.name+" stage "+n+" added");
-      });
-    });
+    const pickCtx = {label:"Add to this session", add:(name, ref)=>{
+      if(!sess.items.some(it=>it.name===name)) sess.items.push({name:name, ref:ref, numbers:"", variation:"", assist:"none"});
+    }};
+    openAddFromSheet(pickCtx, (items, blockTitle)=>{
+      const have=new Set(sess.items.map(x=>x.name));
+      items.forEach(it=>{ if(!have.has(it.name)){ sess.items.push({name:it.name, ref:it.ref, numbers:it.numbers||"", variation:"", assist:"none"}); have.add(it.name); } });
+      if(blockTitle && sess.title==="Own session") sess.title = blockTitle;
+      renderSessionBuilder(); toast((blockTitle||"Block")+" added");
+    }, renderSessionBuilder, {routines:true, skills:true});
   };
-  $("#ss-cancel").onclick=()=>{ sessionAddContext=null; closeSheet(); };
+  $("#ss-cancel").onclick=()=>{ pickContext=null; closeSheet(); };
   $("#ss-save").onclick=()=>{
     if(!sess.items.length){ toast("Add at least one exercise"); return; }
     const d=$("#ss-date").value||todayISO();
     const title=$("#ss-title").value.trim()||"Own session";
     const items = sess.items.map(x=>({name:x.name, ref:x.ref, numbers:x.numbers||"", variation:x.variation||"", assist:x.assist||"none"}));
-    sess=null; sessionAddContext=null; closeSheet();
+    sess=null; pickContext=null; closeSheet();
     openSessionRunner(items, title, d);
   };
 }
@@ -2502,6 +2536,67 @@ function renderWorkouts(){
       state.meta_classU=Date.now(); save(); closeSheet(); renderWorkouts(); toast("Deleted"); };
   });
 }
+
+/* Shared "Add from…" picker — routines and skills are optional per caller,
+   category browsing is always available. Used identically by the session
+   builder and the workout editor so both behave the same way. onAddBlock
+   receives a ready-made list of {name, ref, numbers} when a whole routine
+   or skill stage is pulled in; the category-browse path reviews one item
+   at a time through its real card before adding, via pickCtx. */
+function openAddFromSheet(pickCtx, onAddBlock, backToCaller, opts){
+  opts = opts || {};
+  let browseCat = null;
+  const draw = ()=>{
+    if(browseCat){
+      const t = taxById(browseCat);
+      const {drills, moves} = taxContents(browseCat);
+      openSheet("Browse — "+t.name,
+       `<button class="backbar" id="af-back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M15 5l-7 7 7 7"/></svg>All categories</button>
+        <div class="eyebrow" style="margin:12px 0 9px">Your drills · ${drills.length}</div>
+        <div class="exl">${drills.length?drills.map(e=>`<div class="exi" data-afitem="${e.id}"><div class="bd"><div class="nm">${esc(e.name)}</div></div><span class="go" style="color:var(--teal);font-size:.74rem;font-weight:700">View</span></div>`).join(""):'<p class="tiny">None.</p>'}</div>
+        <div class="eyebrow" style="margin:16px 0 9px">Movements · ${moves.length}</div>
+        <div class="exl">${moves.length?moves.map(m=>`<div class="exi" data-afmove="${esc(m.name)}"><div class="bd"><div class="nm">${esc(m.name)}</div><div class="mt">${esc(m.fam)}</div></div><span class="go" style="color:var(--teal);font-size:.74rem;font-weight:700">View</span></div>`).join(""):'<p class="tiny">None.</p>'}</div>`,
+       null, draw);
+      $("#af-back").onclick=()=>{ browseCat=null; draw(); };
+      $$("#sheet-body [data-afitem]").forEach(el=> el.onclick=()=>{
+        pickContext = pickCtx;
+        openExercise(el.dataset.afitem, ()=>{ pickContext=null; draw(); });
+      });
+      $$("#sheet-body [data-afmove]").forEach(el=> el.onclick=()=>{
+        pickContext = pickCtx;
+        openRefMove(el.dataset.afmove, ()=>{ pickContext=null; draw(); });
+      });
+      return;
+    }
+    openSheet("Add from…",
+     `${opts.routines? `<div class="eyebrow teal" style="margin-bottom:9px">Routines</div>
+        <div class="wrap">${state.routines.map(r=>`<button class="chip" data-sr="${r.id}">${esc(r.name)}</button>`).join("")}</div>`:""}
+      ${opts.skills? `<div class="eyebrow teal" style="margin:${opts.routines?"16px":"0"} 0 9px">Skills — pick a stage</div>
+        <div class="wrap">${TREES.map(t=>`<button class="chip" data-sk="${t.id}">${esc(t.name)}</button>`).join("")}</div>`:""}
+      <div class="eyebrow teal" style="margin:${(opts.routines||opts.skills)?"16px":"0"} 0 9px">Browse a category</div>
+      <div class="wrap">${TAXONOMY.map(t=>`<button class="chip" data-afcat="${t.id}">${esc(t.name)}</button>`).join("")}</div>`,
+     null, backToCaller);
+    $$("#sheet-body [data-afcat]").forEach(b=> b.onclick=()=>{ browseCat=b.dataset.afcat; draw(); });
+    if(opts.routines) $$("#sheet-body [data-sr]").forEach(b=> b.onclick=()=>{
+      const r=routineById(b.dataset.sr);
+      const items = r.items.map(it=>{ const e=exById(it.ex); return e?{name:e.name, ref:e.id,
+        numbers:(it.sets+"×"+(it.hold&&it.hold!=="—"?it.hold:it.reps))}:null; }).filter(Boolean);
+      closeSheet(); onAddBlock(items);
+    });
+    if(opts.skills) $$("#sheet-body [data-sk]").forEach(b=> b.onclick=()=>{
+      pickSkillStage(b.dataset.sk, (st, n)=>{
+        const t = treeById(b.dataset.sk);
+        const items = [];
+        (st.match||[]).forEach(m=> items.push({name:m, ref:null, numbers:""}));
+        (st.drills||[]).forEach(d=>{ const e=exById(d); if(e) items.push({name:e.name, ref:d, numbers:""}); });
+        (t.support.strength||[]).slice(0,2).forEach(m=> items.push({name:m, ref:null, numbers:""}));
+        onAddBlock(items, t.name+" stage "+n);
+      });
+    });
+  };
+  draw();
+}
+
 function openWorkoutEditor(editId){
   const w0 = editId ? workoutById(editId) : null;
   const W = w0 ? JSON.parse(JSON.stringify(w0)) : {id:"", name:"", tax:"", blurb:"", items:[]};
@@ -2523,7 +2618,9 @@ function openWorkoutEditor(editId){
       <div class="sec" style="margin-top:14px"><div class="eyebrow teal">Add an exercise</div>
         <div class="searchbar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
           <input type="text" id="wk-q" placeholder="Search drills and movements…"></div>
-        <div id="wk-res"></div></div>`,
+        <div id="wk-res"></div>
+        <button class="btn small" id="wk-block" style="margin-top:12px">${ICONS.build}From a routine, skill or category</button>
+      </div>`,
      `${w0?'<button class="btn danger" id="wk-del">Delete</button>':""}
       <button class="btn primary" style="flex:1" id="wk-save">Save workout</button>`);
     $$("#sheet-body [data-wrm]").forEach(b=> b.onclick=()=>{ W.items.splice(+b.dataset.wrm,1); draw(); });
@@ -2538,12 +2635,32 @@ function openWorkoutEditor(editId){
       const moves = searchCatalog(q).slice(0,8).map(x=>({name:x.name, ref:x.name}));
       const all = drills.concat(moves);
       res.innerHTML = all.length? `<div class="exl" style="margin-top:8px">${all.map((x,i)=>`
-        <div class="exi" data-wadd="${i}" style="padding:9px 11px"><div class="bd"><div class="nm">${esc(x.name)}</div></div></div>`).join("")}</div>` : "";
+        <div class="exi" data-wadd="${i}" style="padding:9px 11px"><div class="bd"><div class="nm">${esc(x.name)}</div></div>
+        <span class="go" style="color:var(--teal);font-size:.74rem;font-weight:700">View</span></div>`).join("")}</div>
+        <p class="tiny" style="margin-top:8px">Tap a result to see the full drill before you add it.</p>` : "";
       res.querySelectorAll("[data-wadd]").forEach(b=> b.onclick=()=>{
-        const x=all[+b.dataset.wadd]; W.items.push({ref:x.ref, sets:3, reps:"10"});
+        const x=all[+b.dataset.wadd];
         W.name=$("#wk-name").value; W.tax=$("#wk-tax").value; W.blurb=$("#wk-blurb").value;
-        draw();
+        pickContext = {label:"Add to this workout", add:(name, ref)=>{
+          if(!W.items.some(it=>it.ref===ref)) W.items.push({ref: ref||name, sets:3, reps:"10"});
+        }};
+        const backToEditor = ()=>{ pickContext=null; draw(); };
+        if(x.ref) openExercise(x.ref, backToEditor);
+        else openRefMove(x.name, backToEditor);
       });
+    };
+    const wb=$("#wk-block");
+    if(wb) wb.onclick=()=>{
+      W.name=$("#wk-name").value; W.tax=$("#wk-tax").value; W.blurb=$("#wk-blurb").value;
+      const pickCtx = {label:"Add to this workout", add:(name, ref)=>{
+        if(!W.items.some(it=>it.ref===(ref||name))) W.items.push({ref: ref||name, sets:3, reps:"10"});
+      }};
+      openAddFromSheet(pickCtx, (items, blockTitle)=>{
+        items.forEach(it=>{ const ref = it.ref || it.name;
+          if(!W.items.some(x=>x.ref===ref)) W.items.push({ref:ref, sets:3, reps:it.numbers||"10"}); });
+        if(blockTitle && !W.name) W.name = blockTitle;
+        draw(); toast((blockTitle||"Block")+" added");
+      }, draw, {routines:true, skills:true});
     };
     if(w0) $("#wk-del").onclick=()=>{
       state.customWorkouts=(state.customWorkouts||[]).filter(x=>x.id!==editId);
@@ -2574,6 +2691,7 @@ function addToDraft(exId){
   draft.items.push({ex:exId, sets:2, reps:"8", hold:"", note:""});
   toast(e.name+" added to draft");
 }
+let bQuery = "";
 function renderBuilder(){
   const catExs = catProgression(bCat);
   const bRec = recommendedLevel(bCat);
@@ -2615,15 +2733,17 @@ function renderBuilder(){
    </div>
 
    <div class="sec"><div class="row between" style="margin-bottom:10px;gap:10px">
-       <div class="eyebrow" style="flex:1;margin:0">Browse by bottleneck category</div>
+       <div class="eyebrow" style="flex:1;margin:0">Add a drill</div>
        <button class="btn small primary" id="b-newdrill">${ICONS.build}New drill</button>
      </div>
-     <div class="chiprow">${CATS.map(c=>`<button class="chip ${bCat===c.id?"on":""}" data-bc="${c.id}">${c.name}</button>`).join("")}</div>
+     <div class="searchbar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+       <input type="text" id="b-q" placeholder="Search your drills…" value="${esc(bQuery)}"></div>
+     ${bQuery.trim()? "" : `<div class="chiprow" style="margin-top:10px">${CATS.map(c=>`<button class="chip ${bCat===c.id?"on":""}" data-bc="${c.id}">${c.name}</button>`).join("")}</div>`}
      <div class="row between" style="margin:2px 0 10px;gap:8px">
        <span class="tiny">Lv 1→4, foundation to loaded. Tap ⊕ to add, ▢ to compare.</span>
        <button class="btn small ${cmp.size>=2?"primary":""}" id="b-cmp" ${cmp.size<2?"disabled style='opacity:.4'":""}>Compare (${cmp.size})</button>
      </div>
-     <div class="exl">${catExs.map(e=>`
+     <div class="exl">${(bQuery.trim()? EX_ALL().filter(e=>e.name.toLowerCase().includes(bQuery.trim().toLowerCase())) : catExs).map(e=>`
        <div class="exi" ${e.level===bRec?'style="border-color:var(--teal)"':''}>
          <button class="check ${cmp.has(e.id)?"on":""}" data-cmp="${e.id}" aria-label="Select to compare">${ICONS.check}</button>
          <div class="bd" data-open-ex="${e.id}">
@@ -2679,6 +2799,8 @@ function renderBuilder(){
     save(); renderBuilder();
   };
   $$("#view-builder [data-bc]").forEach(c=> c.onclick=()=>{ bCat=c.dataset.bc; cmp.clear(); renderBuilder(); });
+  const bq=$("#b-q");
+  if(bq){ bq.oninput=e=>{ bQuery=e.target.value; renderBuilder(); }; bq.focus(); bq.setSelectionRange(bQuery.length,bQuery.length); }
   $$("#view-builder [data-badd]").forEach(b=> b.onclick=()=>{ addToDraft(b.dataset.badd); renderBuilder(); });
   $$("#view-builder [data-cmp]").forEach(b=> b.onclick=()=>{ const id=b.dataset.cmp; cmp.has(id)?cmp.delete(id):(cmp.size<3&&cmp.add(id)); renderBuilder(); });
   $$("#view-builder [data-open-ex]").forEach(el=> el.onclick=()=> openExercise(el.dataset.openEx));
