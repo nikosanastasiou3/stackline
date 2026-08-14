@@ -289,13 +289,13 @@ function renderToday(){
   <div class="ambient ${amb}" id="today-ambient"></div>
 
   <div class="datestrip">${dots.map((d,i)=>`
-    <div class="dcell ${i===todayI?"today":""}"><div class="dow">${dowLbl[i]}</div>
+    <button class="dcell ${i===todayI?"today":""}" data-dateiso="${d.iso}"><div class="dow">${dowLbl[i]}</div>
       <div class="num">${new Date(d.iso+"T12:00:00").getDate()}</div>
-      <div class="dot ${d.has?"":"empty"}"></div></div>`).join("")}</div>
+      <div class="dot ${d.has?"":"empty"}"></div></button>`).join("")}</div>
 
   <div class="eyebrow" style="margin-top:16px">Today</div>
   <div class="hero ${amb==="recovery"?"recovery":amb==="rest"?"restday":""}">
-    ${!isRest? `<div class="figs">${taxMap(taxById(taxOfDrill(exById(routine.items[0]?routine.items[0].ex:"")||{cats:[]}))||taxById("mobility"), 120)}</div>`:""}
+    ${!isRest? `<div class="figs">${routineMuscleMap(routine, 100)}</div>`:""}
     <div class="top"><span class="day">${new Date().toLocaleDateString(undefined,{weekday:"long", day:"numeric", month:"long"})}</span>
       ${!isRest?`<span class="dur">${routine.minutes} min</span>`:""}</div>
     <h2>${isRest? "Rest day" : esc(routine.name)}</h2>
@@ -344,6 +344,7 @@ function renderToday(){
       <div class="ic">${ICONS.build}</div><div class="nm">${esc(r.name)}</div><div class="mt">Logged ${r.count}× recently</div></div>`).join("")}</div>` : ""}
   `;
 
+  $$("#view-today [data-dateiso]").forEach(el=> el.onclick=()=> openClassLog(el.dataset.dateiso));
   const wb=$("#t-why"); if(wb) wb.onclick=()=> $("#t-whybox").classList.toggle("on");
   $("#t-daytype").onclick=()=> openDayOverride(today);
   const ot=$("#t-owntoday");

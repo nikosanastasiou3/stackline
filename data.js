@@ -2064,6 +2064,32 @@ function taxMap(t, h){
   const B = SM.defs.filter(d=>d.view===SM.ViewSide.BACK);
   return fig(F,"0 0 35 93")+fig(B,"37 0 35 93");
 }
+/* Accurate version for a specific routine: aggregates the REAL per-drill
+   muscle tags (the same ones each drill card uses) across every exercise
+   in the routine, rather than a whole taxonomy category's generic list —
+   that generic list spans far more than any one routine actually trains
+   (e.g. "mobility" covers both shoulders and hips), so using it produced
+   the wrong body region lighting up. */
+function routineMuscleMap(routine, h){
+  const SM = window.SL_MUSCLES; if(!SM||!SM.ready) return "";
+  const work=new Set(), stretch=new Set();
+  (routine.items||[]).forEach(it=>{
+    const M = musclesFor(it.ex); if(!M) return;
+    if(M.work) (M.work.p||[]).concat(M.work.s||[]).forEach(g=> (SM.groups[g]||[]).forEach(id=>work.add(id)));
+    if(M.stretch) (M.stretch.p||[]).concat(M.stretch.s||[]).forEach(g=> (SM.groups[g]||[]).forEach(id=>stretch.add(id)));
+  });
+  const fig = (defs, vb) => {
+    const paths = defs.map(d=>{
+      const col = work.has(d.id) ? "var(--teal)" : stretch.has(d.id) ? "var(--amber)" : "var(--figure)";
+      return `<path d="${d.path}" fill="${col}"/>`;
+    }).join("");
+    return `<svg viewBox="${vb}" style="height:${h}px;width:auto" xmlns="http://www.w3.org/2000/svg">${paths}</svg>`;
+  };
+  const F = SM.defs.filter(d=>d.view===SM.ViewSide.FRONT);
+  const B = SM.defs.filter(d=>d.view===SM.ViewSide.BACK);
+  return fig(F,"0 0 35 93")+fig(B,"37 0 35 93");
+}
+
 
 /* ============================================================
    WEEKLY SCHEDULE — user-owned, not hardcoded.

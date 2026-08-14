@@ -343,9 +343,10 @@ ul.bul{padding-left:18px;font-size:.85rem;line-height:1.6}
 .ambient.skill{background:radial-gradient(ellipse 140% 55% at 50% -8%, var(--amber-mid), transparent 62%)}
 .ambient.recovery{background:radial-gradient(ellipse 140% 55% at 50% -8%, var(--teal-mid), transparent 62%)}
 .ambient.rest{background:none}
-.datestrip{display:flex;justify-content:space-between;background:var(--surface);border:1px solid var(--line);
-  border-radius:16px;padding:12px 6px;box-shadow:var(--shadow)}
-.dcell{flex:1;text-align:center;padding:4px 0;border-radius:10px}
+.datestrip{display:flex;align-items:stretch;justify-content:space-between;background:var(--surface);border:1px solid var(--line);
+  border-radius:16px;padding:10px 5px;box-shadow:var(--shadow);gap:2px}
+.dcell{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;
+  padding:7px 2px;border-radius:11px;border:0;background:none;font:inherit;color:inherit;cursor:pointer;height:auto}
 .dcell .dow{font-size:.58rem;color:var(--faint);font-weight:700;text-transform:uppercase}
 .dcell .num{font-family:"Archivo";font-size:.98rem;font-weight:800;margin-top:3px;color:var(--ink)}
 .dcell.today{background:var(--teal-soft)}
@@ -356,14 +357,15 @@ ul.bul{padding-left:18px;font-size:.85rem;line-height:1.6}
   background:linear-gradient(135deg,var(--amber-mid) 0%,var(--surface) 65%);border:1px solid var(--amber-mid)}
 .hero.recovery{background:linear-gradient(135deg,var(--teal-mid) 0%,var(--surface) 65%);border-color:var(--teal-mid)}
 .hero.restday{background:var(--surface);border-color:var(--line)}
-.hero .figs{position:absolute;right:8px;top:8px;bottom:8px;width:110px;display:flex;gap:2px;opacity:.85;pointer-events:none}
+.hero .figs{position:absolute;right:10px;bottom:10px;width:92px;display:flex;gap:2px;opacity:.8;pointer-events:none;z-index:1}
 .hero .figs svg{height:100%;width:auto}
 .hero .top{display:flex;justify-content:space-between;align-items:flex-start;position:relative;z-index:2}
+.hero .top .day{background:var(--surface);padding:3px 9px;border-radius:8px;box-shadow:var(--shadow)}
 .hero .day{font-size:.6rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--amber)}
 .hero.recovery .day{color:var(--teal)}
 .hero .dur{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:5px 10px;font-family:"Archivo";font-weight:800;font-size:.78rem}
-.hero h2{font-family:"Archivo";font-size:1.4rem;font-weight:800;margin-top:7px;position:relative;z-index:2;max-width:62%}
-.hero .fx{font-size:.8rem;color:var(--muted);margin-top:2px;position:relative;z-index:2;max-width:62%}
+.hero h2{font-family:"Archivo";font-size:1.4rem;font-weight:800;margin-top:7px;position:relative;z-index:2;max-width:60%}
+.hero .fx{font-size:.8rem;color:var(--muted);margin-top:2px;position:relative;z-index:2;max-width:60%}
 .hero .marks{display:flex;align-items:center;gap:3px;margin-top:10px;position:relative;z-index:2}
 .hero .marks svg{width:12px;height:12px}
 .hero .marks span{font-size:.66rem;font-weight:700;margin-right:4px;color:var(--amber)}
