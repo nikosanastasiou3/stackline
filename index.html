@@ -402,19 +402,22 @@ body.tint-rest{background-color:var(--bg);background-image:none}
 .mini-hero .count{position:absolute;top:7px;right:7px;background:var(--surface);border:1px solid var(--line);
   border-radius:7px;padding:2px 7px;font-size:.6rem;font-weight:800;color:var(--teal)}
 
-.wk-hero{position:relative;border-radius:20px;padding:16px;box-shadow:var(--shadow-lg);overflow:hidden;margin-bottom:12px;
-  background:linear-gradient(135deg,var(--teal-mid) 0%,var(--surface) 65%);border:1px solid var(--teal-mid);
-  display:flex;flex-direction:column;min-height:172px}
-.wk-hero .figs{position:absolute;right:14px;top:50%;transform:translateY(-50%);height:150px;display:flex;gap:4px;
-  opacity:.92;pointer-events:none;z-index:1;filter:drop-shadow(0 4px 10px rgba(0,0,0,.2))}
-.wk-hero .figs svg{height:100%;width:auto}
-.wk-hero .top{display:flex;justify-content:space-between;align-items:flex-start;position:relative;z-index:2}
-.wk-hero .tag2{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:3px 9px;
+/* Workout cards — the figure sits as a proper flex sibling of the title,
+   confined to the heading area only, so it can never overlap the exercise
+   list below it regardless of how many exercises a workout has. */
+.wk-hero-flat{border-radius:20px;padding:16px;box-shadow:var(--shadow-lg);margin-bottom:12px;
+  background:linear-gradient(135deg,var(--teal-mid) 0%,var(--surface) 55%);border:1px solid var(--teal-mid)}
+.wk-hero-flat .top{display:flex;justify-content:space-between;align-items:flex-start}
+.wk-hero-flat .tag2{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:3px 9px;
   font-size:.6rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--teal)}
-.wk-hero .dur2{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:4px 9px;
+.wk-hero-flat .dur2{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:4px 9px;
   font-family:"Archivo";font-weight:800;font-size:.75rem}
-.wk-hero h3{font-family:"Archivo";font-size:1.15rem;font-weight:800;margin-top:8px;position:relative;z-index:2;max-width:52%}
-.wk-hero .fx2{font-size:.79rem;color:var(--muted);margin-top:2px;position:relative;z-index:2;max-width:52%}
+.wk-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:8px}
+.wk-heading .wk-text{flex:1;min-width:0}
+.wk-heading h3{font-family:"Archivo";font-size:1.1rem;font-weight:800}
+.wk-heading .fx2{font-size:.78rem;color:var(--muted);margin-top:3px}
+.wk-heading .figs{flex:none;height:96px;display:flex;gap:3px;opacity:.9;filter:drop-shadow(0 4px 10px rgba(0,0,0,.18))}
+.wk-heading .figs svg{height:100%;width:auto}
 
 .thead{background:linear-gradient(150deg,var(--surface) 0%,var(--surface2) 100%);border:1px solid var(--line);
   border-radius:20px;padding:18px;box-shadow:var(--shadow-lg);position:relative;overflow:hidden}

@@ -2458,13 +2458,15 @@ function renderSkills(){
     const p = treeProgress(t);
     const st = t.stages.find(s=>s.n===p.current) || t.stages[0];
     const pct = Math.round(((p.current-1)/(t.stages.length-1))*100);
-    return `<div class="wk-hero" data-tree="${t.id}" style="cursor:pointer">
-      <div class="figs">${routineMuscleMap({items:(st.drills||[]).map(id=>({ex:id}))}, 150)}</div>
-      <div class="top"><span class="tag2">${t.depth==="full"?"detailed":"outline"}</span>
-        <span class="dur2">Stage ${p.current}/${t.stages.length}</span></div>
-      <h3>${esc(t.name)}</h3>
-      <div class="fx2">${esc(st.name)}</div>
-      <div class="ladder" style="margin-top:10px">${t.stages.map(s=>`<i class="${s.n<p.current?"done":s.n===p.current?"now":""}"></i>`).join("")}</div>
+    return `<div class="card" data-tree="${t.id}" style="cursor:pointer">
+      <div class="row between" style="gap:10px">
+        <div style="flex:1;min-width:0">
+          <div class="h-md">${esc(t.name)}</div>
+          <div class="sub" style="font-size:.79rem;margin-top:2px">Stage ${p.current} of ${t.stages.length} · ${esc(st.name)}</div>
+        </div>
+        ${t.depth==="full"?'<span class="tag teal">detailed</span>':'<span class="tag">outline</span>'}
+      </div>
+      <div class="ladder">${t.stages.map(s=>`<i class="${s.n<p.current?"done":s.n===p.current?"now":""}"></i>`).join("")}</div>
       <div class="row between" style="margin-top:7px"><span class="tiny">${pct}% through the ladder</span>
         <span class="tiny">${p.manual?"set by you":"from your logs"}</span></div>
     </div>`;}).join("");
@@ -2587,13 +2589,14 @@ function renderWorkouts(){
      ${all.map(w=>{
        const t = taxById(w.tax);
        const totalMin = w.items.reduce((n,it)=> n + (it.sets||1)*0.6, 0);
-       return `<div class="wk-hero">
-         <div class="figs">${routineMuscleMap({items:w.items.map(it=>({ex:it.ref}))}, 150)}</div>
+       return `<div class="wk-hero-flat">
          <div class="top"><span class="tag2">${t?esc(t.name):"Workout"}</span>
            <span class="dur2">${Math.max(1,Math.round(totalMin))} min</span></div>
-         <h3>${esc(w.name)}</h3>
-         <div class="fx2">${esc(w.blurb||"")}</div>
-         <div class="exl" style="margin-top:10px">${w.items.map((it,i)=>{
+         <div class="wk-heading">
+           <div class="wk-text"><h3>${esc(w.name)}</h3><div class="fx2">${esc(w.blurb||"")}</div></div>
+           <div class="figs">${routineMuscleMap({items:w.items.map(it=>({ex:it.ref}))}, 96)}</div>
+         </div>
+         <div class="exl" style="margin-top:12px">${w.items.map((it,i)=>{
            const r = workoutRef(it.ref);
            return `<div class="exi" style="padding:8px 10px;background:var(--surface)">
              <div class="ic" style="width:26px;height:26px;font-size:.66rem">${i+1}</div>
