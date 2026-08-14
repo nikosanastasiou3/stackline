@@ -813,6 +813,7 @@ function renderLibraryCategory(){
     <button class="backbar" id="lib-back">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M15 5l-7 7 7 7"/></svg>
       All categories</button>
+    ${libSearchBar()}
     <div class="cathead">
       <div class="figs">${taxMap(t,96)}</div>
       <div><h2>${esc(t.name)}</h2><p class="sub" style="font-size:.82rem">${esc(t.blurb)}</p></div>
@@ -924,10 +925,18 @@ function openRefMove(name, back){
       :`<p class="tiny" style="margin-top:14px">Not logged yet.</p>`}
     ${inTrees.length?`<div class="sec"><div class="eyebrow">Feeds into</div>
       <div class="wrap">${inTrees.map(t=>`<button class="chip" data-gotree="${t.id}">${esc(t.name)}</button>`).join("")}</div></div>`:""}`,
-   `<button class="btn primary block" id="ref-promote">${ICONS.build}Promote to a full drill</button>`,
+   `${sessionAddContext?`<button class="btn primary" style="flex:1" id="ref-addsess">${ICONS.build}Add to this session</button>`
+      :`<button class="btn primary block" id="ref-promote">${ICONS.build}Promote to a full drill</button>`}`,
    back);
   $$("#sheet-body [data-gotree]").forEach(b=> b.onclick=()=> openTree(b.dataset.gotree));
-  $("#ref-promote").onclick=()=>{ closeSheet(); show("builder"); openDrillEditor(); setTimeout(()=>{ const f=$("#dl-name"); if(f) f.value=name; },60); };
+  const rp=document.getElementById("ref-promote");
+  if(rp) rp.onclick=()=>{ closeSheet(); show("builder"); openDrillEditor(); setTimeout(()=>{ const f=$("#dl-name"); if(f) f.value=name; },60); };
+  const ras=document.getElementById("ref-addsess");
+  if(ras) ras.onclick=()=>{
+    sessionAddContext(name, null);
+    toast(name+" added");
+    if(back) back();
+  };
 }
 function mediaList(e){
   const list = e.media.slice();
@@ -1057,7 +1066,9 @@ function openExercise(id, back){
     ${!HT?`<div class="notice" style="margin-top:14px">${ICONS.info}<span>Step-by-step instructions for this drill haven't been written yet.</span></div>`:""}`,
    `<button class="btn ${state.prefs.favs.includes(id)?"":"ghost"}" id="ex-fav">★</button>
     ${e.custom?'<button class="btn" id="ex-edit">Edit</button>':""}
-    <button class="btn primary" style="flex:1" id="ex-add">${ICONS.build}Add to routine draft</button>`, back);
+    ${sessionAddContext
+      ? `<button class="btn primary" style="flex:1" id="ex-addsess">${ICONS.build}Add to this session</button>`
+      : `<button class="btn primary" style="flex:1" id="ex-add">${ICONS.build}Add to routine draft</button>`}`, back);
   $$("#sheet-body [data-acc]").forEach(b=> b.onclick=()=> b.parentElement.classList.toggle("open"));
   $$("#sheet-body .navrow[data-go]").forEach(b=>{ if(b.dataset.go!=="none") b.onclick=()=> openExercise(b.dataset.go, back); });
   const eed=$("#ex-edit"); if(eed) eed.onclick=()=> openDrillEditor(id);
@@ -1108,6 +1119,12 @@ function openExercise(id, back){
   $("#ex-custom-save").onclick=()=>{ const v=$("#ex-custom").value.trim(); if(v) state.prefs.customMedia[id]=v; else delete state.prefs.customMedia[id]; save(); openExercise(id, back); toast(v?"Custom link saved":"Custom link removed"); };
   $("#ex-fav").onclick=()=>{ const f=state.prefs.favs; f.includes(id)?state.prefs.favs=f.filter(x=>x!==id):f.push(id); save(); openExercise(id, back); };
   $("#ex-add").onclick=()=>{ addToDraft(id); closeSheet(); show("builder"); };
+  const exAddSess = document.getElementById("ex-addsess");
+  if(exAddSess) exAddSess.onclick=()=>{
+    sessionAddContext(e.name, id);
+    toast(e.name+" added");
+    if(back) back();
+  };
 }
 
 
@@ -1147,6 +1164,13 @@ function openQuickCapture(){
     toast("Saved — flesh it out in Library whenever you like");
   };
 }
+
+
+/* Set only while browsing search results from inside the session builder, so
+   a drill/movement card can offer "Add to this session" instead of the
+   normal Library actions, and land you back in the builder — with your
+   in-progress session and search still intact — instead of losing it. */
+let sessionAddContext = null;
 
 function openDrillEditor(editId, presetCat){
   const ex = editId ? (state.customDrills||[]).find(d=>d.id===editId) : null;
@@ -1336,6 +1360,11 @@ const MUSCLES = {
   "step-up":              {work:{p:["quads","glutes"],s:["hamstrings"]}},
   "calf-raise":           {work:{p:["calves"],s:[]}},
   "glute-activation-circuit": {work:{p:["glutes"],s:["hipflexors"]}},
+  "pull-up":              {work:{p:["lats","biceps"],s:["forearms","traps_lower"]}},
+  "ring-row":             {work:{p:["lats","biceps"],s:["traps_lower","abs"]}},
+  "dip":                  {work:{p:["triceps","pecs"],s:["delts_front"]}},
+  "diamond-pushup":       {work:{p:["triceps"],s:["pecs","delts_front"]}},
+  "pseudo-planche-pushup":{work:{p:["delts_front","pecs"],s:["triceps","serratus","abs"]}},
   "pancake":              {stretch:{p:["adductors","hamstrings"],s:["erectors","calves"]}},
   "seated-pike-lifts":    {work:{p:["hipflexors","abs"],s:["quads"]}, stretch:{p:["hamstrings"],s:[]}},
   "straddle-liftoffs":    {work:{p:["hipflexors","abs","delts"],s:["triceps","adductors","serratus"]}},
@@ -1761,6 +1790,51 @@ const HOWTO = {
   "Move through all four with small, controlled ranges — this is activation, not a strength session."],
  check:"If you feel this in your lower back rather than the outer hip on each movement, the range is too big or the pace is too fast. Shrink the range and slow down."},
 
+"pull-up":{desc:"Hanging from a bar with straight arms, you pull your whole bodyweight up until your chest nearly touches the bar, then lower back down under control.",
+ steps:["Hang from the bar with an overhand grip, hands roughly shoulder-width apart, arms fully extended and elbows locked.",
+  "Before you move, set your shoulders — pull your shoulder blades down and back, away from your ears.",
+  "Pull yourself up by driving your elbows down and back, keeping your gaze forward rather than looking up at the bar.",
+  "Continue until your chest gets close to the bar, not just your chin.",
+  "Pause briefly at the top, then lower yourself back down slowly and under control to a full dead hang.",
+  "Reset fully at the bottom — elbows locked — before starting the next rep."],
+ check:"If you're swinging your legs or your body is kipping to get momentum, slow down and reset. A strict, controlled rep with a full lockout at the bottom is worth far more than a fast, swinging one."},
+
+"ring-row":{desc:"Leaning back under a set of rings with your body in a straight line, you pull your chest up to the rings and lower back down under control.",
+ steps:["Set the rings at roughly chest height and grip them with a neutral grip, palms facing each other.",
+  "Walk your feet forward and lean back until your arms are straight and your body forms one straight line from head to heels.",
+  "Brace your core and squeeze your glutes — the only thing that should move during the rep is your arms.",
+  "Pull your chest up toward the rings, driving your elbows back and pulling your shoulder blades down and together.",
+  "Aim to bring the rings to the middle of your chest, not your throat and not your stomach.",
+  "Lower back down slowly to a full stretch, keeping your body rigid the whole way."],
+ check:"If your hips are sagging or piking during the rep, your core has switched off. Reset the straight line from head to heels before continuing."},
+
+"dip":{desc:"Supporting your full bodyweight on parallel bars, you lower your body by bending your elbows, then press back up to a full lockout.",
+ steps:["Grip the parallel bars and press up to a full support, arms locked straight.",
+  "Lean your torso slightly forward and tuck your chin — this position protects the shoulders and is easier to control than staying bolt upright.",
+  "Bend your elbows and lower your body slowly, keeping the elbows at roughly a 45° angle rather than flaring them wide.",
+  "Keep your shoulders set — actively resist the urge to let them drift forward and down as you descend.",
+  "Lower until your upper arms are roughly parallel to the floor, or as close as feels controlled.",
+  "Press back up to a full lockout, driving through your palms."],
+ check:"The bottom of the rep is where form usually breaks — if your shoulders are collapsing forward as you descend, stop the set there. That's the fault that makes the press back up much harder than it needs to be."},
+
+"diamond-pushup":{desc:"A push-up with your hands together under your chest in a diamond shape, which shifts far more of the work onto the triceps.",
+ steps:["Get into a high plank position and bring your hands together under your chest, index fingers and thumbs touching to form a diamond shape.",
+  "Set your body in one straight line from head to heels — brace your core and squeeze your glutes.",
+  "Bend your elbows and lower your chest toward your hands, keeping the elbows tracking back along your sides rather than flaring out.",
+  "Lower until your chest nearly touches your hands, or as far as you can control.",
+  "Press back up to a full lockout, keeping the straight body line throughout.",
+  "Reset briefly at the top before the next rep rather than bouncing straight into it."],
+ check:"If your elbows are flaring out to the sides rather than staying close to your body, you're losing the triceps emphasis that makes this drill worth doing — and adding strain to the shoulders. Tuck them back in."},
+
+"pseudo-planche-pushup":{desc:"A push-up with your hands near your hips and your shoulders leaned forward past your wrists — the position, not the depth, is what makes this hard.",
+ steps:["Get into a push-up position with your hands turned slightly outward, placed lower than usual — near your hips rather than your shoulders.",
+  "Set a posterior pelvic tilt and brace your core into a hollow position, legs together.",
+  "Walk your shoulders forward until they sit clearly in front of your wrists. This lean is the entire point of the exercise.",
+  "Keeping that forward lean the whole time, bend your elbows and lower your chest toward the floor.",
+  "Press back up to full lockout, making sure your shoulders stay protracted — pushed forward — rather than relaxing back.",
+  "Hold the lean at the top for a moment before the next rep."],
+ check:"If your shoulders drift back to a normal, stacked-over-the-wrists position at any point, you've lost the exercise — it becomes a regular push-up. The forward lean has to be held for the entire rep, not just at the bottom."},
+
 "pancake":{desc:"You sit with your legs wide apart and fold forward with a flat back. It opens the hamstrings and inner thighs, which is where the press handstand starts from.",
  steps:["Sit on the floor and take your legs as wide as is comfortable, kneecaps pointing at the ceiling.","Sit up tall on your sit bones. If you are rolling backward, sit on a folded towel or cushion.","Place your hands on the floor in front of you.","Keeping your back flat, hinge forward from the hips — imagine leading with your chest, not your head.","Walk your hands forward only as far as you can go without your lower back rounding.","Hold, breathing steadily, then walk back up."],
  check:"Flat back beats depth every time. If your lower back is rounding, you have gone too far — come back up until it is flat again."},
@@ -2060,18 +2134,28 @@ function renderSessionBuilder(){
   const show=()=>{
     const q=$("#ss-q").value.trim().toLowerCase();
     if(!q){ res.innerHTML=""; return; }
+    const have = new Set(sess.items.map(x=>x.name));
     const drills = EX_ALL().filter(e=>e.name.toLowerCase().includes(q)).slice(0,8)
       .map(e=>({name:e.name, sub:"Your drill · "+catName(e.cats[0]), ref:e.id}));
     const moves = searchCatalog(q).slice(0,10).map(x=>({name:x.name, sub:x.fam, ref:null}));
     const all=drills.concat(moves);
-    res.innerHTML = all.length? `<div class="exl" style="margin-top:8px">${all.map((x,i)=>`
-      <div class="exi" data-sadd="${i}" style="padding:9px 11px">
-        <div class="bd"><div class="nm">${esc(x.name)}</div><div class="mt">${esc(x.sub)}</div></div>
-      </div>`).join("")}</div>` : `<p class="tiny" style="margin-top:10px">Nothing found.</p>`;
+    res.innerHTML = all.length? `<div class="exl" style="margin-top:8px">${all.map((x,i)=>{
+      const already = have.has(x.name);
+      return `<div class="exi" data-sadd="${i}" style="padding:9px 11px;${already?'opacity:.55':''}">
+        <div class="bd"><div class="nm">${esc(x.name)}${already?' <span class="tag teal">in session</span>':''}</div><div class="mt">${esc(x.sub)}</div></div>
+        <span class="go" style="color:var(--teal);font-size:.74rem;font-weight:700">View</span>
+      </div>`;}).join("")}</div>
+      <p class="tiny" style="margin-top:8px">Tap a result to see the full drill — cues, video, muscle map — before you add it.</p>`
+      : `<p class="tiny" style="margin-top:10px">Nothing found.</p>`;
     res.querySelectorAll("[data-sadd]").forEach(b=> b.onclick=()=>{
       const x=all[+b.dataset.sadd];
-      sess.items.push({name:x.name, ref:x.ref, numbers:"", variation:"", assist:"none"});
-      sess.title=$("#ss-title").value; sess.date=$("#ss-date").value; renderSessionBuilder();
+      sess.title=$("#ss-title").value; sess.date=$("#ss-date").value;
+      sessionAddContext = (name, ref)=>{
+        if(!sess.items.some(it=>it.name===name)) sess.items.push({name:name, ref:ref, numbers:"", variation:"", assist:"none"});
+      };
+      const backToBuilder = ()=>{ sessionAddContext=null; renderSessionBuilder(); };
+      if(x.ref) openExercise(x.ref, backToBuilder);
+      else openRefMove(x.name, backToBuilder);
     });
   };
   $("#ss-q").oninput=show;
@@ -2103,13 +2187,13 @@ function renderSessionBuilder(){
       });
     });
   };
-  $("#ss-cancel").onclick=closeSheet;
+  $("#ss-cancel").onclick=()=>{ sessionAddContext=null; closeSheet(); };
   $("#ss-save").onclick=()=>{
     if(!sess.items.length){ toast("Add at least one exercise"); return; }
     const d=$("#ss-date").value||todayISO();
     const title=$("#ss-title").value.trim()||"Own session";
     const items = sess.items.map(x=>({name:x.name, ref:x.ref, numbers:x.numbers||"", variation:x.variation||"", assist:x.assist||"none"}));
-    sess=null; closeSheet();
+    sess=null; sessionAddContext=null; closeSheet();
     openSessionRunner(items, title, d);
   };
 }
