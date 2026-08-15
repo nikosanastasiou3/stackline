@@ -355,16 +355,23 @@ body.tint-rest{background-color:var(--bg);background-image:none}
    teal background lives on a separate inner element sized only to its own
    content (dow+num+dot). That way the highlight can never stretch beyond
    its content no matter what happens to the outer flex row's height. */
-.datestrip{display:flex;align-items:center;justify-content:space-between;background:var(--surface);border:1px solid var(--line);
+/* Hard ceiling on the highlight box specifically, rather than relying on
+   the layout to naturally hug its content — three previous attempts at the
+   structural fix didn't resolve a persistent over-tall render, so this caps
+   it directly: it cannot visually stretch past this height regardless of
+   what is causing the stretch, full stop. */
+.datestrip{display:flex;align-items:flex-start;justify-content:space-between;background:var(--surface);border:1px solid var(--line);
   border-radius:13px;padding:6px 3px;box-shadow:var(--shadow);gap:1px}
-.dcell{flex:1;min-width:0;display:flex;align-items:center;justify-content:center;
-  padding:0;border:0;background:none;font:inherit;color:inherit;cursor:pointer}
-.dcell-inner{display:inline-flex;flex-direction:column;align-items:center;padding:2px 7px;border-radius:7px}
+.dcell{flex:1 1 0;min-width:0;max-width:14%;display:block;
+  padding:0;border:0;background:none;font:inherit;color:inherit;cursor:pointer;height:auto}
+.dcell-inner{display:block;width:fit-content;max-width:100%;margin:0 auto;
+  max-height:38px;overflow:hidden;padding:3px 7px;border-radius:7px;
+  text-align:center;box-sizing:border-box}
 .dcell.today .dcell-inner{background:var(--teal-soft)}
-.dcell .dow{font-size:.5rem;color:var(--faint);font-weight:700;text-transform:uppercase;line-height:1.1}
-.dcell .num{font-family:"Archivo";font-size:.82rem;font-weight:800;margin-top:0;color:var(--ink);line-height:1.1}
+.dcell .dow{display:block;font-size:.5rem;color:var(--faint);font-weight:700;text-transform:uppercase;line-height:1.1}
+.dcell .num{display:block;font-family:"Archivo";font-size:.82rem;font-weight:800;margin-top:0;color:var(--ink);line-height:1.1}
 .dcell.today .num{color:var(--teal)}
-.dcell .dot{width:3px;height:3px;border-radius:50%;background:var(--teal);margin:2px auto 0}
+.dcell .dot{display:block;width:3px;height:3px;border-radius:50%;background:var(--teal);margin:2px auto 0}
 .dcell .dot.empty{background:transparent}
 .hero{position:relative;border-radius:22px;padding:18px;box-shadow:var(--shadow-lg);overflow:hidden;margin-top:10px;
   background:linear-gradient(135deg,var(--amber-mid) 0%,var(--surface) 65%);border:1px solid var(--amber-mid)}
@@ -438,12 +445,6 @@ body.tint-rest{background-color:var(--bg);background-image:none}
   border-radius:20px;padding:18px;box-shadow:var(--shadow-lg);position:relative;overflow:hidden}
 .thead .day{font-size:.63rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--teal)}
 .thead h2{font-family:"Archivo";font-size:1.45rem;font-weight:800;line-height:1.15;margin:5px 0 3px;padding-right:72px}
-.whybtn{display:inline-flex;align-items:center;gap:5px;background:none;border:0;color:var(--muted);font:inherit;
-  font-size:.8rem;cursor:pointer;padding:0;margin-top:2px;text-align:left}
-.whybtn svg{width:14px;height:14px;flex:none}
-.whybox{display:none;margin-top:10px;padding:11px 13px;border-radius:11px;background:var(--teal-soft);
-  border:1px solid var(--teal-mid);color:var(--teal);font-size:.81rem}
-.whybox.on{display:block}
 .tring{position:absolute;right:16px;top:16px;width:62px;height:62px}
 .tring svg{width:100%;height:100%;transform:rotate(-90deg)}
 .tring .lbl{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
