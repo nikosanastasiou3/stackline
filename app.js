@@ -296,7 +296,7 @@ function renderToday(){
   <div class="eyebrow" style="margin-top:16px">Today</div>
   <div class="hero ${amb==="recovery"?"recovery":amb==="rest"?"restday":""}">
     ${!isRest? `<div class="figs">${routineMuscleMap(routine, 100)}</div>`:""}
-    <div class="top"><span class="day">${new Date().toLocaleDateString(undefined,{weekday:"long", day:"numeric", month:"long"})}</span>
+    <div class="hero-top"><span class="day">${new Date().toLocaleDateString(undefined,{weekday:"long", day:"numeric", month:"long"})}</span>
       ${!isRest?`<span class="dur">${routine.minutes} min</span>`:""}</div>
     <h2>${isRest? "Rest day" : esc(routine.name)}</h2>
     <div class="fx">${isRest? "Nothing scheduled" : esc(clsName)}</div>
@@ -2595,7 +2595,7 @@ function renderWorkouts(){
        const t = taxById(w.tax);
        const totalMin = w.items.reduce((n,it)=> n + (it.sets||1)*0.6, 0);
        return `<div class="wk-hero-flat">
-         <div class="top"><span class="tag2">${t?esc(t.name):"Workout"}</span>
+         <div class="hero-top"><span class="tag2">${t?esc(t.name):"Workout"}</span>
            <span class="dur2">${Math.max(1,Math.round(totalMin))} min</span></div>
          <div class="wk-heading">
            <div class="wk-text"><h3>${esc(w.name)}</h3><div class="fx2">${esc(w.blurb||"")}</div></div>
