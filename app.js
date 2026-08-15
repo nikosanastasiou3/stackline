@@ -288,9 +288,10 @@ function renderToday(){
 
   $("#view-today").innerHTML = `
   <div class="datestrip">${dots.map((d,i)=>`
-    <button class="dcell ${i===todayI?"today":""}" data-dateiso="${d.iso}"><div class="dow">${dowLbl[i]}</div>
+    <button class="dcell ${i===todayI?"today":""}" data-dateiso="${d.iso}"><div class="dcell-inner">
+      <div class="dow">${dowLbl[i]}</div>
       <div class="num">${new Date(d.iso+"T12:00:00").getDate()}</div>
-      <div class="dot ${d.has?"":"empty"}"></div></button>`).join("")}</div>
+      <div class="dot ${d.has?"":"empty"}"></div></div></button>`).join("")}</div>
 
   <div class="eyebrow" style="margin-top:16px">Today</div>
   <div class="hero ${amb==="recovery"?"recovery":amb==="rest"?"restday":""}">
@@ -299,7 +300,11 @@ function renderToday(){
       ${!isRest?`<span class="dur">${routine.minutes} min</span>`:""}</div>
     <h2>${isRest? "Rest day" : esc(routine.name)}</h2>
     <div class="fx">${isRest? "Nothing scheduled" : esc(clsName)}</div>
-    ${!isRest?`<div class="marks"><span>${esc((plan.focus||"").toUpperCase())}</span>${levelMarks(routine.fatigue==="high"?4:routine.fatigue==="med"?2:1)}</div>`:""}
+    ${!isRest?(function(){
+      const lvl = routine.fatigue==="high"?4:routine.fatigue==="med"?2:1;
+      const word = lvl>=4?"HARD":lvl>=3?"MEDIUM":lvl>=2?"LIGHT":"EASY";
+      return `<div class="marks"><span>${word}</span>${levelMarks(lvl)}</div>`;
+    })():""}
     ${!isRest?`<button class="hero-cta" id="t-startprimary">${runDone?"Redo":"Start now"}
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="m9 6 6 6-6 6"/></svg></button>`
       :`<button class="hero-cta" id="t-deskcta">Desk resets, if you want
