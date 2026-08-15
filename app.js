@@ -190,6 +190,16 @@ function render(v){
 function last7Adherence(){
   let n=0; for(let i=0;i<7;i++){ if(logByDate(todayISO(-i))) n++; } return n;
 }
+/* PENDING REVIEW (added 2026-08-15): recommendToday() still computes adaptive
+   `notes` — reasoning like "recovery's been low, downgraded to the reset"
+   or "only 2 days logged this week, rebuilding the streak" — but nothing in
+   the UI displays them anymore since the Today "why?" link was removed as
+   redundant with the amber focus label. The label only names the category;
+   these notes explain WHY a specific swap happened, which is different
+   information. Revisit: either surface this somewhere else on Today (a
+   quieter one-line notice, not a whole expandable box), fold it into class
+   logging, or decide it's genuinely not needed and strip the computation
+   too. Discuss before building either direction. */
 function recommendToday(){
   const dow = new Date().getDay();
   const plan = planFor(dow);
@@ -310,10 +320,6 @@ function renderToday(){
       :`<button class="hero-cta" id="t-deskcta">Desk resets, if you want
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="m9 6 6 6-6 6"/></svg></button>`}
   </div>
-  <button class="whybtn" id="t-why">${esc(plan.focus||"")} — why?
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 16v-4m0-4v.01"/></svg></button>
-  <div class="whybox" id="t-whybox">${esc(plan.why)}${notes.map(n=>`<div style="margin-top:8px">${esc(n)}</div>`).join("")}</div>
-
   <div class="row" style="gap:8px;margin-top:12px;flex-wrap:wrap">
     <span class="streakpill">🔥 <b>${streak()||0}</b> day streak</span>
     <button class="streakpill" id="t-daytype" style="cursor:pointer">⇄ Change day</button>
@@ -352,7 +358,6 @@ function renderToday(){
   document.body.classList.remove("tint-skill","tint-recovery","tint-rest");
   document.body.classList.add("tint-"+amb);
   $$("#view-today [data-dateiso]").forEach(el=> el.onclick=()=> openClassLog(el.dataset.dateiso));
-  const wb=$("#t-why"); if(wb) wb.onclick=()=> $("#t-whybox").classList.toggle("on");
   $("#t-daytype").onclick=()=> openDayOverride(today);
   const ot=$("#t-owntoday");
   if(ot) ot.onclick=()=>{ setDayOverride(today, "own", ""); openSessionBuilder([], "Own training"); };
@@ -1448,6 +1453,19 @@ const MUSCLES = {
   "desk-ankles":        {work:{p:["calves"],s:[]}},
   "desk-glute-squeeze": {work:{p:["glutes"],s:[]}},
   "desk-chair-squat":   {work:{p:["quads","glutes"],s:["hamstrings"]}},
+  "downward-dog":         {stretch:{p:["hamstrings","calves"],s:["delts","lats"]}, work:{p:["delts_front"],s:["abs"]}},
+  "puppy-pose-classic":   {stretch:{p:["lats","delts_front"],s:["pecs"]}},
+  "pike-fold":            {stretch:{p:["hamstrings"],s:["erectors"]}},
+  "butterfly-stretch":    {stretch:{p:["adductors"],s:["hipflexors"]}},
+  "hamstring-stretch-standing": {stretch:{p:["hamstrings"],s:["calves"]}},
+  "couch-stretch":        {stretch:{p:["hipflexors","quads"],s:[]}},
+  "pigeon-pose":          {stretch:{p:["glutes"],s:["hipflexors"]}},
+  "middle-split":         {stretch:{p:["adductors","hamstrings"],s:[]}},
+  "front-split":          {stretch:{p:["hipflexors","hamstrings"],s:[]}},
+  "bridge-backbend":      {work:{p:["delts","erectors"],s:["glutes","quads"]}, stretch:{p:["pecs","hipflexors"],s:["abs"]}},
+  "neck-bridge":          {work:{p:["traps_upper"],s:["erectors"]}},
+  "forearm-plank":        {work:{p:["abs"],s:["delts_front","glutes"]}},
+  "wrist-curls":          {work:{p:["forearms"],s:[]}},
   "pull-up":              {work:{p:["lats","biceps"],s:["forearms","traps_lower"]}},
   "ring-row":             {work:{p:["lats","biceps"],s:["traps_lower","abs"]}},
   "dip":                  {work:{p:["triceps","pecs"],s:["delts_front"]}},
@@ -1976,6 +1994,123 @@ const HOWTO = {
   "Drive back up through your heels to standing.",
   "Repeat for 8-10 reps without using your hands for balance."],
  check:"If you're pushing off the desk or armrests to stand back up, that's doing the work your legs should be doing — keep your arms free through the whole set."},
+
+"downward-dog":{desc:"From all fours, you tuck your toes and lift your hips up and back into an inverted V, pushing the floor away and lengthening through your whole posterior chain.",
+ steps:["Start on all fours, hands slightly forward of your shoulders, fingers spread wide.",
+  "Tuck your toes under.",
+  "Press through your hands and lift your hips up and back, straightening toward an inverted V shape.",
+  "Bend your knees generously to start — this lets your spine lengthen instead of your hamstrings forcing it to round.",
+  "Push the floor away actively with your hands, keeping your shoulders broad rather than caving forward.",
+  "Hold, breathing steadily, gradually working toward straighter legs without losing the flat back."],
+ check:"If your back is rounding, you've prioritized straight legs over a flat spine — bend the knees more until the back flattens out again. A flat back with bent knees beats straight legs with a rounded back."},
+
+"puppy-pose-classic":{desc:"Kneeling with your hips stacked over your knees, you walk your straight arms forward and let your chest sink down toward the floor.",
+ steps:["Start on all fours, hips stacked directly over your knees.",
+  "Keeping your arms straight, walk your hands forward.",
+  "Let your chest and chin sink down toward the floor as your hands walk out.",
+  "As you approach your end range, wrap your shoulder blades wide — reach the outside of your armpits down toward the floor rather than squeezing the blades together.",
+  "Keep your hips stacked over your knees throughout — don't let them drift forward.",
+  "Hold, breathing steadily, then walk the hands back in to release."],
+ check:"If your hips have drifted forward of your knees, you've lost the position — walk them back to stacked before continuing. That hip position is what makes this pose work."},
+
+"pike-fold":{desc:"Standing or seated with straight-ish legs, you fold forward from the hips, letting your torso hang toward your legs.",
+ steps:["Stand or sit with your legs extended.",
+  "Keep a slight bend in the knees to start.",
+  "Hinge forward from the hips, not the waist, letting your torso lower toward your legs.",
+  "Let your head hang heavy rather than tucking your chin.",
+  "Hold at whatever depth feels like a genuine stretch without pain.",
+  "Slowly roll back up to release."],
+ check:"If you're rounding hard through the lower back to chase depth, that's your hips reaching their limit — back off the range rather than forcing more through the spine."},
+
+"butterfly-stretch":{desc:"Seated with the soles of your feet together and knees dropped open, you let the inner thighs and hips lengthen.",
+ steps:["Sit on the floor and bring the soles of your feet together in front of you.",
+  "Let your knees drop open toward the floor.",
+  "Sit up tall, keeping your spine long rather than slumping.",
+  "Rest your elbows lightly on your thighs or shins, and use gentle pressure to encourage — not force — the knees down.",
+  "Hold, breathing steadily.",
+  "For more, keeping the back flat, fold your torso forward toward your feet."],
+ check:"If you're pressing down hard on your knees with your hands to force range, ease off — a gentle, patient press from the elbows works better and is safer than forcing it."},
+
+"hamstring-stretch-standing":{desc:"With one foot elevated on a surface in front of you, you hinge forward from the hips to stretch the hamstring of that leg.",
+ steps:["Stand facing a step, bench, or other stable surface at a comfortable height.",
+  "Place one heel on the surface, leg reasonably straight, toes pointing up.",
+  "Stand tall first on your standing leg.",
+  "Keeping your back flat, hinge forward from the hips, reaching your chest toward the raised thigh.",
+  "Hold once you feel a clear stretch along the back of the raised leg.",
+  "Return upright and switch sides."],
+ check:"If you feel this in your lower back rather than the back of your thigh, you're rounding instead of hinging — flatten your back and hinge from the hip joint instead."},
+
+"couch-stretch":{desc:"With one rear foot elevated behind you and the knee bent, you drive the front hip forward to deeply stretch the hip flexor of the back leg.",
+ steps:["Kneel in front of a low, stable surface — a couch, low box, or step.",
+  "Place the top of your rear foot on the surface behind you, knee bent.",
+  "Bring your front foot forward into a lunge position, front knee bent.",
+  "Keep your torso upright — resist the urge to lean forward.",
+  "Gently drive your hips forward, feeling the stretch through the front of the rear hip and thigh.",
+  "Hold, then switch sides. Start with a lower surface and build toward a higher one over weeks."],
+ check:"If your lower back is arching to compensate, you've gone too deep too soon — use a lower surface and keep the torso upright rather than leaning forward to chase depth."},
+
+"pigeon-pose":{desc:"With your front leg bent and turned out in front of you and your back leg extended straight behind, you open the hip of the front leg.",
+ steps:["From all fours or a high plank, bring one knee forward and place it behind the same-side wrist.",
+  "Extend your other leg straight back behind you, keeping the hips square to the front.",
+  "Square your hips — don't let them rotate open toward the bent-leg side.",
+  "Sit upright first, feeling the stretch through the front hip.",
+  "For more, fold your torso forward over the bent leg, keeping the hips square throughout.",
+  "Hold, then switch sides."],
+ check:"If you feel anything sharp in the knee rather than a stretch in the hip, stop immediately and adjust the angle of your front shin — knee pain means the setup needs changing, not pushing through."},
+
+"middle-split": {desc:"With both legs extended straight out to the sides, you work toward sitting upright with your hips square and facing forward.",
+ steps:["Start in a comfortable wide-legged seated or standing position, well short of your full range.",
+  "Keep your chest up, shoulders down, and hips facing forward throughout — don't let them roll back.",
+  "Slowly widen your stance to a genuine but controlled stretch — this is the half-split stage.",
+  "Hold for the target time before easing out.",
+  "Only once this stage is comfortable and well-controlled, progress to a wider three-quarter stage, then eventually a full middle split.",
+  "Never skip a stage to chase more depth — build the range gradually over weeks and months."],
+ check:"If your hips have rolled backward or your posture has collapsed to gain a few extra inches, you've prioritized depth over the position that actually builds real range — sit back up and reduce the width."},
+
+"front-split": {desc:"With one leg extended straight forward and the other extended straight back, you work toward a full split on each side.",
+ steps:["Start in a comfortable lunge position, well short of full range.",
+  "Keep your chest up, shoulders down, and hips square to the front — resist any rotation.",
+  "Slowly slide the front foot forward and back foot backward to a genuine but controlled stretch — the half-split stage.",
+  "Hold for the target time before easing out.",
+  "Only once comfortable and controlled, progress to a wider three-quarter stage, then eventually a full front split.",
+  "Repeat on the other side. Build gradually — this is a long-term project, not a single-session goal."],
+ check:"If your hips have rotated open rather than staying square, you've quietly turned this into a different stretch — reset the hips square before continuing."},
+
+"bridge-backbend": {desc:"Hands and feet on the floor, you lift your hips and chest up into a full backbend, pushing the floor away through both hands and feet.",
+ steps:["Set up with your hands elevated on a stable, secure platform — a low, sturdy bench or box — rather than the floor, if this is new to you.",
+  "Lie on your back, feet flat on the floor, hands placed by your ears or on the elevated platform.",
+  "Push through your hands and feet together, lifting your hips and chest up into the bridge shape.",
+  "Actively push the surface away rather than just resting your weight on your hands.",
+  "Drive the lift through your legs and hips as much as your back — don't let it all come from the lower spine.",
+  "Hold briefly, then lower back down with control. Over time, gradually lower the platform height toward the floor."],
+ check:"If you feel it concentrated in your lower back rather than spread through your shoulders, spine, and hips, you likely don't have the mobility for this height yet — raise the platform back up and build gradually."},
+
+"neck-bridge": {desc:"A careful, conservative neck-specific strengthening drill, briefly supporting light weight through the head while in a bridge position.",
+ steps:["Only attempt this once your regular bridge-backbend work is genuinely comfortable and controlled.",
+  "Set up in a bridge position with the vast majority of your weight supported by your hands and feet.",
+  "Very briefly and lightly, allow a small amount of weight to transfer through your forehead or the crown of your head.",
+  "Hold for only a few seconds at first, keeping the load light.",
+  "Return the weight fully to your hands and feet.",
+  "Alternate between neck extension and flexion positions across different sessions rather than always using the same angle."],
+ check:"If you feel any sharp or shooting sensation, stop immediately — this drill has real risk if rushed, and every source is explicit that starting extremely light and building slowly over weeks, not sessions, is the only safe approach."},
+
+"forearm-plank":{desc:"Supported on your forearms and toes, you hold a straight line from shoulders to heels.",
+ steps:["Kneel down and place your forearms on the floor, elbows under your shoulders.",
+  "Step your feet back one at a time until your body forms a straight line from shoulders to heels.",
+  "Brace your core and squeeze your glutes.",
+  "Keep your neck neutral, gaze toward the floor.",
+  "Hold, breathing normally throughout — don't hold your breath.",
+  "Lower to your knees to release."],
+ check:"If your hips are sagging toward the floor or piking up toward the ceiling, reset the straight line before continuing — both are signs the core has stopped doing its job."},
+
+"wrist-curls":{desc:"Resting your forearm on your thigh or a bench, you curl a light weight up and down through wrist flexion, then repeat with the wrist turned the other way for extension.",
+ steps:["Sit down and rest your forearm on your thigh or a bench, wrist hanging just past the edge.",
+  "For a flexion curl: hold a light weight with your palm facing up. Curl your wrist up, squeeze at the top, then lower under control to a full stretch at the bottom.",
+  "For a reverse curl: turn your palm to face down. Curl your wrist up against gravity, squeeze at the top, then lower under control.",
+  "Keep your forearm completely still throughout — only your wrist should move.",
+  "Complete your reps in one direction, then switch to the other.",
+  "Repeat on the other arm."],
+ check:"If your elbow is lifting or your forearm is rocking to help move the weight, the load is too heavy or the movement isn't isolated — lighten it and keep the forearm pinned still."},
 
 "pancake":{desc:"You sit with your legs wide apart and fold forward with a flat back. It opens the hamstrings and inner thighs, which is where the press handstand starts from.",
  steps:["Sit on the floor and take your legs as wide as is comfortable, kneecaps pointing at the ceiling.","Sit up tall on your sit bones. If you are rolling backward, sit on a folded towel or cushion.","Place your hands on the floor in front of you.","Keeping your back flat, hinge forward from the hips — imagine leading with your chest, not your head.","Walk your hands forward only as far as you can go without your lower back rounding.","Hold, breathing steadily, then walk back up."],
@@ -2603,7 +2738,7 @@ function renderWorkouts(){
          </div>
          <div class="exl" style="margin-top:12px">${w.items.map((it,i)=>{
            const r = workoutRef(it.ref);
-           return `<div class="exi" style="padding:8px 10px;background:var(--surface)">
+           return `<div class="exi" style="padding:8px 10px;background:var(--surface);cursor:pointer" data-wex="${w.id}|${i}">
              <div class="ic" style="width:26px;height:26px;font-size:.66rem">${i+1}</div>
              <div class="bd"><div class="nm" style="font-size:.83rem">${esc(r.name)}</div>
              <div class="mt">${it.sets} × ${esc(it.reps)}</div></div>
@@ -2624,6 +2759,13 @@ function renderWorkouts(){
     openSessionRunner(items, w.name, todayISO());
   });
   $$("#view-library [data-wedit]").forEach(b=> b.onclick=()=> openWorkoutEditor(b.dataset.wedit));
+  $$("#view-library [data-wex]").forEach(el=> el.onclick=()=>{
+    const [wid, idx] = el.dataset.wex.split("|");
+    const w = workoutById(wid); if(!w) return;
+    const it = w.items[+idx]; if(!it) return;
+    if(exById(it.ref)) openExercise(it.ref, renderWorkouts);
+    else openRefMove(workoutRef(it.ref).name, renderWorkouts);
+  });
   $$("#view-library [data-wdel]").forEach(b=> b.onclick=()=>{
     openSheet("Delete workout?", `<p class="sub">"${esc(workoutById(b.dataset.wdel).name)}" will be removed.</p>`,
       `<button class="btn ghost" id="wd-no">Keep</button><button class="btn danger" style="flex:1" id="wd-yes">Delete</button>`);
