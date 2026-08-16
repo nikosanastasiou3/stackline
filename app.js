@@ -241,7 +241,14 @@ function recommendToday(){
       notes.push("Only "+adh+" logged day(s) this week. Rebuild the streak with the 5-minute reset — consistency beats volume.");
     }
   }
-  const evening = plan.evening ? routineById(plan.evening) : null;
+  // "evening" was never a field the schedule editor exposes, so anyone with
+  // a schedule saved before this feature existed has it silently missing
+  // from their stored plan object. Resolve it directly from the built-in
+  // default by day-of-week instead of trusting plan.evening, so it works
+  // regardless of what's actually stored.
+  const defaultForDow = DEFAULT_SCHEDULE.find(s=>s.dow===plan.dow);
+  const eveningId = plan.evening !== undefined ? plan.evening : (defaultForDow ? defaultForDow.evening : null);
+  const evening = eveningId ? routineById(eveningId) : null;
   return {plan, routine, notes, evening};
 }
 
@@ -1275,7 +1282,9 @@ let pickContext = null; // {label, add(name, ref)} — set only while an "add an
 function openDayLogPicker(date){
   const plan = planFor(new Date(date+"T12:00:00").getDay());
   const routine = plan.routine ? (routineById(plan.routine) || state.routines[0]) : null;
-  const evening = plan.evening ? routineById(plan.evening) : null;
+  const defaultForDow2 = DEFAULT_SCHEDULE.find(s=>s.dow===plan.dow);
+  const eveningId2 = plan.evening !== undefined ? plan.evening : (defaultForDow2 ? defaultForDow2.evening : null);
+  const evening = eveningId2 ? routineById(eveningId2) : null;
   const cl = classLogFor(date);
   const dayLog = logByDate(date);
   const deskCount = (state.deskLogs||[]).filter(d=>d.date===date).length;
