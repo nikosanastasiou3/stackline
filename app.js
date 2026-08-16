@@ -210,7 +210,8 @@ function recommendToday(){
   // — routine, focus, why — instead of quietly still showing the originally
   // scheduled day's content under a relabeled name.
   if(ov && ov.type==="other" && ov.label){
-    const matched = getSchedule().find(s=> s.cls===ov.label);
+    const wantLabel = ov.label.trim().toLowerCase();
+    const matched = getSchedule().find(s=> (s.cls||"").trim().toLowerCase()===wantLabel);
     if(matched) plan = matched;
   }
   let routine = routineById(plan.routine) || state.routines[0];
@@ -321,16 +322,16 @@ function renderToday(){
       <div class="hero-left">
         <h2>${isRest? "Rest day" : esc(routine.name)}</h2>
         <div class="fx">${isRest? "Nothing scheduled" : esc(clsName)}</div>
-        ${!isRest?(function(){
+        <div class="marks">${isRest? levelMarks(0) : (function(){
           const lvl = routine.fatigue==="high"?4:routine.fatigue==="med"?2:1;
-          return `<div class="marks">${levelMarks(lvl)}</div>`;
-        })():""}
+          return levelMarks(lvl);
+        })()}</div>
         ${!isRest?`<button class="hero-cta" id="t-startprimary">${runDone?"Redo":"Start now"}
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="m9 6 6 6-6 6"/></svg></button>`
           :`<button class="hero-cta" id="t-deskcta">Desk resets, if you want
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="m9 6 6 6-6 6"/></svg></button>`}
       </div>
-      ${!isRest? `<div class="figs">${routineMuscleMap(routine, "100%")}</div>`:""}
+      <div class="figs">${isRest? routineMuscleMap({items:[]}, "100%") : routineMuscleMap(routine, "100%")}</div>
     </div>
   </div>
   <div class="row" style="gap:8px;margin-top:12px;flex-wrap:wrap">
@@ -365,7 +366,7 @@ function renderToday(){
 
   ${recents.length? `<div class="eyebrow">Recently used</div>
     <div class="scrollrow">${recents.map(r=>`<div class="rchip" data-recent="${esc(r.name)}">
-      <div class="ic">${ICONS.check}</div><div class="nm">${esc(r.name)}</div><div class="mt">Logged ${r.count}× recently</div></div>`).join("")}</div>` : ""}
+      <div class="ic">${ICONS.play}</div><div class="nm">${esc(r.name)}</div><div class="mt">Logged ${r.count}× recently</div></div>`).join("")}</div>` : ""}
   `;
 
   document.body.classList.remove("tint-skill","tint-recovery","tint-rest");
@@ -1277,9 +1278,48 @@ function openDayLogPicker(date){
     const k = b.dataset.daylog;
     closeSheet();
     if(k==="class") openClassLog(date);
-    else if(k==="block") openLogForm(date);
+    else if(k==="block") openBlockBackfill(date);
     else if(k==="desk") openDeskSet("defaults", false, date);
   });
+}
+
+
+/* openLogForm alone has no drill-picking UI — it only summarises drills
+   that were already ticked elsewhere (normally by the live routine runner).
+   For backfilling a day you did not run live, this step comes first: pick
+   which routine, tick which drills, then hand off to the existing feel/
+   notes step with that selection already populated. */
+function openBlockBackfill(date){
+  const plan = planFor(new Date(date+"T12:00:00").getDay());
+  const existing = logByDate(date);
+  let routineId = (existing && existing.routineId) || plan.routine || (state.routines[0]||{}).id;
+  let doneSet = new Set((existing && existing.done) || []);
+  const draw = ()=>{
+    const r = routineById(routineId);
+    const items = r ? r.items.map(it=>exById(it.ex)).filter(Boolean) : [];
+    openSheet("What did you do — "+fmtDate(date),
+     `<label class="f">Which block?</label>
+      <select id="bb-routine">${state.routines.map(x=>`<option value="${x.id}" ${x.id===routineId?"selected":""}>${esc(x.name)} · ${x.minutes} min</option>`).join("")}</select>
+      <label class="f" style="margin-top:14px">Which drills did you actually do?</label>
+      <div class="exl">${items.map(e=>`
+        <div class="exi" data-bbtick="${e.id}">
+          <div class="check ${doneSet.has(e.id)?"on":""}">${ICONS.check}</div>
+          <div class="bd"><div class="nm">${esc(e.name)}</div></div>
+        </div>`).join("") || '<p class="tiny">This block has no drills.</p>'}</div>`,
+     `<button class="btn ghost" id="bb-cancel">Cancel</button>
+      <button class="btn primary" style="flex:1" id="bb-next">Next</button>`);
+    $("#bb-routine").onchange=e=>{ routineId=e.target.value; doneSet=new Set(); draw(); };
+    $$("#sheet-body [data-bbtick]").forEach(el=> el.onclick=()=>{
+      const id=el.dataset.bbtick;
+      doneSet.has(id)?doneSet.delete(id):doneSet.add(id);
+      el.querySelector(".check").classList.toggle("on");
+    });
+    $("#bb-cancel").onclick = closeSheet;
+    $("#bb-next").onclick = ()=>{
+      openLogForm(date, {routineId:routineId, done:[...doneSet]});
+    };
+  };
+  draw();
 }
 
 function openDrillEditor(editId, presetCat){
