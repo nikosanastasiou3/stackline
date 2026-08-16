@@ -2882,7 +2882,7 @@ let state = {
   milestones: [],      // {date, text}
   prefs: { theme:"dark", media:{}, customMedia:{}, favs:[], upgradesInUse:{} },
 };
-const APP_VERSION = "2026.08.15-1";
+const APP_VERSION = "2026.08.15-2";
 const SKEY = "stackline-v1";
 async function loadState(){
   let raw = null;
