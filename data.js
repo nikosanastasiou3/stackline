@@ -2664,7 +2664,8 @@ function routineMuscleMap(routine, h){
       const col = work.has(d.id) ? "var(--teal)" : stretch.has(d.id) ? "var(--amber)" : "var(--figure)";
       return `<path d="${d.path}" fill="${col}"/>`;
     }).join("");
-    return `<svg viewBox="${vb}" style="height:${h}px;width:auto" xmlns="http://www.w3.org/2000/svg">${paths}</svg>`;
+    const hVal = typeof h==="string" ? h : h+"px"; // accepts a plain number (px) or a raw CSS value like "100%"
+    return `<svg viewBox="${vb}" style="height:${hVal};width:auto" xmlns="http://www.w3.org/2000/svg">${paths}</svg>`;
   };
   const F = SM.defs.filter(d=>d.view===SM.ViewSide.FRONT);
   const B = SM.defs.filter(d=>d.view===SM.ViewSide.BACK);

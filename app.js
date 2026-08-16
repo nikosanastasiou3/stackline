@@ -202,7 +202,17 @@ function last7Adherence(){
    too. Discuss before building either direction. */
 function recommendToday(){
   const dow = new Date().getDay();
-  const plan = planFor(dow);
+  const today = todayISO();
+  const ov = dayOverride(today);
+  let plan = planFor(dow);
+  // When you've overridden today to a class that matches another day already
+  // in your schedule (via "Different class"), borrow that day's actual plan
+  // — routine, focus, why — instead of quietly still showing the originally
+  // scheduled day's content under a relabeled name.
+  if(ov && ov.type==="other" && ov.label){
+    const matched = getSchedule().find(s=> s.cls===ov.label);
+    if(matched) plan = matched;
+  }
   let routine = routineById(plan.routine) || state.routines[0];
   const notes=[];
   const y = logByDate(todayISO(-1));
@@ -305,25 +315,28 @@ function renderToday(){
 
   <div class="eyebrow" style="margin-top:16px">Today</div>
   <div class="hero ${amb==="recovery"?"recovery":amb==="rest"?"restday":""}">
-    ${!isRest? `<div class="figs">${routineMuscleMap(routine, 100)}</div>`:""}
     <div class="hero-top"><span class="day">${new Date().toLocaleDateString(undefined,{weekday:"long", day:"numeric", month:"long"})}</span>
       ${!isRest?`<span class="dur">${routine.minutes} min</span>`:""}</div>
-    <h2>${isRest? "Rest day" : esc(routine.name)}</h2>
-    <div class="fx">${isRest? "Nothing scheduled" : esc(clsName)}</div>
-    ${!isRest?(function(){
-      const lvl = routine.fatigue==="high"?4:routine.fatigue==="med"?2:1;
-      const word = lvl>=4?"HARD":lvl>=3?"MEDIUM":lvl>=2?"LIGHT":"EASY";
-      return `<div class="marks"><span>${word}</span>${levelMarks(lvl)}</div>`;
-    })():""}
-    ${!isRest?`<button class="hero-cta" id="t-startprimary">${runDone?"Redo":"Start now"}
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="m9 6 6 6-6 6"/></svg></button>`
-      :`<button class="hero-cta" id="t-deskcta">Desk resets, if you want
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="m9 6 6 6-6 6"/></svg></button>`}
+    <div class="hero-body">
+      <div class="hero-left">
+        <h2>${isRest? "Rest day" : esc(routine.name)}</h2>
+        <div class="fx">${isRest? "Nothing scheduled" : esc(clsName)}</div>
+        ${!isRest?(function(){
+          const lvl = routine.fatigue==="high"?4:routine.fatigue==="med"?2:1;
+          return `<div class="marks">${levelMarks(lvl)}</div>`;
+        })():""}
+        ${!isRest?`<button class="hero-cta" id="t-startprimary">${runDone?"Redo":"Start now"}
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="m9 6 6 6-6 6"/></svg></button>`
+          :`<button class="hero-cta" id="t-deskcta">Desk resets, if you want
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="m9 6 6 6-6 6"/></svg></button>`}
+      </div>
+      ${!isRest? `<div class="figs">${routineMuscleMap(routine, "100%")}</div>`:""}
+    </div>
   </div>
   <div class="row" style="gap:8px;margin-top:12px;flex-wrap:wrap">
     <span class="streakpill">🔥 <b>${streak()||0}</b> day streak</span>
     <button class="streakpill" id="t-daytype" style="cursor:pointer">⇄ Change day</button>
-    ${!isOwn?`<button class="streakpill" id="t-owntoday" style="cursor:pointer">🏋️ Training on my own today</button>`:""}
+    ${!isOwn?`<button class="streakpill" id="t-owntoday" style="cursor:pointer">🏋️ Own training</button>`:""}
   </div>
 
   ${(!isRest && plan.kind==="mobility")? `<div class="notice" style="margin-top:16px">${ICONS.info}<span>Your class today is already a mobility session — the block below is only a short top-up, not a second session.</span></div>`:""}
@@ -352,12 +365,12 @@ function renderToday(){
 
   ${recents.length? `<div class="eyebrow">Recently used</div>
     <div class="scrollrow">${recents.map(r=>`<div class="rchip" data-recent="${esc(r.name)}">
-      <div class="ic">${ICONS.build}</div><div class="nm">${esc(r.name)}</div><div class="mt">Logged ${r.count}× recently</div></div>`).join("")}</div>` : ""}
+      <div class="ic">${ICONS.check}</div><div class="nm">${esc(r.name)}</div><div class="mt">Logged ${r.count}× recently</div></div>`).join("")}</div>` : ""}
   `;
 
   document.body.classList.remove("tint-skill","tint-recovery","tint-rest");
   document.body.classList.add("tint-"+amb);
-  $$("#view-today [data-dateiso]").forEach(el=> el.onclick=()=> openClassLog(el.dataset.dateiso));
+  $$("#view-today [data-dateiso]").forEach(el=> el.onclick=()=> openDayLogPicker(el.dataset.dateiso));
   $("#t-daytype").onclick=()=> openDayOverride(today);
   const ot=$("#t-owntoday");
   if(ot) ot.onclick=()=>{ setDayOverride(today, "own", ""); openSessionBuilder([], "Own training"); };
@@ -1233,6 +1246,42 @@ let pickContext = null; // {label, add(name, ref)} — set only while an "add an
                          // flow (session builder, workout editor, routine draft) has a
                          // drill/reference card open for review.
 
+
+/* Backfilling a past day should offer everything Today offers, not just
+   the class log — the support block and desk resets are just as real a
+   part of what happened that day. */
+function openDayLogPicker(date){
+  const plan = planFor(new Date(date+"T12:00:00").getDay());
+  const routine = routineById(plan.routine) || state.routines[0];
+  const cl = classLogFor(date);
+  const dayLog = logByDate(date);
+  const deskCount = (state.deskLogs||[]).filter(d=>d.date===date).length;
+  openSheet("Log "+fmtDate(date),
+   `<div class="exl">
+      <button class="exi" data-daylog="class">
+        <div class="mark ${cl?"on":""}">${cl?ICONS.check:""}</div>
+        <div class="bd"><div class="nm">Class</div><div class="mt">${cl?cl.items.length+" exercise"+(cl.items.length!==1?"s":"")+" logged":"Not logged"}</div></div>
+      </button>
+      <button class="exi" data-daylog="block">
+        <div class="mark ${dayLog?"on":""}">${dayLog?ICONS.check:""}</div>
+        <div class="bd"><div class="nm">Support block</div><div class="mt">${dayLog?"Logged":routine.name+" · "+routine.minutes+" min"}</div></div>
+      </button>
+      <button class="exi" data-daylog="desk">
+        <div class="mark ${deskCount?"on":""}">${deskCount?ICONS.check:""}</div>
+        <div class="bd"><div class="nm">Desk resets</div><div class="mt">${deskCount?deskCount+" logged":"Not logged"}</div></div>
+      </button>
+    </div>`,
+   `<button class="btn ghost block" id="dl-close">Close</button>`);
+  $("#dl-close").onclick = closeSheet;
+  $$("#sheet-body [data-daylog]").forEach(b=> b.onclick=()=>{
+    const k = b.dataset.daylog;
+    closeSheet();
+    if(k==="class") openClassLog(date);
+    else if(k==="block") openLogForm(date);
+    else if(k==="desk") openDeskSet("defaults", false, date);
+  });
+}
+
 function openDrillEditor(editId, presetCat){
   const ex = editId ? (state.customDrills||[]).find(d=>d.id===editId) : null;
   const d = Object.assign({
@@ -1348,7 +1397,7 @@ function deskStreak(){
   return n;
 }
 let deskDraft = null;
-function openDeskSet(setId, keepDraft){
+function openDeskSet(setId, keepDraft, forDate){
   const set = DESK_SETS.find(s=>s.id===setId); if(!set) return;
   if(!keepDraft || !deskDraft) deskDraft = set.pick.slice();
   const drills = deskDraft.map(exById).filter(Boolean);
@@ -1376,17 +1425,18 @@ function openDeskSet(setId, keepDraft){
     b.classList.toggle("on"); b.closest(".exi").classList.toggle("done");
   });
   $$("#sheet-body [data-dkrm]").forEach(b=> b.onclick=()=>{
-    const i=+b.dataset.dkrm; deskDraft.splice(i,1); openDeskSet(setId, true);
+    const i=+b.dataset.dkrm; deskDraft.splice(i,1); openDeskSet(setId, true, forDate);
   });
   $$("#sheet-body [data-dkadd]").forEach(b=> b.onclick=()=>{
-    deskDraft.push(b.dataset.dkadd); openDeskSet(setId, true);
+    deskDraft.push(b.dataset.dkadd); openDeskSet(setId, true, forDate);
   });
-  $$("#sheet-body [data-open-ex]").forEach(el=> el.onclick=()=> openExercise(el.dataset.openEx, ()=>openDeskSet(setId, true)));
+  $$("#sheet-body [data-open-ex]").forEach(el=> el.onclick=()=> openExercise(el.dataset.openEx, ()=>openDeskSet(setId, true, forDate)));
   $("#dk-close").onclick=()=>{ deskDraft=null; closeSheet(); };
   $("#dk-done").onclick=()=>{
-    state.deskLogs = (state.deskLogs||[]).concat([{date:todayISO(), set:setId, n:done.size||drills.length, t:Date.now()}]);
+    const d = forDate || todayISO();
+    state.deskLogs = (state.deskLogs||[]).concat([{date:d, set:setId, n:done.size||drills.length, t:Date.now()}]);
     state.meta_deskU = Date.now(); deskDraft=null; save(); closeSheet(); render(curView);
-    toast("Desk reset logged · "+deskToday()+" today");
+    toast(forDate && forDate!==todayISO() ? "Desk reset logged for "+fmtDate(d) : "Desk reset logged · "+deskToday()+" today");
   };
 }
 
