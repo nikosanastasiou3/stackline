@@ -1468,6 +1468,176 @@ const EXERCISES = [
   ]},
 
 
+{ id:"band-pullapart", name:"Band pull-apart", cats:["scap"], fatigue:"low", level:1, desk:true, deskType:"chair",
+  targets:"Rear delts, rhomboids and mid-back, pulling a light resistance band apart at chest height.",
+  why:"A cheap, quick way to counter the forward-shoulder posture desk work builds — pulling the band apart trains the exact opposite pattern to hours of typing and reaching forward.",
+  when:["before","recovery"], dosage:"2-3 × 15-20.",
+  progression:"Use a stronger band, or slow the return for more time under tension.",
+  regression:"Use a lighter band, or a shorter range if the shoulders feel tight.",
+  mistakes:"Shrugging the shoulders up toward the ears instead of keeping them down; using momentum to snap the band apart rather than a controlled pull.",
+  cues:"Squeeze the shoulder blades together at the end of the pull, then return under control — don't let the band snap back.",
+  pairs:"A good addition alongside the desk chest opener — pulling and stretching cover the same posture problem from two angles.",
+  source:"Cross-checked against Gymshark's upper-body warm-up guide and Pliability's technique breakdown — both name it a standard, low-risk shoulder-health movement.",
+  upgrades:[
+    {type:"measurable", label:"Log the band strength", detail:"Track which band you're using and progress to a stronger one over time."},
+    {type:"harder", label:"Slow the return", detail:"Add a 2-3 second controlled return instead of letting the band pull your hands back quickly."},
+  ],
+  media:[
+    {t:"article",label:"Level Up Your Upper Body Warm Up", src:"Gymshark", url:"https://www.gymshark.com/blog/article/upper-body-warm-up"},
+    {t:"article",label:"25 Best Upper Body Warm Up Exercises", src:"Pliability", url:"https://pliability.com/stories/upper-body-warm-up-exercises"},
+  ]},
+
+{ id:"arm-circles", name:"Arm circles", cats:["overhead"], fatigue:"low", level:1,
+  targets:"Shoulder joint mobility and general warmth, circling the arms through a full range.",
+  why:"The simplest possible shoulder warm-up, and genuinely useful right before anything overhead — no equipment, no setup, works anywhere.",
+  when:["before"], dosage:"10-15 circles each direction.",
+  progression:"Increase the circle size, or add light hand weights for a bit of resistance.",
+  regression:"Smaller circles, especially if the shoulder feels stiff first thing.",
+  mistakes:"Rushing through small, tight circles rather than reaching for a genuinely full range.",
+  cues:"Reach as wide as you comfortably can, keeping the movement smooth rather than jerky.",
+  pairs:"A natural first step before wrist prep and dislocates in any warm-up sequence.",
+  source:"Cross-checked across the US Army's warm-up guide and Healthline's dynamic flexibility guide — both list this as a standard opener before overhead or throwing work.",
+  upgrades:[
+    {type:"measurable", label:"Log circle size", detail:"Note whether you're doing small or full-reach circles — size is the real progress marker here."},
+    {type:"harder", label:"Add light weight", detail:"Small hand weights add resistance through the same range."},
+  ],
+  media:[
+    {t:"article",label:"Warm-ups and Cool-downs", src:"U.S. Army Holistic Health & Fitness", url:"https://h2f.army.mil/Portals/141/pdfs/physical/Warm%20Ups%20and%20Cool%20Downs.pdf"},
+    {t:"article",label:"Dynamic Flexibility", src:"Healthline", url:"https://www.healthline.com/health/exercise-fitness/dynamic-flexibility"},
+  ]},
+
+{ id:"floor-catcow", name:"Floor cat-cow", cats:["thoracic"], fatigue:"low", level:1,
+  targets:"Spinal mobility, alternating flexion and extension on hands and knees.",
+  why:"The standard floor version of the same movement your seated desk cat-cow trains — worth having both, since the quadruped position lets gravity assist the movement differently and gives a fuller range than sitting allows.",
+  when:["before","recovery"], dosage:"8-10 slow rounds.",
+  progression:"Add a slight side-to-side sway at the top, or slow the tempo further.",
+  regression:"Smaller range at each end.",
+  mistakes:"Moving too fast to actually move segment by segment through the spine; only moving the upper back.",
+  cues:"Inhale into cow (belly down, chest lifts), exhale into cat (round the spine, tuck the chin). Let the breath set the pace.",
+  pairs:"A natural first movement in almost any warm-up sequence, floor-based or otherwise.",
+  source:"Cross-checked against the Catalyst Athletics warm-up framework and multiple dynamic mobility guides — a near-universal warm-up staple.",
+  upgrades:[
+    {type:"measurable", label:"Log rounds until loose", detail:"Note roughly how many rounds it takes before the motion feels smooth."},
+    {type:"harder", label:"Add reach", detail:"Reach one arm through and rotate for a thread-the-needle variation once the basic pattern is easy."},
+  ],
+  media:[
+    {t:"article",label:"Our Warm-up is a Warm-up", src:"Catalyst Athletics", url:"https://www.catalystathletics.com/article/127/Catalyst-Athletics-Our-Warm-up-is-a-Warm-up/"},
+    {t:"article",label:"Bottom-Up Mobility Warm-Up", src:"Bow International", url:"https://www.pressreader.com/uk/bow-international/20220519/282157884842216"},
+  ]},
+
+{ id:"jumping-jacks", name:"Jumping jacks", cats:["legs"], fatigue:"low", level:1,
+  targets:"Full-body, mildly elevating heart rate and warming muscles broadly before training.",
+  why:"The simplest general warm-up available — raises core temperature and gets blood moving before anything more specific, with zero setup or equipment.",
+  when:["before"], dosage:"30-45 s, or 20-30 reps.",
+  progression:"Increase duration, or add a squat at the bottom of each rep.",
+  regression:"A slower, lower-impact step-out-and-in version instead of a full jump.",
+  mistakes:"Landing stiff-legged instead of absorbing through the knees and ankles.",
+  cues:"Land soft, knees slightly bent, and keep a steady rhythm rather than rushing.",
+  pairs:"A good opener before any warm-up sequence that includes circles and dynamic stretches.",
+  source:"Universally standard general warm-up movement; no meaningful technique disagreement across sources.",
+  upgrades:[
+    {type:"measurable", label:"Log duration or reps", detail:"Track how long or how many reps before you feel genuinely warm."},
+    {type:"harder", label:"Add a squat", detail:"Drop into a small squat at the bottom of each rep for more leg engagement."},
+  ],
+  media:[
+    {t:"article",label:"25 Best Upper Body Warm Up Exercises", src:"Pliability", url:"https://pliability.com/stories/upper-body-warm-up-exercises"},
+  ]},
+
+{ id:"hip-circles", name:"Hip circles", cats:["hips"], fatigue:"low", level:1,
+  targets:"Hip joint mobility, circling one leg through a full range while standing on the other.",
+  why:"Warms the hip through rotation in a way static stretches don't — a genuinely useful pre-training opener for anything leg or hip-flexor heavy.",
+  when:["before"], dosage:"10 circles each direction, per leg.",
+  progression:"Increase the circle size, or add a very brief pause at the top of each circle.",
+  regression:"Smaller circles, holding a wall or chair for balance.",
+  mistakes:"Using the lower back to generate the movement instead of the hip joint itself.",
+  cues:"Keep your standing leg stable and let the movement come from the hip of the circling leg.",
+  pairs:"Pairs naturally with leg swings as a lower-body warm-up pair.",
+  source:"Cross-checked against Pliability's dynamic warm-up guide and the Bottom-Up Mobility framework — both list hip circles as a standard lower-body opener.",
+  upgrades:[
+    {type:"measurable", label:"Log range comfort", detail:"Note how large a circle you can do smoothly, and track that over time."},
+    {type:"harder", label:"Add a pause", detail:"A brief 1-second pause at the top of each circle adds a small control demand."},
+  ],
+  media:[
+    {t:"article",label:"25 Best Upper Body Warm Up Exercises", src:"Pliability", url:"https://pliability.com/stories/upper-body-warm-up-exercises"},
+    {t:"article",label:"Bottom-Up Mobility Warm-Up", src:"Bow International", url:"https://www.pressreader.com/uk/bow-international/20220519/282157884842216"},
+  ]},
+
+{ id:"leg-swings", name:"Leg swings", cats:["hips"], fatigue:"low", level:1,
+  targets:"Hamstrings, hip flexors and adductors, swinging one leg forward-back and side-to-side while holding a support.",
+  why:"A dynamic way to open the same range your static hamstring and hip flexor stretches train — useful right before training since dynamic movement warms the tissue rather than just lengthening it cold.",
+  when:["before"], dosage:"10-12 swings each direction, per leg.",
+  progression:"Increase the swing height gradually as the hips warm up.",
+  regression:"Smaller swings, holding a support firmly.",
+  mistakes:"Using momentum to force height instead of controlled range; rounding the lower back to swing higher.",
+  cues:"Hold a wall or doorframe for balance. Let the swing height build gradually rather than starting at maximum.",
+  pairs:"Pairs naturally with hip circles as a lower-body warm-up pair.",
+  source:"Cross-checked against the U.S. Army warm-up guide and Healthline's dynamic flexibility guide — both list forward-back and side-to-side leg swings as standard pre-training openers.",
+  upgrades:[
+    {type:"measurable", label:"Log swing height", detail:"Track roughly how high you can swing with control, without the lower back compensating."},
+    {type:"harder", label:"Add both directions", detail:"Combine forward-back and side-to-side swings in the same warm-up for fuller hip coverage."},
+  ],
+  media:[
+    {t:"article",label:"Warm-ups and Cool-downs", src:"U.S. Army Holistic Health & Fitness", url:"https://h2f.army.mil/Portals/141/pdfs/physical/Warm%20Ups%20and%20Cool%20Downs.pdf"},
+    {t:"article",label:"Dynamic Flexibility", src:"Healthline", url:"https://www.healthline.com/health/exercise-fitness/dynamic-flexibility"},
+  ]},
+
+{ id:"inchworm-wgs", name:"Inchworm to world's greatest stretch", cats:["hips","thoracic"], fatigue:"low", level:2,
+  targets:"Hamstrings, hips, thoracic spine and shoulders together, in one flowing sequence from standing to a deep lunge with rotation.",
+  why:"Commonly taught as a single combined flow rather than two separate movements — it mobilizes the whole posterior chain and spine in one continuous sequence, genuinely efficient as a full-body pre-training opener.",
+  when:["before"], dosage:"3-5 slow reps per side.",
+  progression:"Add a longer hold in the rotated lunge position, or slow the whole sequence further.",
+  regression:"Bend the knees generously throughout, and skip the rotation at first if balance is an issue.",
+  mistakes:"Rushing through rather than treating each phase as its own controlled position; letting the hips rock while walking the hands out.",
+  cues:"From standing, walk your hands out to a plank, step one foot up beside your hand into a deep lunge, then rotate that same-side arm up toward the ceiling, following it with your eyes.",
+  pairs:"An excellent single opener before any full-body or lower-body session — covers hamstrings, hips, spine and shoulders in one sequence.",
+  source:"Cross-checked against Alchemy SD's technique breakdown and BarBend's detailed guide — both confirm this is standardly taught as one combined flow, and BarBend specifically notes it mobilizes upper and lower body simultaneously.",
+  upgrades:[
+    {type:"measurable", label:"Log how deep the lunge gets", detail:"Track how close your back knee gets to the floor and how far you can rotate."},
+    {type:"harder", label:"Slow the tempo", detail:"Hold each position for 2-3 seconds instead of flowing continuously through."},
+  ],
+  media:[
+    {t:"video", label:"Inchworm to World's Greatest Stretch", src:"YouTube", url:"https://www.youtube.com/watch?v=sYyc0dxoAwA"},
+    {t:"article",label:"Inchworm (World's Greatest Stretch)", src:"Alchemy SD", url:"https://www.alchemysd.com/exercise/inchworm-worlds-greatest-stretch/"},
+    {t:"article",label:"How To Do the Inchworm Exercise Correctly", src:"BarBend", url:"https://barbend.com/inchworm-exercise/"},
+  ]},
+
+{ id:"band-facepull", name:"Band face pull", cats:["scap"], fatigue:"low", level:1,
+  targets:"Rear delts, rhomboids and mid-traps, pulling a band toward the face at eye level.",
+  why:"Widely recommended specifically for shoulder health and posture — training the rear-delt and scapular retraction pattern that pushing-heavy training and desk work both neglect.",
+  when:["before","skill"], dosage:"2-3 × 12-15.",
+  progression:"Use a stronger band, or add a brief pause and external rotation at the end of the pull.",
+  regression:"Lighter band, smaller range.",
+  mistakes:"Letting the elbows drop low instead of staying roughly at shoulder height; using the arms alone rather than initiating the pull from the shoulder blades.",
+  cues:"Pull the band toward your face, elbows high and wide, finishing with your hands roughly level with your ears.",
+  pairs:"Pairs well with band pull-aparts as a complete rear-shoulder health pairing.",
+  source:"Cross-checked against Healthline's face pull technique guide, which specifically identifies this as key for reducing shoulder injuries and correcting the posture imbalance from chest-dominant training.",
+  upgrades:[
+    {type:"measurable", label:"Log the band strength", detail:"Track resistance level and progress it over time."},
+    {type:"harder", label:"Add external rotation", detail:"Pause at the end of the pull and rotate the hands slightly further back for more rear-delt demand."},
+  ],
+  media:[
+    {t:"article",label:"Face Pulls: Muscles Worked and How to Do Them", src:"Healthline", url:"https://www.healthline.com/health/face-pulls"},
+  ]},
+
+{ id:"ring-scap-work", name:"Ring support scap work", cats:["scap"], fatigue:"med", level:2,
+  targets:"Scapular depression and control, shrugging up and pressing down from a straight-arm ring support hold.",
+  why:"Directly relevant to nearly every ring skill you're building toward — back lever, muscle-up, and any ring support hold all depend on this exact scapular control under load.",
+  when:["skill"], dosage:"3 × 8-10.",
+  progression:"Slow the tempo, or add a brief pause at the bottom of each shrug.",
+  regression:"Use a lower ring height so your feet can assist, or reduce the range of the shrug.",
+  mistakes:"Bending the elbows to fake range instead of keeping the arms locked straight throughout — the movement should come entirely from the shoulder blades.",
+  cues:"Start each rep by actively pushing the rings down and shrugging the shoulders up toward the ears, then reverse — depress the shoulder blades and let the body rise.",
+  pairs:"A natural addition before any ring-based skill work — back lever, muscle-up, or general ring support holds.",
+  source:"Standard ring-strength conditioning drill; scapular depression under straight-arm load is consistently cited across ring-training sources as a foundational skill for muscle-ups and levers.",
+  upgrades:[
+    {type:"measurable", label:"Log reps with strict straight arms", detail:"Track how many reps you can do before the elbows start to bend."},
+    {type:"harder", label:"Slow the tempo", detail:"A 2-3 second pause at the bottom of each rep adds real time under tension."},
+  ],
+  media:[
+    {t:"article",label:"Achieve The Perfect Pullover (ring conditioning context)", src:"GymnasticBodies", url:"https://www.gymnasticbodies.com/exercises/pullover/"},
+  ]},
+
+
 /* ---- PRESS-SPECIFIC ---- */
 { id:"press-walks", name:"Press walks (weight-shift drill)", cats:["compression","line"], fatigue:"low", level:2,
   targets:"The shoulder lean and counterbalance that starts every press — without needing to leave the floor.",
@@ -2001,6 +2171,15 @@ const VIDEO = {
   "desk-ankles":          {yt:"", title:"", src:"", status:"missing", why:"No dedicated ankle-circles video confirmed — this one is simple enough that a picture might suffice too."},
   "desk-glute-squeeze":   {yt:"", title:"", src:"", status:"missing", why:"No dedicated seated-glute-squeeze video confirmed — worth finding one."},
   "desk-chair-squat":     {yt:"", title:"", src:"", status:"missing", why:"No dedicated chair-hover-squat video confirmed — worth finding one."},
+  "band-pullapart":       {yt:"", title:"", src:"", status:"missing", why:"No dedicated video confirmed — extremely standard movement, worth finding one."},
+  "arm-circles":          {yt:"", title:"", src:"", status:"missing", why:"No dedicated video confirmed — simple enough a picture may suffice."},
+  "floor-catcow":         {yt:"", title:"", src:"", status:"missing", why:"The chair-yoga video works for the seated version specifically — this is the floor/quadruped version, genuinely different setup, worth finding its own clip rather than reusing a seated one."},
+  "jumping-jacks":        {yt:"", title:"", src:"", status:"missing", why:"No dedicated video confirmed — universally standard, low priority to find one."},
+  "hip-circles":          {yt:"", title:"", src:"", status:"missing", why:"No dedicated video confirmed — worth finding one."},
+  "leg-swings":           {yt:"", title:"", src:"", status:"missing", why:"No dedicated video confirmed — worth finding one."},
+  "inchworm-wgs":         {yt:"sYyc0dxoAwA", title:"Inchworm to World's Greatest Stretch", src:"YouTube", status:"ok"},
+  "band-facepull":        {yt:"", title:"", src:"", status:"missing", why:"No dedicated band-specific video confirmed — most results were cable-machine focused."},
+  "ring-scap-work":       {yt:"", title:"", src:"", status:"missing", why:"No dedicated video confirmed — worth finding a proper ring-specific one."},
   "downward-dog":         {yt:"cPgE_UBIN2c", title:"Downward Dog For Beginners: Fix These Common Mistakes", src:"YouTube", status:"ok"},
   "puppy-pose-classic":   {yt:"szi5tN8NpKY", title:"How To Do Puppy Pose", src:"YouTube", status:"ok"},
   "pike-fold":            {yt:"", title:"", src:"", status:"missing", why:"No dedicated video confirmed — a simple, standard fold, article sourcing is solid."},
@@ -2088,14 +2267,14 @@ const CATALOG = {
 "Core — other":[["Plank",1],["Side plank",1],["Arch hold (superman)",1],["Dragon flag negative",4],["Full dragon flag",5],["Ab wheel from knees",3],["Ab wheel standing",5],["Dead bug",1],["Copenhagen plank",3],["Hanging windshield wipers",5]],
 "Legs & glutes":[["Bodyweight squat",1],["Split squat",2],["Bulgarian split squat",3],["Pistol squat negative",3],["Full pistol squat",4],["Shrimp squat",4],["Glute bridge",1],["Single-leg glute bridge",2],["Hip thrust",2],["Weighted hip thrust",3],["Nordic curl negative",4],["Nordic curl",5],["Reverse lunge",2],["Walking lunge",2],["Step-up",2],["Calf raise",1],["Single-leg deadlift",2],["Frog pump",1],["Fire hydrant",1],["Clamshell",1],["Kickback",1],["Banded lateral walk",1],["Curtsy lunge",2],["Sumo squat",1],["Jump squat",3],["Wall sit",1]],
 "Rings":[["Ring support hold",2],["Ring row",2],["Ring push-up",3],["Ring dip",4],["Ring L-sit",4],["Ring turned-out support",4],["Ring flye",4],["Ring archer row",4]],
-"Warm-up & prep":[["Band pull-apart",1],["Shoulder dislocate (stick)",1],["Arm circles",1],["Wrist circles",1],["Cat-cow",1],["Jumping jacks",1],["Hip circles",1],["Leg swings",1],["Inchworm",1],["World's greatest stretch",1],["Band face pull",1],["Ring support scap work",2]],
+"Warm-up & prep":[["Band pull-apart",1],["Band / PVC dislocates",1],["Arm circles",1],["Floor cat-cow",1],["Jumping jacks",1],["Hip circles",1],["Leg swings",1],["Inchworm to world's greatest stretch",1],["Band face pull",1],["Ring support scap work",2]],
 "Grip & hangs":[["Passive hang",1],["Active hang",1],["One-arm hang",3],["Towel hang",3],["Fingertip hang",4],["Rope climb (legs)",3],["Rope climb (legless)",5],["Plate pinch",2],["Bar hang shrug",2]],
 "Bridging":[["Table top bridge",1],["Bridge (short)",2],["Full bridge",3],["Bridge push-up",4],["Wall walk down",3],["Stand-to-bridge",5],["One-arm bridge",5]],
 "Explosive":[["Clap push-up",4],["Explosive push-up",3],["Bar pop-up",3],["Muscle-up pop",4],["Box jump",2],["Broad jump",2],["Burpee",2],["Kip swing",2],["Plyo pull-up",4]],
 "Rings — extra":[["Inverted hang",2],["Ring roll",4],["Ring shoulder stand",4],["Ring hollow hold",3],["Bulgarian ring dip",5],["Ring handstand",5],["False grip row",3]],
-"Neck & forearm":[["Neck bridge",3],["Wrist curl",1],["Reverse wrist curl",1],["Forearm plank",1],["Wrist rotation",1]],
+"Neck & forearm":[["Neck bridge",3],["Wrist curls & reverse curls",1],["Forearm plank",1]],
 "Handstand entries":[["Kick-up",2],["Tuck-up to handstand",4],["Straddle-up to handstand",4],["Pike-up to handstand",5],["Frog stand to handstand",4],["Crow to handstand",4]],
-"Mobility & stretch":[["Pancake",2],["Pike fold",1],["Couch stretch",2],["Pigeon pose",2],["Downward dog",1],["Puppy pose",1],["Thoracic extension",1],["Doorway pec stretch",1],["Overhead lat stretch",1],["Wall angel",1],["Hip flexor lunge stretch",1],["Butterfly stretch",1],["Hamstring stretch",1],["Wrist stretch",1],["Shoulder flexion PAILs/RAILs",3],["Middle split",3],["Front split",3],["Bridge",3]]
+"Mobility & stretch":[["Pancake / straddle fold",2],["Pike fold",1],["Couch stretch",2],["Pigeon pose",2],["Downward dog",1],["Puppy pose (classic)",1],["Thoracic extension over roller",1],["Pec doorway stretch",1],["Overhead wall lat stretch",1],["Wall angels",1],["Standing hip flexor (lunge)",1],["Butterfly stretch",1],["Standing hamstring stretch",1],["Shoulder flexion PAILs/RAILs",3],["Middle split",3],["Front split",3],["Bridge (backbend)",3]]
 };
 /* modifiers that keep one movement one trackable line */
 const VARIATIONS = ["strict","banded (assist)","banded (resist)","weighted","tempo / slow","negative only","tuck","advanced tuck","one leg","straddle","half lay","full","paused","explosive","rings","parallettes","elevated","deficit","assisted","spotted","one arm","L-sit","archer","false grip","wide grip","close grip"];
@@ -2138,7 +2317,7 @@ const TREES = [
     match:["Hollow body hold","Plank","Arch hold (superman)","Wall plank"],
     crit:"30 s hollow with the lower back flat, and 30 s arch without lumbar pinching.",
     why:"If the line breaks on the floor, it will break upside down — you just cannot see it there.",
-    drills:["hollow-line","bodyline-drill","wrist-prep","scapular-pushups","tspine-ext","downward-dog","puppy-pose-classic"]},
+    drills:["hollow-line","bodyline-drill","wrist-prep","scapular-pushups","tspine-ext","downward-dog","puppy-pose-classic","dislocates","pails-rails-flexion","wall-angels"]},
    {n:2, name:"Hold the line on the wall", target:"3 × 30 s chest-to-wall with ribs closed", pass:{type:"min",value:30},
     match:["Chest-to-wall handstand","Wall walk","Back-to-wall handstand"],
     crit:"30 s chest-to-wall, hips and ribs close to the wall, shoulders pushing tall.",
@@ -2209,7 +2388,7 @@ const TREES = [
    {n:1, name:"German hang", target:"German hang held 20 s", pass:{type:"min",value:20}, match:["German hang"],
     crit:"20 s hanging inverted with straight arms and genuinely open shoulders, zero pain.",
     why:"This builds the shoulder-extension range every later stage depends on — rushing past this stage before the shoulders are actually ready is the single most commonly cited cause of injury in back lever training.",
-    drills:["skin-the-cat"]},
+    drills:["skin-the-cat","ring-scap-work"]},
    {n:2, name:"Tuck", target:"Tuck back lever 3×10 s", pass:{type:"min",value:10}, match:["Tuck back lever"],
     crit:"10 s tucked, back parallel to the floor, shoulders actively protracted rather than shrugged toward the ears.",
     why:"The same rotation your skin the cat work already trains, just held under control instead of passed straight through.",
@@ -2269,7 +2448,7 @@ const TREES = [
    {n:1, name:"Tuck", target:"Tuck L-sit hold 15 s", pass:{type:"min",value:15}, match:["Tuck L-sit"],
     crit:"15 s with knees tucked to the chest, shoulders depressed, arms straight.",
     why:"Teaches the shoulder depression and straight-arm support the whole skill is built on.",
-    drills:["hollow-line","lsit-parallettes"]},
+    drills:["hollow-line","lsit-parallettes","forearm-plank"]},
    {n:2, name:"One leg", target:"One-leg L-sit 10 s each side", pass:{type:"min",value:10}, match:["One-leg L-sit"],
     crit:"10 s per side, one leg extended, one tucked.",
     why:"Halfway to full, and exposes hip-flexor endurance gaps early.",
@@ -2329,7 +2508,7 @@ const TREES = [
    {n:1, name:"Hollow foundation", target:"Hollow hold 30 s", pass:{type:"min",value:30}, match:["Hollow body hold"],
     crit:"30 s hollow hold, lower back flat against the floor.",
     why:"The rigid full-body line every stage of dragon flag depends on.",
-    drills:["hollow-line"]},
+    drills:["hollow-line","forearm-plank"]},
    {n:2, name:"Tuck dragon flag", target:"Tuck dragon flag 3×5", pass:{type:"min",value:5}, match:["Tuck dragon flag"],
     crit:"5 controlled reps, knees tucked, shoulders as the only contact point.",
     why:"The entry point — same shoulder-supported line, much shorter lever.",
@@ -2449,7 +2628,7 @@ const TREES = [
    {n:1, name:"Lean", target:"Planche lean 3×20 s", pass:{type:"min",value:20}, match:["Planche lean","Pseudo planche hold","Frog stand"],
     crit:"20 s with shoulders visibly past the hands, hips level, scapula actively protracted — pushed forward, not flat or retracted.",
     why:"This builds the straight-arm loading pattern the entire skill depends on. If your shoulders stay stacked over your wrists rather than leaning past them, it isn't yet a planche lean regardless of how it feels.",
-    drills:["pseudo-planche-pushup","scapular-pushups","wrist-prep","first-knuckle-pushups","reverse-wrist-pushups","pec-doorway"]},
+    drills:["pseudo-planche-pushup","scapular-pushups","wrist-prep","first-knuckle-pushups","reverse-wrist-pushups","pec-doorway","pec-doorway-upgraded"]},
    {n:2, name:"Tuck", target:"Tuck planche 3×15 s", pass:{type:"min",value:15}, match:["Tuck planche"],
     crit:"15 s tucked, knees held to the chest, back rounded, hips roughly at shoulder height, feet off the floor.",
     why:"The first time your full bodyweight sits entirely on straight arms — sources are consistent this is the real first checkpoint, sometimes called the 'floating crane.'",
@@ -2697,11 +2876,12 @@ const WORKOUTS = [
      {ref:"calf-raise", sets:3, reps:"15"},
    ]},
  { id:"w-back", name:"Back Day", tax:"pull", seeded:true,
-   blurb:"Vertical and horizontal pulling, a straight-arm hold, and a lat stretch to close it out.",
+   blurb:"Scap prep, vertical and horizontal pulling, a straight-arm hold, and a lat stretch to close it out.",
    items:[
-     {ref:"Pull-up", sets:4, reps:"6-8"},
+     {ref:"ring-scap-work", sets:2, reps:"8-10"},
+     {ref:"pull-up", sets:4, reps:"6-8"},
      {ref:"bar-pullover", sets:3, reps:"5"},
-     {ref:"Ring row", sets:3, reps:"10"},
+     {ref:"ring-row", sets:3, reps:"10"},
      {ref:"tuck-back-lever", sets:3, reps:"10s hold"},
      {ref:"oh-lat-stretch", sets:2, reps:"30s each side"},
    ]},
@@ -2709,9 +2889,9 @@ const WORKOUTS = [
    blurb:"Activation, then compound pressing before accessory and straight-arm work — chest, shoulders, triceps.",
    items:[
      {ref:"scapular-pushups", sets:2, reps:"10"},
-     {ref:"Dip", sets:4, reps:"8-10"},
-     {ref:"Diamond push-up", sets:3, reps:"10-12"},
-     {ref:"Pseudo planche push-up", sets:3, reps:"6-8"},
+     {ref:"dip", sets:4, reps:"8-10"},
+     {ref:"diamond-pushup", sets:3, reps:"10-12"},
+     {ref:"pseudo-planche-pushup", sets:3, reps:"6-8"},
      {ref:"pec-doorway-upgraded", sets:2, reps:"40s each side"},
    ]},
  { id:"w-press-practice", name:"Press Handstand Practice", tax:"skills", seeded:true,
@@ -2750,32 +2930,32 @@ const DAY_KINDS = [
 const DEFAULT_SCHEDULE = [
  {dow:0, day:"Sunday",    cls:"Optional recovery / rest", kind:"rest",
   focus:"Recovery flow (optional)", time:"8 min", fatigue:"Very low",
-  goal:"Restore tissue, keep the overhead pattern warm", routine:"r-recovery",
+  goal:"Restore tissue, keep the overhead pattern warm", routine:"r-recovery", evening:null,
   why:"No class load today. A gentle flow keeps range from stiffening without spending recovery."},
  {dow:1, day:"Monday",    cls:"Handstands", kind:"skill",
   focus:"Light primer only", time:"6 min", fatigue:"Low",
-  goal:"Open the joint enough to enter class ready", routine:"r-primer",
+  goal:"Open the joint enough to enter class ready", routine:"r-primer", evening:"r-eve-shoulder",
   why:"Class is about to load your shoulders hard. A medium block on top competes with class quality — the real dose lands on the days nothing else loads them."},
  {dow:2, day:"Tuesday",   cls:"Glutes", kind:"lower",
   focus:"Developmental block — shoulders are fresh", time:"15 min", fatigue:"Medium",
-  goal:"Bank real range on a day nothing else touches your shoulders", routine:"r-tue-dev",
+  goal:"Bank real range on a day nothing else touches your shoulders", routine:"r-tue-dev", evening:"r-eve-hips",
   why:"Lower-body class means zero shoulder load. Best day for the heavier end-range work, with a full day of recovery after."},
  {dow:3, day:"Wednesday", cls:"Calisthenics skills", kind:"skill",
   focus:"Short support block", time:"8 min", fatigue:"Low",
-  goal:"Light opener that leaves full energy for skills", routine:"r-opener",
+  goal:"Light opener that leaves full energy for skills", routine:"r-opener", evening:"r-eve-spine",
   why:"Skill day already loads the shoulders in varied ways. A short opener helps; more competes."},
  {dow:4, day:"Thursday",  cls:"Handstands", kind:"skill",
   focus:"Light primer only", time:"6 min", fatigue:"Low",
-  goal:"Prime it, don't pre-fatigue it", routine:"r-primer",
+  goal:"Prime it, don't pre-fatigue it", routine:"r-primer", evening:"r-eve-shoulder",
   why:"Same as Monday — activation only before a class that will load these tissues hard."},
  {dow:5, day:"Friday",    cls:"Strengthening", kind:"strength",
   focus:"Short support block", time:"8 min", fatigue:"Low",
-  goal:"Open what strength work tightens", routine:"r-opener",
+  goal:"Open what strength work tightens", routine:"r-opener", evening:"r-eve-chest",
   why:"Pulling and pressing shortens lats and pecs. A brief opener after class stops the week's range eroding."},
  {dow:6, day:"Saturday",  cls:"Stretching", kind:"mobility",
-  focus:"Class covers it — top-up only", time:"6 min", fatigue:"Very low",
-  goal:"Add only what a general stretching class misses", routine:"r-primer",
-  why:"Your class is already a mobility session. Stacking a long block on top is redundant — this is a short handstand-specific top-up, nothing more."}
+  focus:"Class covers it — nothing before", time:"0 min", fatigue:"Very low",
+  goal:"Let the class do its job; shoulder habit moves to tonight instead", routine:null, evening:"r-primer",
+  why:"An hour of stretching class already covers most of the body — stacking anything before it is redundant and you don't have the time anyway. The daily shoulder touch still happens today, just tonight instead of pre-class."}
 ];
 function getSchedule(){
   const s = state.schedule;
@@ -2797,6 +2977,30 @@ function classCovers(kind){
 
 /* ---------- seed routines ---------- */
 function seedRoutines(){ return [
+ {id:"r-eve-shoulder", name:"Evening Release — Shoulders & Wrists", minutes:7, fatigue:"low", days:[], seeded:true,
+  useCase:"After a handstand-heavy class, at home in the evening — nothing new, just releasing what today already loaded.",
+  items:[
+   {ex:"puppy-pose-classic", sets:1, reps:"—", hold:"45 s", note:"straight arms, hips stacked over knees"},
+   {ex:"wrist-prep", sets:1, reps:"—", hold:"—", note:"same short circuit, no bodyweight loading needed"},
+  ]},
+ {id:"r-eve-hips", name:"Evening Release — Hips", minutes:6, fatigue:"low", days:[], seeded:true,
+  useCase:"After a glutes-heavy class, evening — releases what got loaded, doesn't add fresh training stress.",
+  items:[
+   {ex:"pigeon-pose", sets:1, reps:"—", hold:"45 s/side", note:"stop if you feel the knee, not the hip"},
+   {ex:"couch-stretch", sets:1, reps:"—", hold:"30 s/side", note:"build up gradually, this one is intense"},
+  ]},
+ {id:"r-eve-spine", name:"Evening Release — Spine", minutes:6, fatigue:"low", days:[], seeded:true,
+  useCase:"After a varied skills class, evening — a slow reset for a spine that moved through a lot of positions today.",
+  items:[
+   {ex:"floor-catcow", sets:1, reps:"8-10 rounds", hold:"—", note:"slow, breath-paced"},
+   {ex:"downward-dog", sets:1, reps:"—", hold:"30 s", note:"bend the knees generously"},
+  ]},
+ {id:"r-eve-chest", name:"Evening Release — Chest & Lats", minutes:6, fatigue:"low", days:[], seeded:true,
+  useCase:"After a pull/push strength class, evening — opens what a session of pulling and pressing just shortened.",
+  items:[
+   {ex:"pec-doorway", sets:1, reps:"—", hold:"40 s/side", note:""},
+   {ex:"oh-lat-stretch", sets:1, reps:"—", hold:"30 s/side", note:""},
+  ]},
  {id:"r-opener", name:"Daily Shoulder Opener", minutes:8, fatigue:"low", days:[3,5], seeded:true,
   useCase:"The everyday default — passive open + light activation, before or after anything.",
   items:[
@@ -2873,6 +3077,7 @@ let state = {
   routines: seedRoutines(),
   customDrills: [],
   deskLogs: [],
+  eveningLogs: [],   // {date, routineId, n, t} — separate from state.logs so it never collides with the morning block's log entry for the same day
   schedule: null,   // null = use DEFAULT_SCHEDULE
   classLogs: [],   // {date, cls, items:[{name,variation,assist,numbers}], notes}
   customMoves: [],
@@ -2894,6 +3099,7 @@ async function loadState(){
     state.meta_routinesU = d.meta_routinesU||0; state.meta_milestonesU = d.meta_milestonesU||0;
     state.customDrills = d.customDrills||[]; state.meta_drillsU = d.meta_drillsU||0;
     state.deskLogs = d.deskLogs||[]; state.meta_deskU = d.meta_deskU||0;
+    state.eveningLogs = d.eveningLogs||[]; state.meta_eveningU = d.meta_eveningU||0;
     state.daySwaps = d.daySwaps||{};
     state.classLogs = d.classLogs||[]; state.customMoves = d.customMoves||[]; state.customWorkouts = d.customWorkouts||[]; state.meta_classU = d.meta_classU||0;
     state.schedule = d.schedule||null; state.meta_schedU = d.meta_schedU||0;
@@ -2913,7 +3119,7 @@ async function loadState(){
 function saveLocalOnly(){
   const raw = JSON.stringify({routines:state.routines, logs:state.logs, milestones:state.milestones,
                               prefs:state.prefs, customDrills:state.customDrills, deskLogs:state.deskLogs, meta_deskU:state.meta_deskU, daySwaps:state.daySwaps, classLogs:state.classLogs, customMoves:state.customMoves, customWorkouts:state.customWorkouts, meta_classU:state.meta_classU,
-                              schedule:state.schedule, meta_schedU:state.meta_schedU,
+                              schedule:state.schedule, meta_schedU:state.meta_schedU, eveningLogs:state.eveningLogs, meta_eveningU:state.meta_eveningU,
                               meta_routinesU:state.meta_routinesU, meta_milestonesU:state.meta_milestonesU, meta_drillsU:state.meta_drillsU});
   try{ localStorage.setItem(SKEY, raw); }catch(e){}
   try{ if(window.storage && window.storage.set){ window.storage.set(SKEY, raw).catch(()=>{}); } }catch(e){}

@@ -30,6 +30,7 @@ function metaBlob(){
     milestones: {data: state.milestones, u: state.meta_milestonesU || Date.now()},
     customDrills:{data: state.customDrills, u: state.meta_drillsU || Date.now()},
     deskLogs:   {data: state.deskLogs,    u: state.meta_deskU   || Date.now()},
+    eveningLogs:{data: state.eveningLogs, u: state.meta_eveningU || Date.now()},
     daySwaps:   {data: state.daySwaps,    u: state.meta_deskU   || Date.now()},
     classLogs:  {data: state.classLogs,   u: state.meta_classU  || Date.now()},
     customMoves:{data: state.customMoves, u: state.meta_classU  || Date.now()},
@@ -76,6 +77,9 @@ async function syncPull(){
       }
       if(cloud.deskLogs && (cloud.deskLogs.u||0) > (state.meta_deskU||0)){
         state.deskLogs = cloud.deskLogs.data||[]; state.meta_deskU = cloud.deskLogs.u;
+      }
+      if(cloud.eveningLogs && (cloud.eveningLogs.u||0) > (state.meta_eveningU||0)){
+        state.eveningLogs = cloud.eveningLogs.data||[]; state.meta_eveningU = cloud.eveningLogs.u;
       }
       if(cloud.daySwaps) state.daySwaps = Object.assign({}, cloud.daySwaps.data||{}, state.daySwaps||{});
       if(cloud.classLogs && (cloud.classLogs.u||0) > (state.meta_classU||0)){
@@ -214,23 +218,31 @@ function recommendToday(){
     const matched = getSchedule().find(s=> (s.cls||"").trim().toLowerCase()===wantLabel);
     if(matched) plan = matched;
   }
-  let routine = routineById(plan.routine) || state.routines[0];
+  // plan.routine can legitimately be null (Saturday — the stretching class
+  // already covers the morning, there's genuinely nothing to do beforehand).
+  // Skip the adaptive downgrade logic entirely in that case rather than
+  // silently falling back to whatever routine happens to be first in the
+  // array, which would show the wrong content on a day meant to show none.
+  let routine = plan.routine ? (routineById(plan.routine) || state.routines[0]) : null;
   const notes=[];
-  const y = logByDate(todayISO(-1));
-  const recentEnergy = avg(state.logs.filter(l=> l.date>=todayISO(-2) && l.energy!=null).map(l=>l.energy));
-  if(recentEnergy!=null && recentEnergy<=4 && routine.id!=="r-reset"){
-    routine = routineById("r-reset") || routine;
-    notes.push("Recovery has been low (energy ≤4 recently) — swapped in the Low-Fatigue Reset. Hold the range, spend nothing.");
-  } else if(y && y.energy!=null && y.energy<=3 && routine.fatigue!=="low"){
-    routine = routineById("r-reset") || routine;
-    notes.push("Yesterday's energy was rough — today's block is downgraded to the shortest effective option.");
+  if(routine){
+    const y = logByDate(todayISO(-1));
+    const recentEnergy = avg(state.logs.filter(l=> l.date>=todayISO(-2) && l.energy!=null).map(l=>l.energy));
+    if(recentEnergy!=null && recentEnergy<=4 && routine.id!=="r-reset"){
+      routine = routineById("r-reset") || routine;
+      notes.push("Recovery has been low (energy ≤4 recently) — swapped in the Low-Fatigue Reset. Hold the range, spend nothing.");
+    } else if(y && y.energy!=null && y.energy<=3 && routine.fatigue!=="low"){
+      routine = routineById("r-reset") || routine;
+      notes.push("Yesterday's energy was rough — today's block is downgraded to the shortest effective option.");
+    }
+    const adh = last7Adherence();
+    if(adh<=2 && state.logs.length>=3 && routine.minutes>6){
+      routine = routineById("r-reset") || routine;
+      notes.push("Only "+adh+" logged day(s) this week. Rebuild the streak with the 5-minute reset — consistency beats volume.");
+    }
   }
-  const adh = last7Adherence();
-  if(adh<=2 && state.logs.length>=3 && routine.minutes>6){
-    routine = routineById("r-reset") || routine;
-    notes.push("Only "+adh+" logged day(s) this week. Rebuild the streak with the 5-minute reset — consistency beats volume.");
-  }
-  return {plan, routine, notes};
+  const evening = plan.evening ? routineById(plan.evening) : null;
+  return {plan, routine, notes, evening};
 }
 
 /* ============================================================
@@ -272,18 +284,20 @@ function ambientKind(kind, isRest){
 }
 function renderToday(){
   const today = todayISO();
-  const {plan, routine, notes} = recommendToday();
+  const {plan, routine, notes, evening} = recommendToday();
   const ov = dayOverride(today);
   const isRest = ov && ov.type==="rest";
   const isOwn  = ov && ov.type==="own";
+  const noMorning = isRest || !routine; // Saturday: no morning block at all, but not "rest"
   const clsName = isRest ? "Rest day"
                 : (ov && ov.label) ? ov.label
                 : isOwn ? "Own training"
                 : (ov && ov.type==="other") ? "Different class"
                 : plan.cls;
   const dayLog = logByDate(today), clsLog = classLogFor(today);
-  const runDone = dayLog && (dayLog.routineId===routine.id);
+  const runDone = dayLog && routine && (dayLog.routineId===routine.id);
   const deskN = deskToday();
+  const eveN = eveningToday();
   const amb = ambientKind(plan.kind, isRest);
 
   // the day's jobs (check-in removed — it now happens at the end of finishing a routine)
@@ -317,21 +331,21 @@ function renderToday(){
   <div class="eyebrow" style="margin-top:16px">Today</div>
   <div class="hero ${amb==="recovery"?"recovery":amb==="rest"?"restday":""}">
     <div class="hero-top"><span class="day">${new Date().toLocaleDateString(undefined,{weekday:"long", day:"numeric", month:"long"})}</span>
-      ${!isRest?`<span class="dur">${routine.minutes} min</span>`:""}</div>
+      ${!noMorning?`<span class="dur">${routine.minutes} min</span>`:""}</div>
     <div class="hero-body">
       <div class="hero-left">
-        <h2>${isRest? "Rest day" : esc(routine.name)}</h2>
-        <div class="fx">${isRest? "Nothing scheduled" : esc(clsName)}</div>
-        <div class="marks">${isRest? levelMarks(0) : (function(){
+        <h2>${isRest? "Rest day" : noMorning? "Nothing before class" : esc(routine.name)}</h2>
+        <div class="fx">${isRest? "Nothing scheduled" : noMorning? esc(clsName)+" covers it" : esc(clsName)}</div>
+        <div class="marks">${noMorning? levelMarks(0) : (function(){
           const lvl = routine.fatigue==="high"?4:routine.fatigue==="med"?2:1;
           return levelMarks(lvl);
         })()}</div>
-        ${!isRest?`<button class="hero-cta" id="t-startprimary">${runDone?"Redo":"Start now"}
+        ${!noMorning?`<button class="hero-cta" id="t-startprimary">${runDone?"Redo":"Start now"}
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="m9 6 6 6-6 6"/></svg></button>`
           :`<button class="hero-cta" id="t-deskcta">Desk resets, if you want
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="m9 6 6 6-6 6"/></svg></button>`}
       </div>
-      <div class="figs">${isRest? routineMuscleMap({items:[]}, "100%") : routineMuscleMap(routine, "100%")}</div>
+      <div class="figs">${noMorning? routineMuscleMap({items:[]}, "100%") : routineMuscleMap(routine, "100%")}</div>
     </div>
   </div>
   <div class="row" style="gap:8px;margin-top:12px;flex-wrap:wrap">
@@ -345,7 +359,13 @@ function renderToday(){
   ${jobs.length? `<div class="eyebrow">Rest of today</div><div class="tlist">${jobs.map(row).join("")}</div>` : ""}
 
   <div class="eyebrow">Optional</div>
-  <div class="mini-hero" data-job="desk">
+  ${evening? `<div class="mini-hero" data-job="evening">
+    ${eveN?`<span class="count">Done</span>`:""}
+    <div class="figs">${routineMuscleMap(evening, 52)}</div>
+    <div class="bd"><div class="nm">${esc(evening.name)}</div><div class="mt">${eveN?"Logged for today":evening.minutes+" min · releases what today loaded"}</div></div>
+    <button class="go">${eveN?"Redo":"Start"} →</button>
+  </div>`:""}
+  <div class="mini-hero" data-job="desk" style="${evening?'margin-top:9px':''}">
     ${deskN?`<span class="count">${deskN} today</span>`:""}
     <div class="figs">${routineMuscleMap({items:DESK_SETS[0].pick.map(id=>({ex:id}))}, 52)}</div>
     <div class="bd"><div class="nm">Desk resets</div><div class="mt">${deskN?"90s · keep it going":"Chest, hips, neck, spine — 90s"}</div></div>
@@ -381,6 +401,7 @@ function renderToday(){
     const k=b.dataset.job;
     if(k==="class") isOwn? openSessionBuilder([], "Own training") : openClassLog(today);
     else if(k==="desk") openDeskSet("defaults");
+    else if(k==="evening") openEveningSet(evening.id, today);
     else if(k==="session") openSessionBuilder([], "Own session");
     else if(k==="quickdrill") openQuickCapture();
   });
@@ -1253,20 +1274,26 @@ let pickContext = null; // {label, add(name, ref)} — set only while an "add an
    part of what happened that day. */
 function openDayLogPicker(date){
   const plan = planFor(new Date(date+"T12:00:00").getDay());
-  const routine = routineById(plan.routine) || state.routines[0];
+  const routine = plan.routine ? (routineById(plan.routine) || state.routines[0]) : null;
+  const evening = plan.evening ? routineById(plan.evening) : null;
   const cl = classLogFor(date);
   const dayLog = logByDate(date);
   const deskCount = (state.deskLogs||[]).filter(d=>d.date===date).length;
+  const eveCount = (state.eveningLogs||[]).filter(d=>d.date===date).length;
   openSheet("Log "+fmtDate(date),
    `<div class="exl">
       <button class="exi" data-daylog="class">
         <div class="mark ${cl?"on":""}">${cl?ICONS.check:""}</div>
         <div class="bd"><div class="nm">Class</div><div class="mt">${cl?cl.items.length+" exercise"+(cl.items.length!==1?"s":"")+" logged":"Not logged"}</div></div>
       </button>
-      <button class="exi" data-daylog="block">
+      ${routine? `<button class="exi" data-daylog="block">
         <div class="mark ${dayLog?"on":""}">${dayLog?ICONS.check:""}</div>
         <div class="bd"><div class="nm">Support block</div><div class="mt">${dayLog?"Logged":routine.name+" · "+routine.minutes+" min"}</div></div>
-      </button>
+      </button>`:""}
+      ${evening? `<button class="exi" data-daylog="evening">
+        <div class="mark ${eveCount?"on":""}">${eveCount?ICONS.check:""}</div>
+        <div class="bd"><div class="nm">Evening release</div><div class="mt">${eveCount?"Logged":evening.name+" · "+evening.minutes+" min"}</div></div>
+      </button>`:""}
       <button class="exi" data-daylog="desk">
         <div class="mark ${deskCount?"on":""}">${deskCount?ICONS.check:""}</div>
         <div class="bd"><div class="nm">Desk resets</div><div class="mt">${deskCount?deskCount+" logged":"Not logged"}</div></div>
@@ -1279,6 +1306,7 @@ function openDayLogPicker(date){
     closeSheet();
     if(k==="class") openClassLog(date);
     else if(k==="block") openBlockBackfill(date);
+    else if(k==="evening") openEveningSet(evening.id, date);
     else if(k==="desk") openDeskSet("defaults", false, date);
   });
 }
@@ -1320,6 +1348,46 @@ function openBlockBackfill(date){
     };
   };
   draw();
+}
+
+
+/* Evening release — a second, short block tied to whatever today's morning
+   class actually loaded, so it reads as recovery rather than more training.
+   Deliberately modeled on openDeskSet: same tick-list pattern, its own log
+   array so it can never collide with the morning block's single-per-day
+   state.logs entry. Which routine applies is resolved through the SAME
+   plan (day-matching via recommendToday) the morning block already uses,
+   so a day override swaps both blocks together automatically. */
+function eveningToday(){ return (state.eveningLogs||[]).filter(d=>d.date===todayISO()).length; }
+let eveningDone = null, eveningForRoutine = null;
+function openEveningSet(routineId, forDate){
+  const r = routineById(routineId); if(!r) return;
+  const drills = r.items.map(it=>exById(it.ex)).filter(Boolean);
+  if(!eveningDone || eveningForRoutine!==routineId){ eveningDone = new Set(); eveningForRoutine = routineId; }
+  const done = eveningDone;
+  openSheet(r.name,
+    `<p class="sub" style="margin-bottom:12px;font-size:.85rem">${esc(r.useCase||"")}</p>
+     <div class="exl">${drills.map((e,i)=>{ const it=r.items[i];
+       return `<div class="exi" data-i="${i}">
+         <div class="check ${done.has(i)?"on":""}" data-ek="${i}">${ICONS.check}</div>
+         <div class="bd" data-open-ex="${e.id}"><div class="nm">${esc(e.name)}</div>
+           <div class="mt">${it.sets}×${esc(it.reps!=="—"?it.reps:it.hold)}</div></div>
+       </div>`;}).join("")}</div>
+     <div class="notice teal" style="margin-top:14px">${ICONS.info}<span>Tracked separately from your morning block — logging this never touches or overwrites today's main log.</span></div>`,
+    `<button class="btn ghost" id="ek-close">Close</button>
+     <button class="btn primary" style="flex:1" id="ek-done">Done ✓</button>`);
+  $$("#sheet-body [data-ek]").forEach(b=> b.onclick=()=>{
+    const i=+b.dataset.ek; done.has(i)?done.delete(i):done.add(i);
+    b.classList.toggle("on"); b.closest(".exi").classList.toggle("done");
+  });
+  $$("#sheet-body [data-open-ex]").forEach(el=> el.onclick=()=> openExercise(el.dataset.openEx, ()=>openEveningSet(routineId, forDate)));
+  $("#ek-close").onclick=()=>{ eveningDone=null; closeSheet(); };
+  $("#ek-done").onclick=()=>{
+    const d = forDate || todayISO();
+    state.eveningLogs = (state.eveningLogs||[]).concat([{date:d, routineId:routineId, n:done.size||drills.length, t:Date.now()}]);
+    state.meta_eveningU = Date.now(); eveningDone=null; save(); closeSheet(); render(curView);
+    toast(forDate && forDate!==todayISO() ? "Evening release logged for "+fmtDate(d) : "Evening release logged ✓");
+  };
 }
 
 function openDrillEditor(editId, presetCat){
@@ -1537,6 +1605,15 @@ const MUSCLES = {
   "step-up":              {work:{p:["quads","glutes"],s:["hamstrings"]}},
   "calf-raise":           {work:{p:["calves"],s:[]}},
   "glute-activation-circuit": {work:{p:["glutes"],s:["hipflexors"]}},
+  "band-pullapart":     {work:{p:["delts_rear","traps_mid"],s:["forearms"]}},
+  "arm-circles":        {work:{p:["delts"],s:[]}},
+  "floor-catcow":       {work:{p:["erectors"],s:["abs"]}, stretch:{p:["erectors"],s:[]}},
+  "jumping-jacks":      {work:{p:["calves","glutes"],s:["delts"]}},
+  "hip-circles":        {work:{p:["glutes"],s:["hipflexors"]}},
+  "leg-swings":         {stretch:{p:["hamstrings","hipflexors"],s:["adductors"]}},
+  "inchworm-wgs":       {stretch:{p:["hamstrings","hipflexors"],s:["erectors"]}, work:{p:["abs"],s:["delts_front"]}},
+  "band-facepull":      {work:{p:["delts_rear","traps_mid"],s:["forearms"]}},
+  "ring-scap-work":     {work:{p:["traps_lower","lats"],s:["forearms"]}},
   "desk-cat-cow":       {work:{p:["erectors"],s:["abs"]}, stretch:{p:["erectors"],s:[]}},
   "desk-hamstring":     {stretch:{p:["hamstrings"],s:["glutes"]}},
   "desk-triceps":       {stretch:{p:["triceps"],s:["lats"]}},
@@ -2201,6 +2278,87 @@ const HOWTO = {
   "Complete your reps in one direction, then switch to the other.",
   "Repeat on the other arm."],
  check:"If your elbow is lifting or your forearm is rocking to help move the weight, the load is too heavy or the movement isn't isolated — lighten it and keep the forearm pinned still."},
+
+"band-pullapart":{desc:"Holding a resistance band at chest height with both hands, you pull it apart until your shoulder blades squeeze together, then return under control.",
+ steps:["Hold a light resistance band in both hands, arms extended straight in front of you at chest height.",
+  "Keeping your arms straight, pull the band apart by moving your hands out to the sides.",
+  "Squeeze your shoulder blades together at the end of the pull.",
+  "Hold briefly, then return to the start slowly and under control — don't let the band snap your hands back.",
+  "Keep your shoulders down throughout, not creeping up toward your ears.",
+  "Repeat for the set."],
+ check:"If your shoulders are shrugging up as you pull, that's tension substituting for the actual movement — relax them down and focus the effort on squeezing the shoulder blades instead."},
+
+"arm-circles":{desc:"Standing with arms extended out to the sides, you circle them through a full range, warming the shoulder joints before training.",
+ steps:["Stand tall with your arms extended straight out to your sides at shoulder height.",
+  "Begin circling both arms forward in small circles.",
+  "Gradually increase the circle size to your full comfortable range.",
+  "Complete 10-15 circles, then reverse direction.",
+  "Keep the movement smooth and controlled throughout, not jerky.",
+  "Let your shoulders relax between sets rather than staying tensed."],
+ check:"If the circles feel small and tight rather than reaching a genuine full range, slow down and consciously reach wider — the point is warming the whole joint, not just moving through a narrow arc."},
+
+"floor-catcow":{desc:"On hands and knees, you alternate between arching your back and rounding it, moving the spine through its full range before training.",
+ steps:["Start on all fours, hands under your shoulders, knees under your hips.",
+  "Inhale, and drop your belly down while lifting your chest and tailbone — this is cow.",
+  "Exhale, and round your spine up toward the ceiling, tucking your chin and tailbone — this is cat.",
+  "Move slowly, letting each breath drive the transition.",
+  "Try to feel the movement travel through your whole spine, not just the upper or lower back alone.",
+  "Repeat for 8-10 slow rounds."],
+ check:"If only one part of your spine seems to move while the rest stays locked, slow down further and consciously try to move segment by segment through the whole back."},
+
+"jumping-jacks":{desc:"A full-body jump with the arms and legs moving out and back together, used to raise your heart rate and warm up broadly before training.",
+ steps:["Stand tall with your feet together and arms by your sides.",
+  "Jump your feet out to the sides while raising your arms overhead.",
+  "Jump back to the starting position, arms returning to your sides.",
+  "Keep a steady, controlled rhythm rather than rushing.",
+  "Land softly each time, knees slightly bent to absorb the impact.",
+  "Continue for the set duration or rep count."],
+ check:"If you're landing stiff-legged with a hard thud each time, you're not absorbing the impact — bend the knees slightly more on landing."},
+
+"hip-circles":{desc:"Standing on one leg, you circle the other leg through a full range to warm the hip joint before training.",
+ steps:["Stand on one leg, holding a wall or chair for balance if needed.",
+  "Lift your other leg slightly and begin circling it.",
+  "Keep the circle centered at the hip joint, not compensating with your lower back.",
+  "Complete 10 circles in one direction, then reverse.",
+  "Keep your standing leg stable throughout.",
+  "Switch legs and repeat."],
+ check:"If your lower back is rocking or twisting to help generate the circle, the movement has shifted away from the hip — steady your torso and keep the motion isolated to the hip joint."},
+
+"leg-swings":{desc:"Holding a support for balance, you swing one leg forward and back, then side to side, to dynamically open the hips before training.",
+ steps:["Stand facing a wall or doorframe, holding it lightly for balance.",
+  "Swing one leg forward and backward in a controlled arc, starting small.",
+  "Gradually let the swing height increase as the hip warms up.",
+  "Complete 10-12 swings, then switch to side-to-side swings on the same leg.",
+  "Keep your torso upright throughout — don't let momentum pull your back out of position.",
+  "Switch to the other leg and repeat both directions."],
+ check:"If you're using your lower back to force more height, the swing has lost control — reduce the height and let it build naturally over several reps instead."},
+
+"inchworm-wgs":{desc:"From standing, you fold forward and walk your hands out to a plank, then step one foot up into a lunge and rotate that arm toward the ceiling, mobilizing your whole posterior chain and spine in one flowing sequence.",
+ steps:["Stand tall, then hinge forward and place your hands on the floor in front of your feet.",
+  "Walk your hands forward, one at a time, until you reach a full plank position.",
+  "Step one foot up beside the same-side hand, coming into a deep lunge.",
+  "Rotate that same-side arm up toward the ceiling, following it with your eyes, opening your chest.",
+  "Return the hand to the floor, step the foot back to plank, and walk your hands back to your feet.",
+  "Stand up to complete one rep, then repeat leading with the other leg."],
+ check:"If you're rushing through without pausing in each position, you're missing most of the value — treat the plank and the rotated lunge as brief holds, not just passing points."},
+
+"band-facepull":{desc:"Holding a band anchored in front of you, you pull it toward your face with your elbows high, training the rear shoulders and upper back.",
+ steps:["Anchor a resistance band at roughly chest height in front of you.",
+  "Hold the band with both hands, arms extended, palms facing each other or down.",
+  "Pull the band toward your face, leading with your elbows and keeping them high and wide.",
+  "Finish with your hands roughly level with your ears, shoulder blades squeezed together.",
+  "Hold briefly, then extend your arms back out under control.",
+  "Repeat for the set."],
+ check:"If your elbows are dropping low during the pull, you've lost the rear-delt emphasis this drill is for — keep them up near shoulder height throughout."},
+
+"ring-scap-work":{desc:"From a straight-arm ring support hold, you shrug your shoulders up toward your ears, then actively push the rings down and depress your shoulder blades, training scapular control under load.",
+ steps:["Set the rings at a height where you can get into a support hold, arms straight, body upright.",
+  "From support, let your shoulders rise up toward your ears — this is the top of the movement.",
+  "Keeping your arms completely straight, actively push the rings down and pull your shoulder blades down and together.",
+  "Your body should rise slightly as you do this, entirely from the shoulder movement, not the arms bending.",
+  "Hold the depressed position briefly.",
+  "Return to the shrugged position under control and repeat."],
+ check:"If your elbows are bending at any point, the movement has shifted into a press instead of a scapular exercise — lock the arms straight and isolate the movement to the shoulder blades."},
 
 "pancake":{desc:"You sit with your legs wide apart and fold forward with a flat back. It opens the hamstrings and inner thighs, which is where the press handstand starts from.",
  steps:["Sit on the floor and take your legs as wide as is comfortable, kneecaps pointing at the ceiling.","Sit up tall on your sit bones. If you are rolling backward, sit on a folded towel or cushion.","Place your hands on the floor in front of you.","Keeping your back flat, hinge forward from the hips — imagine leading with your chest, not your head.","Walk your hands forward only as far as you can go without your lower back rounding.","Hold, breathing steadily, then walk back up."],
