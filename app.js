@@ -2626,7 +2626,7 @@ function openClassLog(date, draft){
     ${L.mode==="summary"?"":`<div class="sec" style="margin-top:14px"><div class="eyebrow teal">Add an exercise</div>
       <div class="searchbar">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-        <input type="text" id="cl-q" placeholder="Search ${catalogFlat().length} movements…" value="${esc(query)}">
+        <input type="text" id="cl-q" placeholder="Search ${EX_ALL().length + catalogFlat().length} drills and movements…" value="${esc(query)}">
       </div>
       <div id="cl-res"></div>
       ${recents.length? `<div class="tiny" style="margin:10px 0 6px">Recently used</div>
@@ -2653,8 +2653,18 @@ function openClassLog(date, draft){
   const showResults = ()=>{
     if(!$("#cl-q")) return;
     const q = $("#cl-q").value;
-    const r = searchCatalog(q);
     if(!q.trim()){ resBox.innerHTML=""; return; }
+    // Search drills AND catalog movements together — a drill not yet
+    // matched to a catalog entry (brand-new, not a promotion of an
+    // existing reference) was previously invisible here even though it's
+    // fully searchable in Library. Same merge pattern Library already
+    // uses: drills first, catalog entries with the same name suppressed.
+    const ql = q.toLowerCase();
+    const drillHits = EX_ALL().filter(e=> (e.name+" "+(e.targets||"")).toLowerCase().includes(ql))
+      .map(e=>({name:e.name, fam:(TAXONOMY.find(t=>t.id===taxOfDrill(e))||{}).name||"Drill", lvl:e.level}));
+    const dn = new Set(drillHits.map(d=>d.name.toLowerCase()));
+    const moveHits = searchCatalog(q).filter(m=>!dn.has(m.name.toLowerCase()));
+    const r = drillHits.concat(moveHits);
     resBox.innerHTML = r.length
       ? `<div class="exl" style="margin-top:8px">${r.map(x=>`
           <div class="exi" data-add="${esc(x.name)}" style="padding:9px 11px">
