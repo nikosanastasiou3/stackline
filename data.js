@@ -3060,6 +3060,25 @@ function routineMuscleMap(routine, h){
    session builder, so logging and personal bests just work.
 ============================================================ */
 const WORKOUTS = [
+ { id:"w-mon-handstands", name:"Monday Handstands — Class Replica", tax:"handstand", seeded:true,
+   blurb:"The exact structure from your Monday handstand class — warm-up, mobility, activation, then handstand work.",
+   items:[
+     {ref:"neck-rotations", sets:1, reps:"10 each side"},
+     {ref:"shoulder-rolls", sets:1, reps:"10 each side"},
+     {ref:"arm-circles", sets:1, reps:"10 each direction"},
+     {ref:"wide-forward-fold", sets:1, reps:"10 each side"},
+     {ref:"floor-catcow", sets:1, reps:"15"},
+     {ref:"kneeling-chest-floor", sets:1, reps:"15"},
+     {ref:"prone-iyt-raises", sets:1, reps:"10 each angle (I/Y/T)"},
+     {ref:"wall-angels", sets:1, reps:"10"},
+     {ref:"band-facepull-press", sets:1, reps:"8 each side"},
+     {ref:"wall-pike-push", sets:3, reps:"—"},
+     {ref:"weighted-pullover-stretch", sets:3, reps:"20s hold"},
+     {ref:"loaded-hollow-extension", sets:3, reps:"6, 2s hold"},
+     {ref:"handstand-kick-switch", sets:4, reps:"5 each leg"},
+     {ref:"freestanding-holds", sets:3, reps:"max hold, spotted"},
+     {ref:"kickup-practice", sets:1, reps:"10 min free practice"},
+   ]},
  { id:"w-legs", name:"Full Leg Day", tax:"legs", seeded:true,
    blurb:"Activation first, then a full compound-to-isolation spread across quads, glutes and hamstrings.",
    items:[
@@ -3282,7 +3301,7 @@ let state = {
   milestones: [],      // {date, text}
   prefs: { theme:"dark", media:{}, customMedia:{}, favs:[], upgradesInUse:{} },
 };
-const APP_VERSION = "2026.08.15-3";
+const APP_VERSION = "2026.08.15-4";
 const SKEY = "stackline-v1";
 async function loadState(){
   let raw = null;
