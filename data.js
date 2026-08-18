@@ -1823,6 +1823,191 @@ const EXERCISES = [
   ]},
 
 
+{ id:"bear-to-pike", name:"Bear to pike", cats:["hips","rib"], fatigue:"low", level:2,
+  targets:"Hamstrings, shoulders and core together, flowing between a bear-crawl hover and a pike position.",
+  why:"A dynamic warm-up flow that mobilizes the hamstrings and shoulders together rather than in isolation — genuinely efficient for a glutes-focused day that still needs the posterior chain warm before loading it.",
+  when:["before"], dosage:"10 reps.",
+  progression:"Slow the tempo, holding briefly in the pike position each rep.",
+  regression:"Smaller range in the pike phase, bending the knees more.",
+  mistakes:"Rushing between positions instead of controlling each transition; letting the hips sag in the bear-hover phase.",
+  cues:"From a bear-hover (knees hovering just off the floor, hands under shoulders), push your hips up and back into a pike, straightening your legs as much as comfortable, then return to the hover.",
+  pairs:"A natural flow-based opener before quadruped hip circles and the rest of a lower-body warm-up.",
+  source:"Cross-checked against Lagree Fitness's 'Bear Plank to Pike Combo' and related bear-to-pike flow content — a recognized combination movement in mobility and Pilates-adjacent warm-up sequencing.",
+  upgrades:[
+    {type:"measurable", label:"Log range in the pike phase", detail:"Track how close to straight-legged you can get in the pike position."},
+    {type:"harder", label:"Add a pause", detail:"A brief hold at the top of the pike adds a real hamstring and shoulder demand."},
+  ],
+  media:[
+    {t:"article",label:"The Bear Plank To Pike Combo", src:"Lagree Fitness", url:"https://videos.lagreefitness.com/video/1925/the-bear-plank-to-pike-combo"},
+  ]},
+
+{ id:"quad-hip-circles", name:"Quadruped hip circles", cats:["hips"], fatigue:"low", level:1,
+  targets:"Hip mobility, circling one bent knee through a wide range while on hands and knees.",
+  why:"Genuinely distinct from your existing standing hip circles — the quadruped position isolates the hip joint more completely since the supporting leg and spine stay fixed, giving a bigger, cleaner range of motion.",
+  when:["before"], dosage:"8 circles each direction, per leg.",
+  progression:"Make the circles bigger, driving the knee further forward and back at each end of the circle.",
+  regression:"Smaller circles, keeping the range comfortable.",
+  mistakes:"Letting the spine twist or the supporting hip shift to fake more range — the movement should come entirely from the working hip.",
+  cues:"Keep your knee bent throughout. Drive it back, circle it up toward the ceiling, forward toward your elbow, then back down and around, making the circle as big as your hip allows.",
+  pairs:"A natural pairing with bear to pike and fire hydrants as part of a kneeling hip-mobility sequence.",
+  source:"Cross-checked against Redefining Strength's and Muscle & Strength's dedicated quadruped hip circle guides — both consistent on the big, hip-driven circle cue and keeping the spine stable.",
+  upgrades:[
+    {type:"measurable", label:"Log circle size", detail:"Track how large a circle you can make while keeping the spine still."},
+    {type:"harder", label:"Add a resistance band", detail:"A light band above the knee adds real resistance through the same range."},
+  ],
+  media:[
+    {t:"article",label:"The Booty Builder", src:"Redefining Strength", url:"https://redefiningstrength.com/the-booty-builder/"},
+    {t:"article",label:"Fire Hydrant Circles: Video Exercise Guide", src:"Muscle & Strength", url:"https://www.muscleandstrength.com/exercises/fire-hydrant-circles"},
+  ]},
+
+{ id:"spiderman-lunge", name:"Spiderman lunge", cats:["hips"], fatigue:"low", level:2,
+  targets:"Hip flexors, groin and hamstrings, stepping one foot forward to the hand line from a plank and sinking the hips down.",
+  why:"A genuinely dynamic hip-flexor stretch rather than a static one — moving through the position while the core stays braced in a plank gives you mobility and core stability work in the same movement.",
+  when:["before"], dosage:"6 each side.",
+  progression:"Add the twist variation — reach the same-side arm toward the ceiling as you sink the hips, adding a thoracic rotation component.",
+  regression:"A smaller step forward, and don't sink the hips as low.",
+  mistakes:"Letting the hips rotate or pike upward instead of staying low and square; rushing the transition instead of controlling the step forward and back.",
+  cues:"From a plank, step one foot forward to land just outside the same-side hand. Sink your hips down toward the floor, feeling the stretch through the hip flexor of the back leg, then push back to plank.",
+  pairs:"A natural flow-based addition alongside bear to pike and quadruped hip circles.",
+  source:"Cross-checked extensively across JEFIT, BODi, Rehab Hero, and Motra's Spiderman Lunge guides — all consistent on the plank-to-lunge-to-sink mechanics and the hip flexor/groin stretch target.",
+  upgrades:[
+    {type:"measurable", label:"Log how deep the hips sink", detail:"Track how close to the floor your hips get while staying square."},
+    {type:"harder", label:"Add the twist", detail:"Reaching the same-side arm overhead adds a thoracic rotation component to the stretch."},
+  ],
+  media:[
+    {t:"article",label:"Spiderman Lunge", src:"JEFIT", url:"https://www.jefit.com/exercises/1425/spiderman-lunge-"},
+    {t:"article",label:"Improve Your Mobility With Spider Lunges", src:"BODi", url:"https://www.bodi.com/blog/spider-lunges"},
+  ]},
+
+{ id:"db-deadlift", name:"Dumbbell deadlift", cats:["legs"], fatigue:"med", level:2,
+  targets:"Hamstrings, glutes and lower back, hinging at the hips with dumbbells held in front of the thighs.",
+  why:"The classic two-leg hinge pattern — distinct from your single-leg deadlift, this builds the same hip-hinge strength with less balance demand, letting you load it more directly.",
+  when:["skill"], dosage:"3 × 10-12.",
+  progression:"Increase the dumbbell weight, or slow the lowering phase for more time under tension.",
+  regression:"Lighter dumbbells, or reduce the range if hamstring flexibility limits a full hinge.",
+  mistakes:"Rounding the lower back instead of hinging with a flat back; letting the dumbbells drift away from the legs instead of staying close throughout.",
+  cues:"Push your hips back first, keeping the dumbbells close to your legs as they lower. Keep your back flat and your shins mostly vertical. Drive your hips forward to stand back up.",
+  pairs:"A natural strength pairing with reverse lunges and hip thrust on any glutes-focused day.",
+  source:"Standard hip-hinge exercise; technique (hips back first, flat back, weight close to the legs) is universal and low-disagreement across strength coaching sources.",
+  upgrades:[
+    {type:"measurable", label:"Log the weight used", detail:"Track dumbbell weight and progress it as your hinge pattern gets cleaner."},
+    {type:"harder", label:"Slow the eccentric", detail:"A 3-second lowering phase adds real time under tension without more weight."},
+  ],
+  media:[
+    {t:"article",label:"22 Best At-Home Leg Exercises", src:"Signos", url:"https://www.signoshealth.com/blog/leg-exercises-at-home"},
+  ]},
+
+{ id:"standing-side-bend", name:"Standing side bend", cats:["legs"], fatigue:"low", level:1,
+  targets:"Obliques, bending sideways while holding a bar or weight for added resistance.",
+  why:"A direct, standing oblique strengthener — distinct from any rotational core work, this specifically trains lateral flexion, a movement pattern most core routines otherwise skip entirely.",
+  when:["skill"], dosage:"3 × 8 each side.",
+  progression:"Increase the load, or slow the movement for more control through the full range.",
+  regression:"Lighter weight, or perform bodyweight-only first to groove the pattern.",
+  mistakes:"Leaning forward or backward instead of bending purely sideways; using momentum to swing through the movement instead of controlling it.",
+  cues:"Stand tall, weight held at your side or across your shoulders. Bend directly sideways, reaching the weight toward your knee, then squeeze your obliques to pull back up to standing.",
+  pairs:"A useful addition to any lower-body or general strength day — most routines miss lateral flexion entirely.",
+  source:"Cross-checked against Calisthenics Forge's oblique progression guide, which lists dumbbell/bar side bends as a standard loaded oblique exercise with a clear progression path.",
+  upgrades:[
+    {type:"measurable", label:"Log the load used", detail:"Track weight and progress it once the movement path stays clean without swinging."},
+    {type:"harder", label:"Slow the tempo", detail:"A controlled 2-3 second bend in each direction adds real difficulty without more weight."},
+  ],
+  media:[
+    {t:"article",label:"Oblique Exercises: Stop Turning Every Rep Into a Twist", src:"Calisthenics Forge", url:"https://calisthenicsforge.com/oblique-exercises/"},
+  ]},
+
+{ id:"banded-glute-bridge-abduction", name:"Banded glute bridge abduction", cats:["legs"], fatigue:"low", level:2,
+  targets:"Glutes and hip abductors together, pressing the knees out against a band at the top of a glute bridge.",
+  why:"Combines two things your plain glute bridge doesn't — hip extension and hip abduction in the same rep, hitting the glute medius (outer hip) that a straight bridge mostly misses.",
+  when:["skill"], dosage:"2 × 20.",
+  progression:"Use a stronger band, or add a brief pause at the top with the knees pressed out.",
+  regression:"Lighter band, or reduce the range of the knee press.",
+  mistakes:"Letting the lower back arch to help lift the hips instead of driving through the glutes; allowing the knees to cave back in under band tension instead of a controlled return.",
+  cues:"Bridge up first, then press your knees out against the band while keeping your hips lifted and level. Control the knees back in without losing bridge height.",
+  pairs:"A natural pairing with glute bridge march — same starting position, different demand.",
+  source:"Cross-checked across Muscle & Strength, Rehab Hero, and Fitwill's banded glute bridge abduction guides — all consistent on bridging first, then pressing the knees out under tension.",
+  upgrades:[
+    {type:"measurable", label:"Log the band strength", detail:"Track resistance level and progress it as hip control improves."},
+    {type:"harder", label:"Add a pause", detail:"Holding the knees pressed out for 1-2 seconds at the top adds real time under tension."},
+  ],
+  media:[
+    {t:"video", label:"Glute bridge banded Abduction", src:"YouTube", url:"https://www.youtube.com/watch?v=QmJA9iZEC1Q"},
+    {t:"article",label:"Banded Glute Bridge Abduction", src:"Muscle & Strength", url:"https://www.muscleandstrength.com/exercises/banded-glute-bridge"},
+  ]},
+
+{ id:"glute-bridge-march", name:"Glute bridge march", cats:["legs"], fatigue:"low", level:2,
+  targets:"Glutes and core stability, alternating leg lifts while holding a glute bridge position.",
+  why:"Adds a real single-leg stability demand on top of your plain glute bridge — holding the bridge with only one foot down at a time forces the working glute to control the pelvis alone.",
+  when:["skill"], dosage:"2 × 20 (alternating).",
+  progression:"Add ankle weights, or slow each march for more control.",
+  regression:"Reduce how high you lift the marching knee, or remove any added weight.",
+  mistakes:"Letting the hips drop or rotate toward the lifted leg — the whole point is keeping the pelvis level while one leg is off the floor.",
+  cues:"Bridge up and hold that height throughout. Lift one knee toward your chest without letting your hips dip, place it back down, then switch legs.",
+  pairs:"A natural pairing with banded glute bridge abduction — same setup, different demand.",
+  source:"Standard glute bridge progression; the alternating-leg march variant is a common, well-established way to add unilateral stability demand to a bilateral bridge.",
+  upgrades:[
+    {type:"measurable", label:"Log reps without hip drop", detail:"Track how many clean reps you get before the hips start to dip or rotate."},
+    {type:"harder", label:"Add ankle weights", detail:"Direct load on the marching leg increases the stability demand significantly."},
+  ],
+  media:[
+    {t:"article",label:"Banded Glute Bridge: Video Exercise Guide", src:"Muscle & Strength", url:"https://www.muscleandstrength.com/exercises/banded-glute-bridge"},
+  ]},
+
+{ id:"lying-knee-tucks", name:"Lying knee tucks", cats:["rib"], fatigue:"low", level:1,
+  targets:"Hip flexors and lower abs, lying on the back and pulling the knees toward the chest.",
+  why:"A direct, simple hip-flexor and lower-ab strengthener — a natural pairing after glute-focused bridge work, balancing the posterior-chain loading with some anterior core work.",
+  when:["skill"], dosage:"2 × 15.",
+  progression:"Add ankle weights, or slow the tempo for more control.",
+  regression:"Reduce the range, bringing the knees only partway to the chest.",
+  mistakes:"Using momentum to swing the knees up instead of a controlled pull; letting the lower back arch off the floor.",
+  cues:"Lie on your back, arms by your sides for stability. Pull both knees toward your chest under control, keeping your lower back pressed into the floor, then lower back down without letting the feet touch.",
+  pairs:"A natural finisher after glute bridge work — balances the posterior-chain loading with direct hip-flexor and ab work.",
+  source:"Standard core exercise; technique (controlled pull, lower back pressed down, no momentum) is universal across strength coaching sources.",
+  upgrades:[
+    {type:"measurable", label:"Log reps without the feet touching down", detail:"Track how many reps you can do keeping continuous tension, without resting the feet between reps."},
+    {type:"harder", label:"Add ankle weights", detail:"Direct resistance on the legs increases the hip-flexor and ab demand."},
+  ],
+  media:[
+    {t:"article",label:"35 Best Flexibility Exercises", src:"Pliability", url:"https://pliability.com/stories/flexibility-exercises"},
+  ]},
+
+{ id:"side-plank-hip-dips", name:"Side plank hip dips", cats:["rib"], fatigue:"low", level:2,
+  targets:"Obliques and glute medius, lowering and lifting the hips from a side plank position.",
+  why:"Turns a static side plank into a controlled, dynamic movement — genuinely more effective at building oblique strength through a real range than holding a fixed side plank alone.",
+  when:["skill"], dosage:"2 × 8 each side.",
+  progression:"Touch the hip closer to the floor each rep, or slow the tempo further.",
+  regression:"Keep the bottom knee on the floor for support, and reduce how far the hips dip.",
+  mistakes:"Rotating the torso instead of moving straight up and down; letting the supporting elbow drift out from under the shoulder.",
+  cues:"Set up in a side plank, elbow under your shoulder. Lower your hips a few inches toward the floor without rotating, then lift back up by squeezing your obliques and glutes.",
+  pairs:"A natural pairing with plank knee to elbow as a complete core-finisher pair.",
+  source:"Cross-checked extensively across Garage Gym Reviews, Redefining Strength, Motra, and WellFitInsider's side plank hip dip guides — all consistent on the controlled up-down motion without rotation.",
+  upgrades:[
+    {type:"measurable", label:"Log reps with clean form", detail:"Track how many reps stay controlled before the torso starts to rotate."},
+    {type:"harder", label:"Elevate the top leg", detail:"Lifting the top leg off the bottom one adds a real balance and oblique demand."},
+  ],
+  media:[
+    {t:"article",label:"Side Plank 101: Expert Form Tips, Variations", src:"Garage Gym Reviews", url:"https://www.garagegymreviews.com/side-plank"},
+    {t:"article",label:"Side Plank Hip Dips: Proper Form for Stronger Obliques", src:"WellFitInsider", url:"https://wellfitinsider.com/workout-tips/side-plank-hip-dips/"},
+  ]},
+
+{ id:"plank-knee-elbow", name:"Plank knee to elbow", cats:["rib"], fatigue:"low", level:1,
+  targets:"Obliques and hip flexors, bringing one knee out and up to the same-side elbow from a high plank.",
+  why:"A controlled, oblique-focused variation on the standard plank — the diagonal knee drive trains rotational core control that a static plank hold doesn't.",
+  when:["skill"], dosage:"2 × 8 each side.",
+  progression:"Slow the tempo, or hold briefly with the knee at the elbow before returning.",
+  regression:"A smaller range, bringing the knee only partway toward the elbow.",
+  mistakes:"Letting the hips rotate or sag as the knee drives across — the supporting side should stay stable throughout.",
+  cues:"From a high plank, bend one knee and pull it out and up toward the same-side elbow. Return to plank under control, then repeat on the other side.",
+  pairs:"A natural pairing with side plank hip dips as a complete core-finisher pair.",
+  source:"Cross-checked against Healthline's oblique exercise guide, which describes this exact knee-to-elbow plank variation as a standard oblique movement.",
+  upgrades:[
+    {type:"measurable", label:"Log reps with a stable plank", detail:"Track how many reps you complete before the hips start to sag or rotate."},
+    {type:"harder", label:"Slow the tempo", detail:"A 2-second pause with the knee at the elbow adds real time under tension."},
+  ],
+  media:[
+    {t:"article",label:"30 Oblique Exercises to Add to Your Workout", src:"Healthline", url:"https://www.healthline.com/health/fitness-exercise/oblique-workout"},
+  ]},
+
+
 /* ---- PRESS-SPECIFIC ---- */
 { id:"press-walks", name:"Press walks (weight-shift drill)", cats:["compression","line"], fatigue:"low", level:2,
   targets:"The shoulder lean and counterbalance that starts every press — without needing to leave the floor.",
@@ -2375,6 +2560,16 @@ const VIDEO = {
   "weighted-pullover-stretch": {yt:"", title:"", src:"", status:"missing", why:"No dedicated video confirmed — worth finding one given the loading detail matters for safety."},
   "loaded-hollow-extension": {yt:"", title:"", src:"", status:"missing", why:"No dedicated video confirmed for this specific loaded box variant."},
   "handstand-kick-switch":   {yt:"", title:"", src:"", status:"missing", why:"No embeddable video confirmed despite strong article sourcing — worth finding one given this is a coordination-heavy skill best seen, not just read."},
+  "bear-to-pike":               {yt:"", title:"", src:"", status:"missing", why:"No clean standalone video confirmed — worth finding one, article sourcing is solid."},
+  "quad-hip-circles":           {yt:"", title:"", src:"", status:"missing", why:"No dedicated video confirmed — worth finding one."},
+  "spiderman-lunge":            {yt:"", title:"", src:"", status:"missing", why:"No single clean video confirmed despite very strong article sourcing across multiple sources."},
+  "db-deadlift":                {yt:"", title:"", src:"", status:"missing", why:"No dedicated video confirmed — extremely standard movement, worth finding one anyway."},
+  "standing-side-bend":         {yt:"", title:"", src:"", status:"missing", why:"No dedicated video confirmed — worth finding one given the load makes form matter."},
+  "banded-glute-bridge-abduction": {yt:"QmJA9iZEC1Q", title:"Glute bridge banded Abduction", src:"YouTube", status:"ok"},
+  "glute-bridge-march":         {yt:"", title:"", src:"", status:"missing", why:"No dedicated video confirmed for the ankle-weighted march variant specifically."},
+  "lying-knee-tucks":           {yt:"", title:"", src:"", status:"missing", why:"No dedicated video confirmed — standard movement, worth finding one."},
+  "side-plank-hip-dips":        {yt:"", title:"", src:"", status:"missing", why:"No single clean video confirmed despite extensive article sourcing."},
+  "plank-knee-elbow":           {yt:"", title:"", src:"", status:"missing", why:"No dedicated video confirmed — standard oblique movement, worth finding one."},
   "downward-dog":         {yt:"cPgE_UBIN2c", title:"Downward Dog For Beginners: Fix These Common Mistakes", src:"YouTube", status:"ok"},
   "puppy-pose-classic":   {yt:"szi5tN8NpKY", title:"How To Do Puppy Pose", src:"YouTube", status:"ok"},
   "pike-fold":            {yt:"", title:"", src:"", status:"missing", why:"No dedicated video confirmed — a simple, standard fold, article sourcing is solid."},
@@ -3060,6 +3255,24 @@ function routineMuscleMap(routine, h){
    session builder, so logging and personal bests just work.
 ============================================================ */
 const WORKOUTS = [
+ { id:"w-tue-glutes", name:"Tuesday Glutes — Class Replica", tax:"legs", seeded:true,
+   blurb:"The exact structure from your Tuesday glutes class — warm-up flow, loaded strength, then two banded/weighted finisher pairs and a core-plank finish.",
+   items:[
+     {ref:"floor-catcow", sets:1, reps:"10"},
+     {ref:"bear-to-pike", sets:1, reps:"10"},
+     {ref:"quad-hip-circles", sets:1, reps:"8 in/8 out each leg"},
+     {ref:"spiderman-lunge", sets:1, reps:"6 each side"},
+     {ref:"db-deadlift", sets:3, reps:"12"},
+     {ref:"reverse-lunge", sets:3, reps:"8 each leg"},
+     {ref:"standing-side-bend", sets:3, reps:"8 each side"},
+     {ref:"banded-glute-bridge-abduction", sets:2, reps:"20"},
+     {ref:"hollow-line", sets:2, reps:"15, 2s hold"},
+     {ref:"glute-bridge-march", sets:2, reps:"20"},
+     {ref:"lying-knee-tucks", sets:2, reps:"15"},
+     {ref:"side-plank-hip-dips", sets:2, reps:"8 each side"},
+     {ref:"plank-knee-elbow", sets:2, reps:"8 each side"},
+     {ref:"forearm-plank", sets:1, reps:"20s hold"},
+   ]},
  { id:"w-mon-handstands", name:"Monday Handstands — Class Replica", tax:"handstand", seeded:true,
    blurb:"The exact structure from your Monday handstand class — warm-up, mobility, activation, then handstand work.",
    items:[
@@ -3127,7 +3340,21 @@ const WORKOUTS = [
      {ref:"freestanding-holds", sets:1, reps:"8-10 attempts"},
    ]},
 ];
-function workoutById(id){ return (WORKOUTS.concat(state.customWorkouts||[])).find(w=>w.id===id); }
+/* Editing or deleting a seeded workout can't literally mutate the
+   hardcoded WORKOUTS array (it's reloaded fresh every page load), so an
+   edit is stored as an override in customWorkouts sharing the same id, and
+   a delete is tracked in hiddenWorkouts instead. This list merges all
+   three states correctly: an override always wins over the original, and
+   a hidden id is suppressed even though it still technically exists in
+   WORKOUTS. Previously workoutById() checked WORKOUTS first, which meant
+   an edited copy in customWorkouts could never actually be seen. */
+function allWorkoutsList(){
+  const overrideIds = new Set((state.customWorkouts||[]).map(w=>w.id));
+  const hidden = new Set(state.hiddenWorkouts||[]);
+  const base = WORKOUTS.filter(w=> !hidden.has(w.id) && !overrideIds.has(w.id));
+  return base.concat(state.customWorkouts||[]);
+}
+function workoutById(id){ return allWorkoutsList().find(w=>w.id===id); }
 function workoutRef(ref){
   const d = exById(ref); if(d) return {name:d.name, isDrill:true};
   return {name:ref, isDrill:false};
@@ -3296,12 +3523,13 @@ let state = {
   classLogs: [],   // {date, cls, items:[{name,variation,assist,numbers}], notes}
   customMoves: [],
   customWorkouts: [],
+  hiddenWorkouts: [],   // ids of seeded WORKOUTS entries the user has deleted
   daySwaps: {},   // {"YYYY-MM-DD": {originalExId: replacementExId}} — today only, never edits the routine
   logs: [],            // {date, routineId, done:[exIds], dosage:{}, line, mob, energy, tight:[], pain, notes, mediaNote}
   milestones: [],      // {date, text}
   prefs: { theme:"dark", media:{}, customMedia:{}, favs:[], upgradesInUse:{} },
 };
-const APP_VERSION = "2026.08.15-4";
+const APP_VERSION = "2026.08.15-6";
 const SKEY = "stackline-v1";
 async function loadState(){
   let raw = null;
@@ -3315,7 +3543,7 @@ async function loadState(){
     state.deskLogs = d.deskLogs||[]; state.meta_deskU = d.meta_deskU||0;
     state.eveningLogs = d.eveningLogs||[]; state.meta_eveningU = d.meta_eveningU||0;
     state.daySwaps = d.daySwaps||{};
-    state.classLogs = d.classLogs||[]; state.customMoves = d.customMoves||[]; state.customWorkouts = d.customWorkouts||[]; state.meta_classU = d.meta_classU||0;
+    state.classLogs = d.classLogs||[]; state.customMoves = d.customMoves||[]; state.customWorkouts = d.customWorkouts||[]; state.hiddenWorkouts = d.hiddenWorkouts||[]; state.meta_classU = d.meta_classU||0;
     state.schedule = d.schedule||null; state.meta_schedU = d.meta_schedU||0;
     state.prefs = Object.assign(state.prefs, d.prefs||{});
     if(Array.isArray(d.routines)){
@@ -3332,7 +3560,7 @@ async function loadState(){
 // (only present inside Claude's own preview) is best-effort and fire-and-forget on top.
 function saveLocalOnly(){
   const raw = JSON.stringify({routines:state.routines, logs:state.logs, milestones:state.milestones,
-                              prefs:state.prefs, customDrills:state.customDrills, deskLogs:state.deskLogs, meta_deskU:state.meta_deskU, daySwaps:state.daySwaps, classLogs:state.classLogs, customMoves:state.customMoves, customWorkouts:state.customWorkouts, meta_classU:state.meta_classU,
+                              prefs:state.prefs, customDrills:state.customDrills, deskLogs:state.deskLogs, meta_deskU:state.meta_deskU, daySwaps:state.daySwaps, classLogs:state.classLogs, customMoves:state.customMoves, customWorkouts:state.customWorkouts, hiddenWorkouts:state.hiddenWorkouts, meta_classU:state.meta_classU,
                               schedule:state.schedule, meta_schedU:state.meta_schedU, eveningLogs:state.eveningLogs, meta_eveningU:state.meta_eveningU,
                               meta_routinesU:state.meta_routinesU, meta_milestonesU:state.meta_milestonesU, meta_drillsU:state.meta_drillsU});
   try{ localStorage.setItem(SKEY, raw); }catch(e){}

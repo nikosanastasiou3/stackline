@@ -35,6 +35,7 @@ function metaBlob(){
     classLogs:  {data: state.classLogs,   u: state.meta_classU  || Date.now()},
     customMoves:{data: state.customMoves, u: state.meta_classU  || Date.now()},
     customWorkouts:{data: state.customWorkouts, u: state.meta_classU || Date.now()},
+    hiddenWorkouts:{data: state.hiddenWorkouts, u: state.meta_classU || Date.now()},
     schedule:   {data: state.schedule,    u: state.meta_schedU  || Date.now()}
   };
 }
@@ -87,6 +88,7 @@ async function syncPull(){
       }
       if(cloud.customMoves && (cloud.customMoves.u||0) > (state.meta_classU||0)) state.customMoves = cloud.customMoves.data||[];
       if(cloud.customWorkouts && (cloud.customWorkouts.u||0) > (state.meta_classU||0)) state.customWorkouts = cloud.customWorkouts.data||[];
+      if(cloud.hiddenWorkouts && (cloud.hiddenWorkouts.u||0) > (state.meta_classU||0)) state.hiddenWorkouts = cloud.hiddenWorkouts.data||[];
       if(cloud.schedule && (cloud.schedule.u||0) > (state.meta_schedU||0)){
         state.schedule = cloud.schedule.data||null; state.meta_schedU = cloud.schedule.u; }
       saveLocalOnly(); takeSnapshot(); applyTheme(); render(curView);
@@ -1633,6 +1635,16 @@ const MUSCLES = {
   "weighted-pullover-stretch": {stretch:{p:["lats","delts_front"],s:["pecs"]}},
   "loaded-hollow-extension": {work:{p:["abs"],s:["delts_front","hipflexors"]}},
   "handstand-kick-switch":  {work:{p:["delts","abs"],s:["forearms"]}},
+  "bear-to-pike":               {stretch:{p:["hamstrings"],s:["delts"]}, work:{p:["abs"],s:["delts_front"]}},
+  "quad-hip-circles":           {work:{p:["glutes"],s:["hipflexors"]}},
+  "spiderman-lunge":            {stretch:{p:["hipflexors"],s:["adductors","hamstrings"]}},
+  "db-deadlift":                {work:{p:["hamstrings","glutes"],s:["erectors"]}},
+  "standing-side-bend":         {work:{p:["abs"],s:["erectors"]}},
+  "banded-glute-bridge-abduction": {work:{p:["glutes"],s:["hipflexors"]}},
+  "glute-bridge-march":         {work:{p:["glutes"],s:["abs"]}},
+  "lying-knee-tucks":           {work:{p:["hipflexors","abs"],s:[]}},
+  "side-plank-hip-dips":        {work:{p:["abs","glutes"],s:["delts"]}},
+  "plank-knee-elbow":           {work:{p:["abs"],s:["hipflexors","delts_front"]}},
   "desk-cat-cow":       {work:{p:["erectors"],s:["abs"]}, stretch:{p:["erectors"],s:[]}},
   "desk-hamstring":     {stretch:{p:["hamstrings"],s:["glutes"]}},
   "desk-triceps":       {stretch:{p:["triceps"],s:["lats"]}},
@@ -2469,6 +2481,96 @@ const HOWTO = {
   "Continue alternating for the set, staying close enough to the wall to catch yourself if needed."],
  check:"If you're pulling up with the top leg rather than driving from your hands and the kicking leg, the lift is coming from the wrong place — focus on pressing the floor away first, let the legs follow."},
 
+"bear-to-pike":{desc:"Starting from a bear-hover with your knees just off the floor, you push your hips up and back into a pike position, then return, flowing between the two shapes.",
+ steps:["Start on hands and knees, hands under shoulders, knees under hips.",
+  "Lift your knees just off the floor into a bear-hover position.",
+  "Push your hips up and back, straightening your legs as much as comfortable, moving into a pike shape.",
+  "Keep your hands planted and your core braced throughout.",
+  "Return to the bear-hover position under control.",
+  "Repeat for the set, flowing smoothly between the two shapes."],
+ check:"If you're dropping straight back down to your knees between reps instead of flowing to the pike and back, slow down and treat this as one continuous movement rather than two separate positions."},
+
+"quad-hip-circles":{desc:"On hands and knees, you lift one bent knee and circle it through a wide range, working the hip joint through rotation.",
+ steps:["Start on hands and knees, hands under shoulders, knees under hips.",
+  "Lift one knee slightly off the floor, keeping it bent around 90 degrees.",
+  "Circle the knee back, up toward the ceiling, forward toward your same-side elbow, then down and around to complete the circle.",
+  "Keep your spine still — the movement should come entirely from the hip.",
+  "Complete the target reps in one direction, then reverse.",
+  "Switch legs and repeat both directions."],
+ check:"If your spine is twisting or your supporting hip is shifting to help make the circle bigger, that range isn't real hip mobility — keep the trunk still and let the circle be as big as the hip alone allows."},
+
+"spiderman-lunge":{desc:"From a plank, you step one foot forward to land beside the same-side hand, then sink your hips down toward the floor to stretch the hip flexor of the trailing leg.",
+ steps:["Start in a high plank, hands under your shoulders.",
+  "Step one foot forward, landing it just outside the same-side hand.",
+  "Sink your hips down toward the floor, keeping your chest lifted.",
+  "Feel the stretch through the hip flexor and groin of the leg still extended behind you.",
+  "Push through the front foot to return to plank.",
+  "Repeat on the other side, alternating for the set."],
+ check:"If your hips are rotating or lifting up rather than sinking straight down, you've lost the position — reset square before continuing, since a rotated hip changes what's actually being stretched."},
+
+"db-deadlift":{desc:"Holding a dumbbell in each hand, you hinge forward from the hips with a flat back, lowering the weights along your legs, then drive your hips forward to stand back up.",
+ steps:["Stand tall holding a dumbbell in each hand, arms extended in front of your thighs.",
+  "Push your hips back, keeping the dumbbells close to your legs as they lower.",
+  "Keep your back flat and your knees only slightly bent — this is a hip hinge, not a squat.",
+  "Lower until you feel a stretch through your hamstrings, or the dumbbells reach around shin height.",
+  "Drive your hips forward to return to standing, squeezing your glutes at the top.",
+  "Repeat for the set."],
+ check:"If you feel this mostly in your lower back rather than your hamstrings, you're likely rounding through the spine — reset with a flatter back and push the hips back further before bending the knees."},
+
+"standing-side-bend":{desc:"Standing tall while holding weight at your side or across your shoulders, you bend directly sideways and then pull back up, training the obliques through lateral flexion.",
+ steps:["Stand tall holding a bar across your shoulders, or a dumbbell at your side.",
+  "Keep your core braced and your hips facing forward throughout.",
+  "Bend directly sideways, reaching toward your knee, without leaning forward or backward.",
+  "Feel the stretch through the obliques on the side you're reaching away from.",
+  "Squeeze the obliques on the working side to pull back up to standing.",
+  "Complete the set, then switch to the other side."],
+ check:"If you're leaning forward or twisting as you bend, the movement has drifted away from pure lateral flexion — reset and bend straight sideways, like sliding down an invisible wall beside you."},
+
+"banded-glute-bridge-abduction":{desc:"With a resistance band around your thighs, you lift into a glute bridge, then press your knees outward against the band before returning them, all while keeping your hips lifted.",
+ steps:["Lie on your back, knees bent, feet flat, a resistance band looped around your thighs just above the knees.",
+  "Bridge your hips up by squeezing your glutes, keeping the band under tension.",
+  "Once at the top, press your knees outward against the band.",
+  "Hold briefly, feeling the outer hip working.",
+  "Bring your knees back to neutral under control, without letting your hips drop.",
+  "Repeat for the set, then lower your hips down to finish."],
+ check:"If your hips are dropping every time you press the knees out, you're losing the bridge to chase the abduction — keep the hips locked high throughout, and reduce the knee press range if needed to maintain that."},
+
+"glute-bridge-march":{desc:"Holding a glute bridge position, you alternate lifting one knee toward your chest at a time, keeping your hips level throughout.",
+ steps:["Lie on your back, knees bent, feet flat on the floor.",
+  "Bridge your hips up by squeezing your glutes.",
+  "Holding that bridge height, lift one knee toward your chest without letting your hips dip or rotate.",
+  "Place that foot back down, then immediately lift the other knee.",
+  "Continue alternating, keeping the bridge height consistent throughout.",
+  "Lower your hips down to finish the set."],
+ check:"If your hips are dropping or twisting toward whichever leg is down, that's the working glute losing control — pause the march and reset the bridge height before continuing, even if that means fewer reps."},
+
+"lying-knee-tucks":{desc:"Lying on your back, you pull both knees toward your chest under control, then lower them back down without your feet touching the floor between reps.",
+ steps:["Lie on your back, arms resting by your sides for stability.",
+  "Extend your legs out along the floor.",
+  "Pull both knees toward your chest under control, keeping your lower back pressed into the floor.",
+  "Hold briefly at the top.",
+  "Lower your legs back down without letting your feet touch the floor, keeping tension in your core.",
+  "Repeat for the set."],
+ check:"If your lower back is lifting off the floor as your knees come in, or you're swinging your legs up with momentum, slow down and keep the movement controlled and core-driven rather than momentum-driven."},
+
+"side-plank-hip-dips":{desc:"From a side plank, you lower your hips a few inches toward the floor and lift them back up, turning a static hold into a controlled, repeated movement.",
+ steps:["Lie on your side, forearm on the floor, elbow directly under your shoulder.",
+  "Stack or stagger your feet, and lift your hips into a side plank position.",
+  "Lower your hips a few inches toward the floor, without rotating your torso.",
+  "Just before touching down, reverse the movement.",
+  "Lift back up to the side plank position by squeezing your obliques and glutes.",
+  "Repeat for the set, then switch sides."],
+ check:"If your torso is rotating forward or backward as your hips dip, you've lost the plank alignment — keep your shoulder and hip stacked throughout, moving straight up and down rather than twisting."},
+
+"plank-knee-elbow":{desc:"From a high plank, you bend one knee and pull it out and up to meet the same-side elbow, then return to plank and repeat on the other side.",
+ steps:["Start in a high plank, hands under your shoulders, body in a straight line.",
+  "Bend one knee and pull it out to the side, bringing it up toward the same-side elbow.",
+  "Keep your hips level throughout — don't let them rotate or pike upward.",
+  "Return the leg to plank under control.",
+  "Repeat on the other side.",
+  "Continue alternating for the set."],
+ check:"If your hips are rotating or your midsection is sagging as the knee comes across, your core has stopped controlling the movement — slow down and keep both hip bones pointing at the floor throughout."},
+
 "pancake":{desc:"You sit with your legs wide apart and fold forward with a flat back. It opens the hamstrings and inner thighs, which is where the press handstand starts from.",
  steps:["Sit on the floor and take your legs as wide as is comfortable, kneecaps pointing at the ceiling.","Sit up tall on your sit bones. If you are rolling backward, sit on a folded towel or cushion.","Place your hands on the floor in front of you.","Keeping your back flat, hinge forward from the hips — imagine leading with your chest, not your head.","Walk your hands forward only as far as you can go without your lower back rounding.","Hold, breathing steadily, then walk back up."],
  check:"Flat back beats depth every time. If your lower back is rounding, you have gone too far — come back up until it is flat again."},
@@ -3079,14 +3181,14 @@ function nameCollisions(){
   const bad=[];
   catalogFlat().forEach(m=>{ if(reserved.has(m.name.toLowerCase())) bad.push({type:"catalog", name:m.name, fam:m.fam}); });
   EX_ALL().forEach(e=>{ if(reserved.has(e.name.toLowerCase())) bad.push({type:"drill", name:e.name, id:e.id}); });
-  WORKOUTS.concat(state.customWorkouts||[]).forEach(w=>{ if(reserved.has(w.name.toLowerCase())) bad.push({type:"workout", name:w.name, id:w.id}); });
+  allWorkoutsList().forEach(w=>{ if(reserved.has(w.name.toLowerCase())) bad.push({type:"workout", name:w.name, id:w.id}); });
   return bad;
 }
 
 
 /* ---------- Workouts screen ---------- */
 function renderWorkouts(){
-  const all = WORKOUTS.concat(state.customWorkouts||[]);
+  const all = allWorkoutsList();
   $("#view-library").innerHTML =
     `<div class="segrow"><button class="seg" id="lib-top-cats">Categories</button><button class="seg on" id="lib-top-work">Workouts</button></div>
      <div class="row between" style="margin-bottom:12px;gap:10px">
@@ -3113,8 +3215,8 @@ function renderWorkouts(){
            </div>`;}).join("")}</div>
          <div class="row" style="margin-top:11px;gap:7px">
            <button class="btn small primary" data-wstart="${w.id}">${ICONS.play}Start</button>
-           ${w.seeded?"":`<button class="btn small" data-wedit="${w.id}">Edit</button>
-             <button class="btn small danger" data-wdel="${w.id}">Delete</button>`}
+           <button class="btn small" data-wedit="${w.id}">Edit</button>
+             <button class="btn small danger" data-wdel="${w.id}">Delete</button>
          </div>
        </div>`;}).join("")}`;
   $("#lib-top-cats").onclick=()=>{ libTop="cats"; renderLibrary(); };
@@ -3134,10 +3236,15 @@ function renderWorkouts(){
     else openRefMove(workoutRef(it.ref).name, renderWorkouts);
   });
   $$("#view-library [data-wdel]").forEach(b=> b.onclick=()=>{
-    openSheet("Delete workout?", `<p class="sub">"${esc(workoutById(b.dataset.wdel).name)}" will be removed.</p>`,
+    const w = workoutById(b.dataset.wdel);
+    if(!w) return;
+    const isSeeded = WORKOUTS.some(x=>x.id===w.id); // true even if currently shown via an edited override
+    openSheet("Delete workout?", `<p class="sub">"${esc(w.name)}" will be removed.${isSeeded?" This is one of the built-in ones — you can't undo this from within the app.":""}</p>`,
       `<button class="btn ghost" id="wd-no">Keep</button><button class="btn danger" style="flex:1" id="wd-yes">Delete</button>`);
     $("#wd-no").onclick=closeSheet;
-    $("#wd-yes").onclick=()=>{ state.customWorkouts=(state.customWorkouts||[]).filter(x=>x.id!==b.dataset.wdel);
+    $("#wd-yes").onclick=()=>{
+      if(isSeeded) state.hiddenWorkouts = (state.hiddenWorkouts||[]).filter(id=>id!==w.id).concat([w.id]);
+      state.customWorkouts=(state.customWorkouts||[]).filter(x=>x.id!==b.dataset.wdel);
       state.meta_classU=Date.now(); save(); closeSheet(); renderWorkouts(); toast("Deleted"); };
   });
 }
