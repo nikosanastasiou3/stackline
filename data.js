@@ -2008,6 +2008,79 @@ const EXERCISES = [
   ]},
 
 
+{ id:"dead-bug", name:"Dead bug", cats:["rehab"], fatigue:"low", level:1,
+  targets:"Deep core stabilizers — the muscles that keep the lower back braced and still while the arms and legs move independently.",
+  why:"Consistently identified as one of the safest, most effective exercises for building the kind of core control that protects the lower back — trains stability with zero spinal flexion or compression, and translates directly into the hollow-body control your handstand and lever work already depends on.",
+  when:["skill","recovery"], dosage:"2-3 × 5-6 each side (bent knee), progressing to 3 × 8-10 each side (straight leg) as it feels controlled.",
+  progression:"Move from bent-knee to straight-leg, then add a brief hold at full extension once that's controlled.",
+  regression:"Keep the knees bent and reduce how far the arm and leg travel — the lower back staying flat matters far more than the range.",
+  mistakes:"Letting the lower back arch or lift off the floor as the arm and leg extend — this is the single most common fault and defeats the entire point of the exercise; moving too fast to actually control the position.",
+  cues:"Press your lower back into the floor like you're crushing something under your spine, and hold that press throughout. Move slowly — 3 seconds down is plenty. If you feel your back lifting, that's your signal the range is too big right now.",
+  pairs:"A natural pairing with bird dog — the same core-stability skill trained lying down versus on all fours.",
+  source:"Cross-checked against Dr. Stuart McGill's core-stability research (widely considered the reference standard in spine biomechanics) and multiple physical-therapy sources — consistently named among the safest core exercises available specifically because it requires no spinal flexion or extension.",
+  upgrades:[
+    {type:"measurable", label:"Log reps with the back staying flat", detail:"Track how many clean reps you get before the lower back starts to lift — that number growing over time is the real progress marker."},
+    {type:"harder", label:"Progress to straight leg, then add a hold", detail:"Bent-knee first, straight-leg once controlled, then a brief hold at full extension."},
+  ],
+  media:[
+    {t:"article",label:"Dead Bug Exercise Guide", src:"Verywell Fit", url:"https://www.verywellfit.com/how-to-do-the-dead-bug-4685573"},
+  ]},
+
+{ id:"bird-dog", name:"Bird dog", cats:["rehab"], fatigue:"low", level:1,
+  targets:"Deep spinal extensors and anti-rotation core control, extending opposite arm and leg from a quadruped position.",
+  why:"The standing-on-all-fours companion to dead bug — specifically activates the deep spinal extensor muscles that are among the first to weaken after a back issue, and trains anti-rotation control that carries over into overhead and pulling work.",
+  when:["skill","recovery"], dosage:"2-3 × 5-6 each side, 1-2 s hold, progressing to 3 × 8-10 each side with a longer hold as control improves.",
+  progression:"Add a longer hold at full extension, or add light resistance (a band around hand and opposite foot) once the base movement is solid.",
+  regression:"Extend just the arm or just the leg on its own before combining both together.",
+  mistakes:"Letting the hips rotate toward the raised leg instead of staying level — this is the fault that undoes the whole exercise; arching or rounding the lower back instead of keeping it neutral throughout.",
+  cues:"Imagine a water bottle balanced on your lower back — it shouldn't fall. Extend your arm and the opposite leg to just parallel with the floor, no higher, keeping your hips level and square the whole time.",
+  pairs:"A natural pairing with dead bug — the standing/quadruped version of the same anti-extension, anti-rotation skill.",
+  source:"Cross-checked against Dr. Stuart McGill's core-stability research and multiple physical-therapy sources — consistently grouped with dead bug and side plank as the foundational \\u201cbig three\\u201d for spine-safe core training.",
+  upgrades:[
+    {type:"measurable", label:"Log hold time without hip rotation", detail:"Track how long you can hold the extended position before the hips start to twist."},
+    {type:"harder", label:"Add a light band", detail:"A resistance band looped hand-to-opposite-foot adds real anti-rotation demand once form is solid."},
+  ],
+  media:[
+    {t:"article",label:"Bird Dog Exercise: How-To, Benefits, Variations", src:"Healthline", url:"https://www.healthline.com/health/exercise-fitness/bird-dog-exercise"},
+  ]},
+
+{ id:"cobra-pose", name:"Cobra pose", cats:["rehab"], fatigue:"low", level:1,
+  targets:"Gentle spinal extension, lying face down and lifting the chest using the hands as light support.",
+  why:"A genuinely gentle spinal-extension movement, distinct from a full weight-bearing bridge — commonly discussed as encouraging favorable disc positioning and directly countering the flattened, flexed posture that comes from long periods of sitting.",
+  when:["recovery"], dosage:"3 × 8-10, holding 10-15 s (sphinx, forearms) building toward longer holds once comfortable.",
+  progression:"Move from forearms-down (sphinx) to a fuller extension on straighter arms, only as far as stays genuinely pain-free.",
+  regression:"Stay on the forearms (sphinx position) and keep the range small — a shallow, pain-free range is doing its job.",
+  mistakes:"Pushing into more extension than is comfortable to chase a deeper stretch — the arms are meant to be a light prop, not a lever to force range; letting the shoulders creep up toward the ears instead of staying relaxed away from them.",
+  cues:"Let your lower back soften and relax rather than actively arching. Come up only as far as feels genuinely comfortable — if anything travels down a leg, that's your signal to reduce the range immediately.",
+  pairs:"A gentle counter-movement after cat-cow or dead bug, and a natural fit at the end of an evening release.",
+  source:"Cross-checked against multiple physical-therapy sources on spinal extension for disc-related back pain — consistently framed as a gentle, generally well-tolerated movement, with the same universal caution: stop or reduce range immediately if any symptom travels down the leg.",
+  upgrades:[
+    {type:"measurable", label:"Log hold time and range", detail:"Track how long you hold and how much extension feels comfortable — small, gradual increases only."},
+    {type:"harder", label:"Progress toward straighter arms", detail:"Move from sphinx (forearms) toward a fuller extension only once the shallower version feels completely comfortable."},
+  ],
+  media:[
+    {t:"article",label:"Cobra Pose: Benefits, How-To, Variations", src:"Yoga Journal", url:"https://www.yogajournal.com/poses/cobra-pose/"},
+  ]},
+
+{ id:"side-lying-hip-abduction", name:"Side-lying hip abduction", cats:["rehab"], fatigue:"low", level:1,
+  targets:"Glute medius — the outer hip muscle that stabilizes the pelvis with every step, distinct from the glutes your bridge work already trains.",
+  why:"A weak glute medius lets the pelvis drop slightly with every step, creating a chain of compensation that lands squarely in the lower back — one of the most commonly cited, most overlooked contributors to recurring back tightness, and a genuinely simple, low-risk exercise to address it directly.",
+  when:["skill","recovery"], dosage:"3 × 12-15 each side, 2 s up / 1 s hold / 2 s down.",
+  progression:"Add a light resistance band above the knees, and later a small ankle weight with a pulse at the top.",
+  regression:"Reduce how high you lift the leg, and slow the tempo further.",
+  mistakes:"Rotating the torso backward to help lift the leg higher instead of keeping the hips stacked — this is the most common way people fake more range without training the actual muscle.",
+  cues:"Keep your hips stacked directly on top of each other throughout. Point your toes very slightly toward the floor rather than the ceiling as you lift — that small rotation meaningfully increases how much the target muscle actually works.",
+  pairs:"A natural pairing with glute bridge and quadruped hip circles — together they cover hip stability from every angle.",
+  source:"Cross-checked against multiple physical-therapy sources on glute medius activation for lower back pain — consistent on the toes-slightly-down cue and the torso-rotation fault to avoid.",
+  upgrades:[
+    {type:"measurable", label:"Log reps without torso rotation", detail:"Track how many clean reps you get before the torso starts rotating backward to compensate."},
+    {type:"harder", label:"Add a band, then an ankle weight", detail:"A light band above the knees first, later an ankle weight with a small pulse at the top once that feels controlled."},
+  ],
+  media:[
+    {t:"article",label:"Side-Lying Hip Abduction Technique", src:"Hinge Health", url:"https://www.hingehealth.com/resources/articles/hip-abduction-exercises/"},
+  ]},
+
+
 /* ---- PRESS-SPECIFIC ---- */
 { id:"press-walks", name:"Press walks (weight-shift drill)", cats:["compression","line"], fatigue:"low", level:2,
   targets:"The shoulder lean and counterbalance that starts every press — without needing to leave the floor.",
@@ -2560,6 +2633,10 @@ const VIDEO = {
   "weighted-pullover-stretch": {yt:"", title:"", src:"", status:"missing", why:"No dedicated video confirmed — worth finding one given the loading detail matters for safety."},
   "loaded-hollow-extension": {yt:"", title:"", src:"", status:"missing", why:"No dedicated video confirmed for this specific loaded box variant."},
   "handstand-kick-switch":   {yt:"", title:"", src:"", status:"missing", why:"No embeddable video confirmed despite strong article sourcing — worth finding one given this is a coordination-heavy skill best seen, not just read."},
+  "dead-bug":                {yt:"g5XKMzr5gUs", title:"Deadbug Tutorial - Proper Form and Technique", src:"YouTube", status:"ok"},
+  "bird-dog":                {yt:"", title:"", src:"", status:"missing", why:"No dedicated video confirmed — worth finding one, hip rotation is easy to miss without seeing it done correctly."},
+  "cobra-pose":              {yt:"", title:"", src:"", status:"missing", why:"No dedicated video confirmed — worth finding one."},
+  "side-lying-hip-abduction": {yt:"", title:"", src:"", status:"missing", why:"No dedicated video confirmed — worth finding one, the toes-down detail is easy to miss from text alone."},
   "bear-to-pike":               {yt:"", title:"", src:"", status:"missing", why:"No clean standalone video confirmed — worth finding one, article sourcing is solid."},
   "quad-hip-circles":           {yt:"", title:"", src:"", status:"missing", why:"No dedicated video confirmed — worth finding one."},
   "spiderman-lunge":            {yt:"", title:"", src:"", status:"missing", why:"No single clean video confirmed despite very strong article sourcing across multiple sources."},
@@ -3163,7 +3240,12 @@ const TAXONOMY = [
   muscles:["delts","forearms","erectors"],
   subs:[{id:"pr-wu", name:"Warm-up", fams:["Warm-up & prep"]},
         {id:"pr-dk", name:"Desk resets", desk:true}],
-  cats:[]}
+  cats:[]},
+ {id:"rehab", name:"Recovery & Rehab", blurb:"General, well-sourced guidance for common issues — never a substitute for your own physio or doctor.",
+  muscles:["erectors","abs","glutes"],
+  subs:[{id:"rh-back", name:"Lower back", fams:["Recovery — lower back"]},
+        {id:"rh-shoulder", name:"Shoulder", fams:["Recovery — shoulder"]}],
+  cats:["rehab"]}
 ];
 const taxById = id => TAXONOMY.find(t=>t.id===id);
 
@@ -3418,29 +3500,39 @@ function classCovers(kind){
 
 /* ---------- seed routines ---------- */
 function seedRoutines(){ return [
- {id:"r-eve-shoulder", name:"Evening Release — Shoulders & Wrists", minutes:7, fatigue:"low", days:[], seeded:true,
-  useCase:"After a handstand-heavy class, at home in the evening — nothing new, just releasing what today already loaded.",
+ {id:"r-eve-shoulder", name:"Evening Release — Shoulders & Wrists", minutes:10, fatigue:"low", days:[], seeded:true,
+  useCase:"After a handstand-heavy class, at home in the evening — nothing new, just releasing what today already loaded, plus the daily core-stability pair.",
   items:[
    {ex:"puppy-pose-classic", sets:1, reps:"—", hold:"45 s", note:"straight arms, hips stacked over knees"},
    {ex:"wrist-prep", sets:1, reps:"—", hold:"—", note:"same short circuit, no bodyweight loading needed"},
+   {ex:"dead-bug", sets:2, reps:"6 each side", hold:"—", note:"back flat on the floor throughout, general guidance only"},
+   {ex:"bird-dog", sets:2, reps:"6 each side", hold:"2 s", note:"hips level, general guidance only"},
   ]},
- {id:"r-eve-hips", name:"Evening Release — Hips", minutes:6, fatigue:"low", days:[], seeded:true,
-  useCase:"After a glutes-heavy class, evening — releases what got loaded, doesn't add fresh training stress.",
+ {id:"r-eve-hips", name:"Evening Release — Hips", minutes:9, fatigue:"low", days:[], seeded:true,
+  useCase:"After a glutes-heavy class, evening — releases what got loaded, plus the daily core-stability pair and direct hip-stability work.",
   items:[
    {ex:"pigeon-pose", sets:1, reps:"—", hold:"45 s/side", note:"stop if you feel the knee, not the hip"},
    {ex:"couch-stretch", sets:1, reps:"—", hold:"30 s/side", note:"build up gradually, this one is intense"},
+   {ex:"dead-bug", sets:2, reps:"6 each side", hold:"—", note:"back flat on the floor throughout, general guidance only"},
+   {ex:"bird-dog", sets:2, reps:"6 each side", hold:"2 s", note:"hips level, general guidance only"},
+   {ex:"side-lying-hip-abduction", sets:2, reps:"12 each side", hold:"—", note:"toes slightly down, general guidance only"},
   ]},
- {id:"r-eve-spine", name:"Evening Release — Spine", minutes:6, fatigue:"low", days:[], seeded:true,
-  useCase:"After a varied skills class, evening — a slow reset for a spine that moved through a lot of positions today.",
+ {id:"r-eve-spine", name:"Evening Release — Spine", minutes:9, fatigue:"low", days:[], seeded:true,
+  useCase:"After a varied skills class, evening — a slow reset for a spine that moved through a lot of positions today, plus the daily core-stability pair.",
   items:[
    {ex:"floor-catcow", sets:1, reps:"8-10 rounds", hold:"—", note:"slow, breath-paced"},
    {ex:"downward-dog", sets:1, reps:"—", hold:"30 s", note:"bend the knees generously"},
+   {ex:"dead-bug", sets:2, reps:"6 each side", hold:"—", note:"back flat on the floor throughout, general guidance only"},
+   {ex:"bird-dog", sets:2, reps:"6 each side", hold:"2 s", note:"hips level, general guidance only"},
   ]},
- {id:"r-eve-chest", name:"Evening Release — Chest & Lats", minutes:6, fatigue:"low", days:[], seeded:true,
-  useCase:"After a pull/push strength class, evening — opens what a session of pulling and pressing just shortened.",
+ {id:"r-eve-chest", name:"Evening Release — Chest & Lats", minutes:10, fatigue:"low", days:[], seeded:true,
+  useCase:"After a pull/push strength class, evening — opens what a session of pulling and pressing just shortened, plus the daily core-stability pair and a gentle spinal-extension finish.",
   items:[
    {ex:"pec-doorway", sets:1, reps:"—", hold:"40 s/side", note:""},
    {ex:"oh-lat-stretch", sets:1, reps:"—", hold:"30 s/side", note:""},
+   {ex:"dead-bug", sets:2, reps:"6 each side", hold:"—", note:"back flat on the floor throughout, general guidance only"},
+   {ex:"bird-dog", sets:2, reps:"6 each side", hold:"2 s", note:"hips level, general guidance only"},
+   {ex:"cobra-pose", sets:2, reps:"—", hold:"10-15 s", note:"gentle range only, general guidance, stop if anything travels down a leg"},
   ]},
  {id:"r-opener", name:"Daily Shoulder Opener", minutes:8, fatigue:"low", days:[3,5], seeded:true,
   useCase:"The everyday default — passive open + light activation, before or after anything.",
@@ -3529,7 +3621,7 @@ let state = {
   milestones: [],      // {date, text}
   prefs: { theme:"dark", media:{}, customMedia:{}, favs:[], upgradesInUse:{} },
 };
-const APP_VERSION = "2026.08.15-6";
+const APP_VERSION = "2026.08.15-7";
 const SKEY = "stackline-v1";
 async function loadState(){
   let raw = null;
