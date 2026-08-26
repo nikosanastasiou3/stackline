@@ -2177,7 +2177,7 @@ const EXERCISES = [
   why:"Direct loaded strength for the scapular elevation your handstand and pressing work both use — a straightforward complement to the bodyweight scapular drills already in your library.",
   when:["skill"], dosage:"3 × 10.",
   progression:"Increase the weight, or add a brief pause at the top of the shrug.",
-  regression:"Lighter weight, or bodyweight-only shoulder shrugs first to groove the pattern.",
+  regression:"Lighter weight, or bodyweight-only shoulder shrugs first to groove the pattern. A resistance band anchored under one foot works just as well as a plate or dumbbells if that's what you have available.",
   mistakes:"Rolling the shoulders in a circular motion instead of a straight vertical shrug; using momentum to swing the weight up instead of a controlled lift.",
   cues:"Hold the weight at your sides, arms straight. Shrug your shoulders straight up toward your ears, squeeze briefly, then lower under control.",
   pairs:"A natural strength complement to wall angels and scapular push-ups — loaded elevation alongside bodyweight control work.",
@@ -2297,6 +2297,174 @@ const EXERCISES = [
   ],
   media:[
     {t:"article",label:"Yoga for Lower Back Pain", src:"Verywell Health", url:"https://www.verywellhealth.com/yoga-for-lower-back-pain-4126958"},
+  ]},
+
+
+{ id:"prone-band-row", name:"Prone band row", cats:["scap","lats"], fatigue:"low", level:2,
+  targets:"Upper back and lats, lying face down and pulling a low-anchored band toward the chest.",
+  why:"The lying position removes any ability to cheat the row with body momentum, isolating the upper back more completely than a standing row would — a genuinely different training effect from the same basic pulling pattern.",
+  when:["before","skill"], dosage:"2 × 10.",
+  progression:"Use a stronger band, or slow the pulling phase for more time under tension.",
+  regression:"A lighter band, or reduce the range of the pull.",
+  mistakes:"Letting the lower back arch to help generate the pull instead of keeping the movement isolated to the upper back and arms; shrugging the shoulders up instead of keeping them down and back.",
+  cues:"Anchor the band low — a stall bar or something heavy works. Lying face down, pull the band toward your chest, driving your elbows back at roughly a 30-degree angle from your body, squeezing your shoulder blades together at the top.",
+  pairs:"A natural pairing with pull-ups and bar pullover as part of a pulling-focused warm-up or main set.",
+  source:"Cross-checked against OPEX Fitness's row-variation guide and Physitrack's prone row technique breakdown — both consistent on the low-back-stays-down, elbows-back-30-degrees cues.",
+  upgrades:[
+    {type:"measurable", label:"Log the band strength", detail:"Track resistance and progress it as upper-back strength improves."},
+    {type:"harder", label:"Slow the tempo", detail:"A 2-3 second pull and controlled return adds real time under tension."},
+  ],
+  media:[
+    {t:"article",label:"10 Row Variations for the Horizontal Pull Pattern", src:"OPEX Fitness", url:"https://www.opexfit.com/blog/10-row-variations-for-the-horizontal-pull-pattern"},
+    {t:"article",label:"How to perform the Prone Row Bench", src:"Physitrack", url:"https://www.physitrack.com/exercise-library/how-to-perform-the-prone-row-bench-exercise"},
+  ]},
+
+{ id:"kneeling-lunge-legext", name:"Kneeling lunge with leg extension", cats:["hips"], fatigue:"low", level:2,
+  targets:"Hip flexors, dynamically stretched by extending the back leg straight from a kneeling lunge instead of holding a static position.",
+  why:"A dynamic alternative to your static hip flexor stretches — actively straightening and controlling the back leg adds a strength-through-range component that a purely passive hold doesn't.",
+  when:["before"], dosage:"2 × 10.",
+  progression:"Extend the back leg higher off the floor, or slow the movement further.",
+  regression:"A smaller range, keeping the back knee closer to the floor throughout.",
+  mistakes:"Losing the hip flexor stretch entirely as the leg straightens — the front hip should still feel the stretch throughout, not just at the start.",
+  cues:"From a kneeling lunge, keep your hips pressed low and forward as you straighten your back leg, lifting the knee just off the floor. Keep feeling the stretch through the front of that hip the whole time, then return to the kneeling position.",
+  pairs:"A natural pairing with Spiderman lunge and couch stretch as part of a hip-flexor-focused sequence.",
+  source:"A dynamic variant of standard half-kneeling hip flexor stretch technique; the active leg-extension addition is a recognized way to add a controlled-range component to an otherwise static stretch.",
+  upgrades:[
+    {type:"measurable", label:"Log how high the leg lifts", detail:"Track how far off the floor the back leg extends while keeping the stretch."},
+    {type:"harder", label:"Slow the tempo", detail:"A 2-3 second extension and return adds real control demand."},
+  ],
+  media:[
+    {t:"article",label:"An Expert Guide to the Couch Stretch", src:"Garage Gym Reviews", url:"https://www.garagegymreviews.com/couch-stretch"},
+  ]},
+
+{ id:"plank-walkout", name:"Plank walk-out", cats:["rib"], fatigue:"low", level:2,
+  targets:"Core and shoulders, walking the hands back toward the feet from a plank to reach standing, then walking back out to plank.",
+  why:"A simpler, more core-focused relative of a full inchworm flow — without the twist and reach finish, this keeps the emphasis specifically on maintaining an active, hollow-feeling core through the whole transition.",
+  when:["before"], dosage:"2 × 10.",
+  progression:"Slow the walk in each direction, or pause briefly in a standing fold before walking back out.",
+  regression:"Bend the knees generously throughout to make the hamstring demand smaller.",
+  mistakes:"Letting the core go slack as the hands walk in — the whole point is keeping active tension through the transition, not just moving from one shape to another.",
+  cues:"From a plank, walk your hands back toward your feet one at a time, keeping your core actively braced the entire way, until you reach a standing fold. Then walk your hands back out to plank the same way.",
+  pairs:"A natural warm-up opener before any core or handstand-focused session.",
+  source:"A simplified variant of the standard inchworm movement pattern, isolating the walking-transition core demand without the twist and overhead reach your existing Inchworm to World's Greatest Stretch adds.",
+  upgrades:[
+    {type:"measurable", label:"Log reps with active core the whole way", detail:"Track how many reps you complete before the core tension starts to fade."},
+    {type:"harder", label:"Slow the walk", detail:"A slower walk in each direction increases time under tension significantly."},
+  ],
+  media:[
+    {t:"article",label:"How To Do the Inchworm Exercise Correctly", src:"BarBend", url:"https://barbend.com/inchworm-exercise/"},
+  ]},
+
+{ id:"parallette-pushup", name:"Parallette push-up", cats:["scap"], fatigue:"med", level:2,
+  targets:"Chest, shoulders and triceps, pressing on elevated parallettes for a deeper range than a floor push-up allows.",
+  why:"Genuinely distinct from a floor diamond push-up — the elevation lets your chest travel below hand level, giving real extra range, and the diagonal elbow path changes the demand on the shoulders and chest.",
+  when:["skill"], dosage:"3 × 15.",
+  progression:"Slow the descent, or elevate the feet for more of the bodyweight over the hands.",
+  regression:"Bend the knees and keep them on the floor to reduce the load.",
+  mistakes:"Flaring the elbows straight out to the sides instead of driving them back at a diagonal — this shifts unwanted strain onto the shoulders.",
+  cues:"Set the parallettes shoulder-width apart. Lower with control, elbows travelling back at a diagonal, until your chest touches or nearly touches the bars, then press back up to full extension.",
+  pairs:"A natural progression once floor push-up work feels easy — same pattern, genuinely more range.",
+  source:"Cross-checked against REP Fitness's and Bulldog Gear's parallette training guides — both consistent on the diagonal elbow path and the deeper range as the key differences from a floor push-up.",
+  upgrades:[
+    {type:"measurable", label:"Log reps with full range", detail:"Track how many reps you complete with your chest genuinely reaching the bars each time."},
+    {type:"harder", label:"Elevate the feet", detail:"Raising the feet shifts more bodyweight onto the hands, increasing the load."},
+  ],
+  media:[
+    {t:"article",label:"Parallettes for Calisthenics", src:"REP Fitness", url:"https://repfitness.com/blogs/training/parallettes-workout"},
+    {t:"article",label:"One Set of Parallettes: 10 Moves", src:"Bulldog Gear", url:"https://bulldoggear.com/blogs/news/one-set-of-parallettes-10-moves"},
+  ]},
+
+{ id:"kb-goblet-squat", name:"Kettlebell goblet squat", cats:["legs"], fatigue:"med", level:2,
+  targets:"Quads and glutes, squatting deep while holding a kettlebell at chest height.",
+  why:"Holding the weight at the chest naturally encourages an upright torso and a genuinely deep squat — often used specifically to teach good squat depth and posture before loading a squat pattern more heavily elsewhere.",
+  when:["skill"], dosage:"3 × 15.",
+  progression:"Increase the kettlebell weight, or slow the descent for more time under tension.",
+  regression:"A lighter kettlebell, or reduce squat depth.",
+  mistakes:"Letting the chest drop forward as the squat deepens instead of staying upright — the weight at the chest is specifically there to help prevent this, so use it actively.",
+  cues:"Hold the kettlebell close to your chest with both hands. Squat down, keeping your chest up and the weight close to your body, going as deep as comfortable, then drive back up through your heels.",
+  pairs:"A natural strength complement to Bulgarian split squats and reverse lunges on any leg-focused day.",
+  source:"Standard loaded squat variant; the goblet-hold cue for maintaining an upright torso through a deep squat is universal and low-disagreement across strength coaching sources.",
+  upgrades:[
+    {type:"measurable", label:"Log the kettlebell weight", detail:"Track load and progress it as depth and control both improve."},
+    {type:"harder", label:"Slow the descent", detail:"A 3-second lowering phase adds real time under tension without more weight."},
+  ],
+  media:[
+    {t:"article",label:"22 Best At-Home Leg Exercises", src:"Signos", url:"https://www.signoshealth.com/blog/leg-exercises-at-home"},
+  ]},
+
+{ id:"weighted-toetouch", name:"Weighted toe-touch crunch", cats:["compression","rib"], fatigue:"med", level:2,
+  targets:"Upper abs, crunching up from a hollow-like position while holding a kettlebell, reaching it toward your toes.",
+  why:"Adds real load to a compression-focused ab movement — the kettlebell gives your abs something genuine to work against rather than just bodyweight, useful once basic hollow and crunch work feels easy.",
+  when:["skill"], dosage:"3 × 10.",
+  progression:"Increase the kettlebell weight, or extend the starting hollow position lower before crunching up.",
+  regression:"Reduce or remove the weight, and shorten the range.",
+  mistakes:"Using momentum to swing the weight up toward the toes instead of a controlled crunch driven by the abs.",
+  cues:"Start in a hollow-like position, legs extended and slightly raised, holding the kettlebell overhead. Crunch up, reaching the kettlebell toward your toes, then lower back to the hollow position under control.",
+  pairs:"A natural progression once your regular hollow body hold and hollow rocks both feel solid.",
+  source:"A loaded variant of standard toe-touch crunch technique; the hollow-position start is consistent with how compression-focused ab work is typically progressed once bodyweight versions feel controlled.",
+  upgrades:[
+    {type:"measurable", label:"Log the weight used", detail:"Track kettlebell weight and progress it as ab strength improves."},
+    {type:"harder", label:"Lower the starting position", detail:"Starting with the legs lower before crunching up increases the range and difficulty."},
+  ],
+  media:[
+    {t:"article",label:"35 Best Flexibility Exercises", src:"Pliability", url:"https://pliability.com/stories/flexibility-exercises"},
+  ]},
+
+{ id:"hammer-curl", name:"Hammer curl", cats:["wrist"], fatigue:"low", level:1,
+  targets:"Biceps and forearms, curling a dumbbell with a neutral grip, thumbs pointing up throughout.",
+  why:"Your first isolated arm exercise — direct bicep and forearm strength that complements the compound pulling your pull-ups and rows already provide, useful accessory work rather than a core skill requirement.",
+  when:["skill"], dosage:"3 × 12.",
+  progression:"Increase the dumbbell weight, or slow the lowering phase for more time under tension.",
+  regression:"Lighter dumbbells, or reduce the range.",
+  mistakes:"Swinging the weight up using the shoulders or back instead of a strict elbow-only curl; letting the elbows drift forward away from the body.",
+  cues:"Keep your elbows pinned close to your sides throughout. Curl the weight up with a neutral grip, thumbs facing up the whole time, squeeze at the top, then lower under control.",
+  pairs:"A natural accessory addition alongside diamond push-ups as a simple arm-focused superset.",
+  source:"Standard isolated arm exercise; the neutral-grip, elbows-pinned technique is universal and low-disagreement across strength coaching sources.",
+  upgrades:[
+    {type:"measurable", label:"Log the weight used", detail:"Track dumbbell weight and progress it as arm strength improves."},
+    {type:"harder", label:"Slow the tempo", detail:"A 3-second lowering phase adds real time under tension without more weight."},
+  ],
+  media:[
+    {t:"article",label:"Top 20 Resistance Band Exercises for Full Body", src:"Living.Fit", url:"https://www.living.fit/blogs/news/20-resistance-band-exercises-for-full-body-workouts"},
+  ]},
+
+
+{ id:"pike-pushup", name:"Pike push-up", cats:["overhead"], fatigue:"med", level:2,
+  targets:"Shoulders, pressing strength trained in a pike position that mimics the shoulder angle of a handstand without being inverted.",
+  why:"Directly builds the pressing strength your handstand push-up work depends on, in a position that's much easier to control while you're still building the strength — no balance demand, just the pressing pattern itself.",
+  when:["skill"], dosage:"3 × 8-10.",
+  progression:"Elevate the feet to increase the shoulder angle and difficulty, working toward a feet-elevated pike push-up.",
+  regression:"A shallower pike angle, or reduce the range of the press.",
+  mistakes:"Letting the hips drift forward into more of a regular push-up instead of staying piked, which shifts the work away from the shoulders and into the chest.",
+  cues:"Set up in a pike position, hips high, hands and feet on the floor. Bend your elbows to lower your head toward the floor between your hands, then press back up, keeping the pike shape throughout.",
+  pairs:"The direct foundation stage for your Handstand Push-up skill line — this is already stage 1 there.",
+  source:"Standard handstand push-up progression exercise; consistent, low-disagreement technique across gymnastics and calisthenics coaching sources.",
+  upgrades:[
+    {type:"measurable", label:"Log reps with a genuine pike angle", detail:"Track how many reps stay piked before the hips start drifting forward."},
+    {type:"harder", label:"Elevate the feet", detail:"Raising the feet increases the shoulder angle, moving you closer to a true handstand position."},
+  ],
+  media:[
+    {t:"article",label:"Pike Push-Up: How to Do It, Muscles Worked, and Variations", src:"Hinge Health", url:"https://www.hingehealth.com/resources/articles/pike-push-up/"},
+    {t:"article",label:"Pike Push-ups", src:"Maximum Potential Calisthenics", url:"https://www.mpcalisthenics.com/tutorial/pike-push-ups"},
+  ]},
+
+{ id:"hanging-leg-raise", name:"Hanging leg raise", cats:["compression"], fatigue:"med", level:3,
+  targets:"Lower abs and hip flexors, raising straight or bent legs while hanging from a bar.",
+  why:"A genuine core-compression benchmark and a direct step toward toes-to-bar and L-sit work — hanging removes any ability to use momentum from the floor, isolating the abs and hip flexors more completely.",
+  when:["skill"], dosage:"3 × 10.",
+  progression:"Straighten the legs fully if starting bent-knee, then work toward raising the legs higher, eventually toward toes-to-bar.",
+  regression:"Bend the knees to shorten the lever significantly, reducing the demand.",
+  mistakes:"Swinging the body to generate momentum instead of a controlled raise; letting the shoulders shrug up toward the ears instead of staying engaged and depressed.",
+  cues:"Hang from the bar with your shoulders actively engaged, not just passively hanging. Raise your legs under control, avoiding any swing, then lower slowly.",
+  pairs:"A natural pairing with your L-sit line — hanging leg raises build the same hip-flexor and lower-ab strength from a different starting position.",
+  source:"Standard core-compression exercise; the no-swing, shoulders-engaged technique is universal and low-disagreement across gymnastics and calisthenics coaching sources.",
+  upgrades:[
+    {type:"measurable", label:"Log reps without swing", detail:"Track how many controlled reps you get before momentum starts to help."},
+    {type:"harder", label:"Straighten the legs, then raise higher", detail:"Bent knee first, then straight leg, then working the raise height toward toes-to-bar."},
+  ],
+  media:[
+    {t:"article",label:"Pike Leg Raise: How to Do It & Abdominals Form", src:"Fitloop", url:"https://fitloop.app/exercises/hanging-pike"},
+    {t:"article",label:"Hanging Pike — Compression Hang Leg Raise", src:"GymStreak", url:"https://www.gymstreak.com/exercises/hanging-pike"},
   ]},
 
 
@@ -2855,6 +3023,15 @@ const VIDEO = {
   "dead-bug":                {yt:"g5XKMzr5gUs", title:"Deadbug Tutorial - Proper Form and Technique", src:"YouTube", status:"ok"},
   "bird-dog":                {yt:"", title:"", src:"", status:"missing", why:"No dedicated video confirmed — worth finding one, hip rotation is easy to miss without seeing it done correctly."},
   "cobra-pose":              {yt:"", title:"", src:"", status:"missing", why:"No dedicated video confirmed — worth finding one."},
+  "prone-band-row":          {yt:"", title:"", src:"", status:"missing", why:"No dedicated video confirmed for this specific band-anchored variant — worth finding one."},
+  "kneeling-lunge-legext":   {yt:"", title:"", src:"", status:"missing", why:"No dedicated video confirmed for this specific dynamic variant."},
+  "plank-walkout":           {yt:"", title:"", src:"", status:"missing", why:"No dedicated video confirmed for this specific simplified variant, distinct from the full inchworm."},
+  "parallette-pushup":       {yt:"", title:"", src:"", status:"missing", why:"No dedicated video confirmed — worth finding one given the elbow-path detail matters."},
+  "kb-goblet-squat":         {yt:"", title:"", src:"", status:"missing", why:"No dedicated video confirmed — extremely standard movement, worth finding one anyway."},
+  "weighted-toetouch":       {yt:"", title:"", src:"", status:"missing", why:"No dedicated video confirmed for this specific loaded variant."},
+  "hammer-curl":             {yt:"", title:"", src:"", status:"missing", why:"No dedicated video confirmed — extremely standard movement, worth finding one anyway."},
+  "pike-pushup":             {yt:"", title:"", src:"", status:"missing", why:"No dedicated video confirmed — worth finding one, this is core content for your HSPU skill line."},
+  "hanging-leg-raise":       {yt:"", title:"", src:"", status:"missing", why:"No dedicated video confirmed — worth finding one, form here is easy to get subtly wrong with swinging."},
   "side-lying-hip-abduction": {yt:"", title:"", src:"", status:"missing", why:"No dedicated video confirmed — worth finding one, the toes-down detail is easy to miss from text alone."},
   "fingertip-plank":         {yt:"", title:"", src:"", status:"missing", why:"No dedicated video confirmed — worth finding one, form here is easy to get subtly wrong."},
   "straddle-plank":          {yt:"", title:"", src:"", status:"missing", why:"No dedicated video confirmed — worth finding one."},
@@ -3568,6 +3745,22 @@ function routineMuscleMap(routine, h){
    session builder, so logging and personal bests just work.
 ============================================================ */
 const WORKOUTS = [
+ { id:"w-repssets-1", name:"Reps & Sets — Week 1", tax:"push", seeded:true,
+   blurb:"A recurring series — full-body strength work in a straightforward reps-and-sets structure, updated week by week as classes evolve toward broader coverage.",
+   items:[
+     {ref:"prone-band-row", sets:2, reps:"10"},
+     {ref:"kneeling-lunge-legext", sets:2, reps:"10"},
+     {ref:"weighted-shrugs", sets:2, reps:"10, band or plate"},
+     {ref:"plank-walkout", sets:2, reps:"10"},
+     {ref:"pull-up", sets:3, reps:"10"},
+     {ref:"parallette-pushup", sets:3, reps:"15"},
+     {ref:"hanging-leg-raise", sets:3, reps:"10"},
+     {ref:"kb-goblet-squat", sets:3, reps:"15"},
+     {ref:"pike-pushup", sets:3, reps:"10"},
+     {ref:"weighted-toetouch", sets:3, reps:"10"},
+     {ref:"hammer-curl", sets:3, reps:"12"},
+     {ref:"diamond-pushup", sets:3, reps:"12"},
+   ]},
  { id:"w-hs-newseason", name:"Handstand Lesson — Activation & Mobility Focus", tax:"handstand", seeded:true,
    blurb:"Start-of-season handstand class structure — activation and mobility focused rather than volume. Rename this once you know which weekday it recurs on.",
    items:[
@@ -3877,7 +4070,7 @@ let state = {
   milestones: [],      // {date, text}
   prefs: { theme:"dark", media:{}, customMedia:{}, favs:[], upgradesInUse:{} },
 };
-const APP_VERSION = "2026.08.15-8";
+const APP_VERSION = "2026.08.15-9";
 const SKEY = "stackline-v1";
 async function loadState(){
   let raw = null;

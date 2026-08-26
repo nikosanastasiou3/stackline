@@ -1328,26 +1328,47 @@ function openDayLogPicker(date){
    For backfilling a day you did not run live, this step comes first: pick
    which routine, tick which drills, then hand off to the existing feel/
    notes step with that selection already populated. */
+/* Resolves an id that could be either a routine or a workout, and returns
+   its drill list in a common shape — routines key items by "ex", workouts
+   by "ref", and a workout's ref can itself be a bare catalog string rather
+   than a real drill, which this filters out safely. */
+function blockItemsFor(id){
+  const r = routineById(id);
+  if(r) return {kind:"routine", obj:r, drills: r.items.map(it=>exById(it.ex)).filter(Boolean)};
+  const w = workoutById(id);
+  if(w) return {kind:"workout", obj:w, drills: w.items.map(it=>exById(it.ref)).filter(Boolean)};
+  return null;
+}
+/* Used wherever a log's routineId needs a human-readable name and might
+   actually be a workout id — routineById() alone would silently return
+   nothing for those. */
+function blockName(id){
+  return (routineById(id)||{}).name || (workoutById(id)||{}).name || "";
+}
 function openBlockBackfill(date){
   const plan = planFor(new Date(date+"T12:00:00").getDay());
   const existing = logByDate(date);
-  let routineId = (existing && existing.routineId) || plan.routine || (state.routines[0]||{}).id;
+  let blockId = (existing && existing.routineId) || plan.routine || (state.routines[0]||{}).id;
   let doneSet = new Set((existing && existing.done) || []);
   const draw = ()=>{
-    const r = routineById(routineId);
-    const items = r ? r.items.map(it=>exById(it.ex)).filter(Boolean) : [];
+    const picked = blockItemsFor(blockId);
+    const items = picked ? picked.drills : [];
+    const workoutOpts = allWorkoutsList();
     openSheet("What did you do — "+fmtDate(date),
      `<label class="f">Which block?</label>
-      <select id="bb-routine">${state.routines.map(x=>`<option value="${x.id}" ${x.id===routineId?"selected":""}>${esc(x.name)} · ${x.minutes} min</option>`).join("")}</select>
+      <select id="bb-routine">
+        <optgroup label="Routines">${state.routines.map(x=>`<option value="${x.id}" ${x.id===blockId?"selected":""}>${esc(x.name)} · ${x.minutes} min</option>`).join("")}</optgroup>
+        <optgroup label="Workouts">${workoutOpts.map(x=>`<option value="${x.id}" ${x.id===blockId?"selected":""}>${esc(x.name)}</option>`).join("")}</optgroup>
+      </select>
       <label class="f" style="margin-top:14px">Which drills did you actually do?</label>
       <div class="exl">${items.map(e=>`
         <div class="exi" data-bbtick="${e.id}">
           <div class="check ${doneSet.has(e.id)?"on":""}">${ICONS.check}</div>
           <div class="bd"><div class="nm">${esc(e.name)}</div></div>
-        </div>`).join("") || '<p class="tiny">This block has no drills.</p>'}</div>`,
+        </div>`).join("") || '<p class="tiny">This block has no drills, or its items don\'t match a drill in your library.</p>'}</div>`,
      `<button class="btn ghost" id="bb-cancel">Cancel</button>
       <button class="btn primary" style="flex:1" id="bb-next">Next</button>`);
-    $("#bb-routine").onchange=e=>{ routineId=e.target.value; doneSet=new Set(); draw(); };
+    $("#bb-routine").onchange=e=>{ blockId=e.target.value; doneSet=new Set(); draw(); };
     $$("#sheet-body [data-bbtick]").forEach(el=> el.onclick=()=>{
       const id=el.dataset.bbtick;
       doneSet.has(id)?doneSet.delete(id):doneSet.add(id);
@@ -1355,7 +1376,7 @@ function openBlockBackfill(date){
     });
     $("#bb-cancel").onclick = closeSheet;
     $("#bb-next").onclick = ()=>{
-      openLogForm(date, {routineId:routineId, done:[...doneSet]});
+      openLogForm(date, {routineId:blockId, done:[...doneSet]});
     };
   };
   draw();
@@ -1661,6 +1682,15 @@ const MUSCLES = {
   "childspose-side":         {stretch:{p:["lats"],s:["obliques"]}},
   "standing-chest-opener":   {stretch:{p:["pecs","delts_front"],s:[]}},
   "supine-spinal-twist":     {stretch:{p:["obliques","erectors"],s:[]}},
+  "prone-band-row":          {work:{p:["lats","traps_mid"],s:["forearms","biceps"]}},
+  "kneeling-lunge-legext":   {stretch:{p:["hipflexors"],s:["quads"]}},
+  "plank-walkout":           {work:{p:["abs"],s:["delts_front"]}, stretch:{p:["hamstrings"],s:[]}},
+  "parallette-pushup":       {work:{p:["pecs","triceps"],s:["delts_front"]}},
+  "kb-goblet-squat":         {work:{p:["quads","glutes"],s:["adductors"]}},
+  "weighted-toetouch":       {work:{p:["abs"],s:["hipflexors"]}},
+  "hammer-curl":             {work:{p:["biceps","forearms"],s:[]}},
+  "pike-pushup":             {work:{p:["delts","triceps"],s:["abs"]}},
+  "hanging-leg-raise":       {work:{p:["abs","hipflexors"],s:["forearms"]}},
   "desk-cat-cow":       {work:{p:["erectors"],s:["abs"]}, stretch:{p:["erectors"],s:[]}},
   "desk-hamstring":     {stretch:{p:["hamstrings"],s:["glutes"]}},
   "desk-triceps":       {stretch:{p:["triceps"],s:["lats"]}},
@@ -2730,6 +2760,87 @@ const HOWTO = {
   "Keep both shoulders on the floor throughout — this is what protects your lower back during the twist.",
   "Hold for 3-5 slow breaths, then return to center and repeat on the other side."],
  check:"If your shoulders are lifting off the floor as your knees lower, the movement has shifted into your lower back instead of your mid-back — reduce how far the knees drop until both shoulders stay grounded."},
+
+"prone-band-row":{desc:"Lying face down, you pull a low-anchored band toward your chest, isolating the upper back without any ability to cheat with body momentum.",
+ steps:["Anchor a resistance band low — around a stall bar leg, a heavy dumbbell, or similar.",
+  "Lie face down on the floor, holding the band with both hands, arms extended toward the anchor.",
+  "Keeping your body still, pull the band toward your chest, driving your elbows back at roughly a 30-degree angle from your body.",
+  "Squeeze your shoulder blades together at the top of the pull.",
+  "Lower back to the extended position under control.",
+  "Repeat for the set."],
+ check:"If your lower back is arching to help generate the pull, that's momentum substituting for actual back strength — keep your body flat and isolate the movement to your arms and upper back."},
+
+"kneeling-lunge-legext":{desc:"From a kneeling lunge, you straighten your back leg while keeping your hips low and forward, adding a dynamic, controlled component to a hip flexor stretch.",
+ steps:["Kneel into a lunge position, front knee bent at 90 degrees, back knee resting on the floor.",
+  "Keep your hips pressed low and slightly forward, feeling a stretch through the front of your back hip.",
+  "Straighten your back leg, lifting the knee just off the floor, while keeping that hip stretch throughout.",
+  "Hold briefly at full extension.",
+  "Return the back knee to the floor under control.",
+  "Repeat for the set, then switch legs."],
+ check:"If the hip stretch disappears as your leg straightens, you've lost the position that makes this exercise work — keep your hips low and forward throughout the whole movement, not just at the start."},
+
+"plank-walkout":{desc:"From a plank, you walk your hands back toward your feet to reach standing, keeping your core actively braced throughout, then walk back out to plank.",
+ steps:["Start in a high plank position.",
+  "Keeping your core actively braced, walk your hands back toward your feet, one hand at a time.",
+  "Continue until you reach a standing forward fold.",
+  "Keeping the same active core tension, walk your hands back out to plank the same way.",
+  "Repeat for the set.",
+  "Bend your knees as needed throughout if your hamstrings limit the range."],
+ check:"If your core tension is fading as you walk in or out, that's the exact thing this drill is meant to train — slow down and consciously keep the bracing consistent through the whole transition."},
+
+"parallette-pushup":{desc:"Pressing on elevated parallettes, you lower your chest below hand level for a deeper range than a floor push-up allows, driving your elbows back at a diagonal.",
+ steps:["Set up parallettes roughly shoulder-width apart.",
+  "Grip the parallettes and extend your legs back into a plank position, body in a straight line.",
+  "Lower your chest down between the bars, elbows travelling back at a diagonal angle, not straight out to the sides.",
+  "Lower until your chest touches or nearly touches the bars.",
+  "Press back up to full extension.",
+  "Repeat for the set."],
+ check:"If your elbows are flaring straight out to the sides instead of tracking back at a diagonal, that shifts strain onto your shoulders — reset the elbow path before continuing."},
+
+"kb-goblet-squat":{desc:"Holding a kettlebell at your chest, you squat down deep while keeping your torso upright, using the weight's position to help maintain good posture.",
+ steps:["Hold a kettlebell close to your chest with both hands, elbows pointing down.",
+  "Stand with your feet roughly shoulder-width apart.",
+  "Squat down, keeping your chest up and the kettlebell close to your body throughout.",
+  "Go as deep as feels comfortable and controlled.",
+  "Drive back up through your heels to standing.",
+  "Repeat for the set."],
+ check:"If your chest is dropping forward as you squat deeper, use the kettlebell actively — pressing it gently into your chest can help you find and hold a taller torso position."},
+
+"weighted-toetouch":{desc:"Starting in a hollow-like position holding a kettlebell overhead, you crunch up and reach the weight toward your toes, then return under control.",
+ steps:["Lie on your back, legs extended and slightly raised, holding a kettlebell overhead with both hands.",
+  "Keep your lower back pressed toward the floor in a hollow-like position.",
+  "Crunch up, reaching the kettlebell toward your toes.",
+  "Hold briefly at the top.",
+  "Lower back down under control to the starting hollow-like position.",
+  "Repeat for the set."],
+ check:"If you're swinging the weight up using momentum rather than a controlled crunch, slow down and let your abs drive the movement instead — a smaller, controlled range beats a bigger, swinging one."},
+
+"hammer-curl":{desc:"Holding a dumbbell in each hand with a neutral grip, you curl the weight up while keeping your elbows pinned to your sides.",
+ steps:["Stand tall holding a dumbbell in each hand, arms extended, palms facing each other (neutral grip).",
+  "Keep your elbows pinned close to your sides throughout.",
+  "Curl the weight up, keeping your thumbs pointing up the whole way.",
+  "Squeeze briefly at the top.",
+  "Lower back down under control.",
+  "Repeat for the set."],
+ check:"If your elbows are drifting forward away from your body, or you're using your shoulders to help swing the weight up, slow down and reset — this should be a strict, elbow-only movement."},
+
+"pike-pushup":{desc:"From a pike position with your hips high, you bend your elbows to lower your head toward the floor between your hands, then press back up.",
+ steps:["Set up in a downward-dog-like pike position, hands and feet on the floor, hips lifted high.",
+  "Keep your legs as straight as comfortable, forming an inverted V shape.",
+  "Bend your elbows, lowering your head toward the floor between your hands.",
+  "Keep your hips high throughout — don't let them drift forward into a regular push-up position.",
+  "Press back up to the starting pike position.",
+  "Repeat for the set."],
+ check:"If your hips are dropping and this starts to feel like a regular push-up, you've lost the pike angle that makes this drill work — reset your hips high before continuing."},
+
+"hanging-leg-raise":{desc:"Hanging from a bar, you raise your legs under control, training your lower abs and hip flexors without any ability to use momentum from the ground.",
+ steps:["Hang from a pull-up bar with an active grip, shoulders engaged rather than just passively hanging.",
+  "Keeping your legs together, raise them up under control — bent knees to start, working toward straight legs over time.",
+  "Avoid any swinging — the raise should come entirely from your abs and hip flexors.",
+  "Pause briefly at the top of the raise.",
+  "Lower back down slowly to the hanging position.",
+  "Repeat for the set."],
+ check:"If you're using a swinging motion to help get your legs up, that's momentum doing the work instead of your abs — slow down, and if needed, reduce the range until you can do it without any swing."},
 
 "pancake":{desc:"You sit with your legs wide apart and fold forward with a flat back. It opens the hamstrings and inner thighs, which is where the press handstand starts from.",
  steps:["Sit on the floor and take your legs as wide as is comfortable, kneecaps pointing at the ceiling.","Sit up tall on your sit bones. If you are rolling backward, sit on a folded towel or cushion.","Place your hands on the floor in front of you.","Keeping your back flat, hinge forward from the hips — imagine leading with your chest, not your head.","Walk your hands forward only as far as you can go without your lower back rounding.","Hold, breathing steadily, then walk back up."],
@@ -3935,7 +4046,7 @@ function logsCSV(){
   const head=["date","routine","drills_completed","dosage","feel","energy","tightness","pain","notes","skill_sessions"];
   const q=v=>'"'+String(v==null?"":v).replace(/"/g,'""')+'"';
   return [head.join(",")].concat(state.logs.map(l=>[
-    l.date, routineById(l.routineId)?.name||"", (l.done||[]).map(id=>exById(id)?.name||id).join("; "),
+    l.date, blockName(l.routineId), (l.done||[]).map(id=>exById(id)?.name||id).join("; "),
     l.dosage||"", l.feel||"", l.energy, (l.tight||[]).join("; "), l.pain||"", l.notes||"",
     (l.skills||[]).map(s=>`${skillById(s.skill)?.name||s.skill} Lv${s.level} ${s.preset}${s.metric?" | "+s.metric:""}${s.metric2?" | "+s.metric2:""}`).join(" ;; ")
   ].map(q).join(","))).join("\n");
