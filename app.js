@@ -36,6 +36,7 @@ function metaBlob(){
     customMoves:{data: state.customMoves, u: state.meta_classU  || Date.now()},
     customWorkouts:{data: state.customWorkouts, u: state.meta_classU || Date.now()},
     hiddenWorkouts:{data: state.hiddenWorkouts, u: state.meta_classU || Date.now()},
+    customAdaptations:{data: state.customAdaptations, u: state.meta_classU || Date.now()},
     schedule:   {data: state.schedule,    u: state.meta_schedU  || Date.now()}
   };
 }
@@ -89,6 +90,7 @@ async function syncPull(){
       if(cloud.customMoves && (cloud.customMoves.u||0) > (state.meta_classU||0)) state.customMoves = cloud.customMoves.data||[];
       if(cloud.customWorkouts && (cloud.customWorkouts.u||0) > (state.meta_classU||0)) state.customWorkouts = cloud.customWorkouts.data||[];
       if(cloud.hiddenWorkouts && (cloud.hiddenWorkouts.u||0) > (state.meta_classU||0)) state.hiddenWorkouts = cloud.hiddenWorkouts.data||[];
+      if(cloud.customAdaptations && (cloud.customAdaptations.u||0) > (state.meta_classU||0)) state.customAdaptations = cloud.customAdaptations.data||[];
       if(cloud.schedule && (cloud.schedule.u||0) > (state.meta_schedU||0)){
         state.schedule = cloud.schedule.data||null; state.meta_schedU = cloud.schedule.u; }
       saveLocalOnly(); takeSnapshot(); applyTheme(); render(curView);
@@ -848,8 +850,48 @@ function exerciseUsage(){
 }
 const lvlBadge = lvl => `<span class="tag" style="background:var(--surface2)">Lv ${lvl}</span>`;
 let libCat = null, libSub = null, libTop = "cats";
+function adaptationById(id){ return ADAPTATIONS.concat(state.customAdaptations||[]).find(a=>a.id===id); }
+function renderAdaptations(){
+  const all = ADAPTATIONS.concat(state.customAdaptations||[]);
+  $("#view-library").innerHTML =
+    `<div class="segrow"><button class="seg" id="lib-top-cats">Categories</button><button class="seg" id="lib-top-work">Workouts</button><button class="seg on" id="lib-top-adapt">Adaptations</button></div>` +
+    `<div class="row between" style="margin:12px 0" ><div class="eyebrow" style="flex:1;margin:0">Training around an active injury or constraint — these stick around to reuse</div></div>` +
+    `${all.map(w=>{
+       const totalMin = w.items.reduce((n,it)=> n + (it.sets||1)*0.6, 0);
+       return `<div class="wk-hero-flat">
+         <div class="hero-top"><span class="tag2">Adaptation</span>
+           <span class="dur2">${Math.max(1,Math.round(totalMin))} min</span></div>
+         <div class="wk-heading">
+           <div class="wk-text"><h3>${esc(w.name)}</h3><div class="fx2">${esc(w.blurb||"")}</div></div>
+         </div>
+         <div class="exl" style="margin-top:12px">${w.items.map((it,i)=>{
+           const r = workoutRef(it.ref);
+           return `<div class="exi" style="padding:8px 10px;background:var(--surface);cursor:pointer" data-wex="${w.id}|${i}">
+             <div class="ic" style="width:26px;height:26px;font-size:.66rem">${i+1}</div>
+             <div class="bd"><div class="nm" style="font-size:.83rem">${esc(r.name)}</div>
+             <div class="mt">${it.sets} × ${esc(it.reps)}</div></div>
+           </div>`;}).join("")}</div>
+         <div class="row" style="margin-top:11px;gap:7px">
+           <button class="btn small primary" data-wstart="${w.id}">${ICONS.play}Start</button>
+         </div>
+       </div>`;}).join("") || '<p class="tiny">No adaptations yet — ask to build one whenever something comes up.</p>'}`;
+  $("#lib-top-cats").onclick=()=>{ libTop="cats"; renderLibrary(); };
+  $("#lib-top-work").onclick=()=>{ libTop="workouts"; renderLibrary(); };
+  $$("#view-library [data-wstart]").forEach(b=> b.onclick=()=>{
+    const w = adaptationById(b.dataset.wstart); if(!w) return;
+    openBlockBackfill(todayISO(), w.id);
+  });
+  $$("#view-library [data-wex]").forEach(el=> el.onclick=()=>{
+    const [wid, idx] = el.dataset.wex.split("|");
+    const w = adaptationById(wid); if(!w) return;
+    const it = w.items[+idx]; if(!it) return;
+    if(exById(it.ref)) openExercise(it.ref, renderAdaptations);
+    else openRefMove(workoutRef(it.ref).name, renderAdaptations);
+  });
+}
 function renderLibrary(){
   if(libTop==="workouts") return renderWorkouts();
+  if(libTop==="adapt") return renderAdaptations();
   if(lib.mode==="progression"){ renderLibraryProgression(exerciseUsage()); return; }
   if(libCat) return renderLibraryCategory();
   const usage = exerciseUsage();
@@ -868,7 +910,7 @@ function renderLibrary(){
     return;
   }
   $("#view-library").innerHTML =
-    `<div class="segrow"><button class="seg on" id="lib-top-cats">Categories</button><button class="seg" id="lib-top-work">Workouts</button></div>` +
+    `<div class="segrow"><button class="seg on" id="lib-top-cats">Categories</button><button class="seg" id="lib-top-work">Workouts</button><button class="seg" id="lib-top-adapt">Adaptations</button></div>` +
     libSearchBar() +
     `${needsReview().length? `<button class="btn small block" id="lib-review" style="margin-bottom:12px">⚑ ${needsReview().length} drills need a video check</button>`:""}
      ${uncategorizedDrills().length? `<button class="btn small block" id="lib-uncat" style="margin-bottom:12px">📋 ${uncategorizedDrills().length} drill${uncategorizedDrills().length>1?"s":""} need categorizing</button>`:""}
@@ -882,6 +924,7 @@ function renderLibrary(){
        </button>`;}).join("")}</div>
      <div class="notice teal" style="margin-top:14px">${ICONS.info}<span>Tap a category to see every drill and movement in it. Teal shows what it trains; amber shows what it lengthens.</span></div>`;
   $("#lib-top-work").onclick=()=>{ libTop="workouts"; renderLibrary(); };
+  $("#lib-top-adapt").onclick=()=>{ libTop="adapt"; renderLibrary(); };
   bindLibrary();
 }
 function libSearchBar(){
@@ -1335,7 +1378,7 @@ function openDayLogPicker(date){
 function blockItemsFor(id){
   const r = routineById(id);
   if(r) return {kind:"routine", obj:r, drills: r.items.map(it=>exById(it.ex)).filter(Boolean)};
-  const w = workoutById(id);
+  const w = workoutById(id) || adaptationById(id);
   if(w) return {kind:"workout", obj:w, drills: w.items.map(it=>exById(it.ref)).filter(Boolean)};
   return null;
 }
@@ -1343,22 +1386,24 @@ function blockItemsFor(id){
    actually be a workout id — routineById() alone would silently return
    nothing for those. */
 function blockName(id){
-  return (routineById(id)||{}).name || (workoutById(id)||{}).name || "";
+  return (routineById(id)||{}).name || (workoutById(id)||{}).name || (adaptationById(id)||{}).name || "";
 }
-function openBlockBackfill(date){
+function openBlockBackfill(date, presetId){
   const plan = planFor(new Date(date+"T12:00:00").getDay());
   const existing = logByDate(date);
-  let blockId = (existing && existing.routineId) || plan.routine || (state.routines[0]||{}).id;
+  let blockId = presetId || (existing && existing.routineId) || plan.routine || (state.routines[0]||{}).id;
   let doneSet = new Set((existing && existing.done) || []);
   const draw = ()=>{
     const picked = blockItemsFor(blockId);
     const items = picked ? picked.drills : [];
     const workoutOpts = allWorkoutsList();
+    const adaptOpts = ADAPTATIONS.concat(state.customAdaptations||[]);
     openSheet("What did you do — "+fmtDate(date),
      `<label class="f">Which block?</label>
       <select id="bb-routine">
         <optgroup label="Routines">${state.routines.map(x=>`<option value="${x.id}" ${x.id===blockId?"selected":""}>${esc(x.name)} · ${x.minutes} min</option>`).join("")}</optgroup>
         <optgroup label="Workouts">${workoutOpts.map(x=>`<option value="${x.id}" ${x.id===blockId?"selected":""}>${esc(x.name)}</option>`).join("")}</optgroup>
+        <optgroup label="Adaptations">${adaptOpts.map(x=>`<option value="${x.id}" ${x.id===blockId?"selected":""}>${esc(x.name)}</option>`).join("")}</optgroup>
       </select>
       <label class="f" style="margin-top:14px">Which drills did you actually do?</label>
       <div class="exl">${items.map(e=>`
@@ -1689,6 +1734,16 @@ const MUSCLES = {
   "kb-goblet-squat":         {work:{p:["quads","glutes"],s:["adductors"]}},
   "weighted-toetouch":       {work:{p:["abs"],s:["hipflexors"]}},
   "hammer-curl":             {work:{p:["biceps","forearms"],s:[]}},
+  "mcgill-curlup":           {work:{p:["abs"],s:[]}},
+  "side-plank-hold":         {work:{p:["obliques","glutes"],s:["delts"]}},
+  "machine-leg-extension":   {work:{p:["quads"],s:[]}},
+  "machine-leg-curl":        {work:{p:["hamstrings"],s:[]}},
+  "machine-hip-abduction":   {work:{p:["glutes"],s:["adductors"]}},
+  "machine-hip-adduction":   {work:{p:["adductors"],s:[]}},
+  "machine-calf-raise":      {work:{p:["calves"],s:[]}},
+  "machine-leg-press":       {work:{p:["quads","glutes"],s:["hamstrings"]}},
+  "machine-ab-crunch":       {work:{p:["abs"],s:[]}},
+  "machine-back-extension":  {work:{p:["erectors","glutes"],s:["hamstrings"]}},
   "pike-pushup":             {work:{p:["delts","triceps"],s:["abs"]}},
   "hanging-leg-raise":       {work:{p:["abs","hipflexors"],s:["forearms"]}},
   "desk-cat-cow":       {work:{p:["erectors"],s:["abs"]}, stretch:{p:["erectors"],s:[]}},
@@ -2842,6 +2897,96 @@ const HOWTO = {
   "Repeat for the set."],
  check:"If you're using a swinging motion to help get your legs up, that's momentum doing the work instead of your abs — slow down, and if needed, reduce the range until you can do it without any swing."},
 
+"mcgill-curlup":{desc:"Lying on your back with one knee bent and your hands under your lower back, you lift only your head and shoulders slightly, keeping your spine completely still throughout.",
+ steps:["Lie on your back, one knee bent with that foot flat on the floor, the other leg straight.",
+  "Slide your hands underneath your lower back, palms down — this is how you'll monitor that it stays still.",
+  "Brace your core as if about to be gently punched in the stomach.",
+  "Lift only your head and shoulders a small amount off the floor — this is a small lift, not a real crunch.",
+  "Hold briefly, feeling your lower back staying completely still under your hands.",
+  "Lower back down slowly and repeat.",
+  "This is general guidance, not a substitute for your physio's specific assessment — stop if anything feels sharp."],
+ check:"If your lower back is moving under your hands as you lift, that's exactly the motion this exercise is meant to avoid — reduce the lift until your hands genuinely feel no movement at all."},
+
+"side-plank-hold":{desc:"Lying on your side, you lift your hips into a straight line and hold the position completely still.",
+ steps:["Lie on your side, forearm on the floor, elbow directly under your shoulder.",
+  "Stack or stagger your feet for stability.",
+  "Brace your core, then lift your hips until your body forms a straight line from shoulders to feet.",
+  "Hold completely still — no dipping, no rotating forward or back.",
+  "Breathe normally throughout the hold.",
+  "Lower down under control, then repeat on the other side.",
+  "This is general guidance, not a substitute for your physio's specific assessment — stop if anything feels sharp."],
+ check:"If your hips are sagging toward the floor or your body is rotating forward, the hold has broken down — either reset the position or drop the bottom knee to the floor for support until you can hold it properly."},
+
+"machine-leg-extension":{desc:"Seated on the machine, you extend your knees against resistance from a pad resting on your shins.",
+ steps:["Sit on the machine with the back pad adjusted to your height, the shin pad resting just above your ankles.",
+  "Hold the side handles lightly, or rest your hands on your thighs if avoiding grip.",
+  "Extend your knees smoothly until your legs are straight.",
+  "Squeeze briefly at the top.",
+  "Lower back down under control.",
+  "Repeat for the set."],
+ check:"If you're swinging the weight up using momentum, slow down — the movement should be smooth and controlled through the whole range."},
+
+"machine-leg-curl":{desc:"Seated or lying on the machine, you curl your legs against resistance from a pad resting on your ankles or calves.",
+ steps:["Set up on the machine, adjusting the pad so it rests against your ankles or lower calves.",
+  "Hold the side handles lightly, or keep your hands relaxed if avoiding grip.",
+  "Curl your legs through the full range against the resistance.",
+  "Squeeze briefly at the top.",
+  "Lower back down under control.",
+  "Repeat for the set."],
+ check:"If your lower back is arching off the pad to help generate the curl, that's compensation — keep your back flat and isolate the movement to your hamstrings."},
+
+"machine-hip-abduction":{desc:"Seated on the machine with pads against your knees or thighs, you press your legs apart against resistance.",
+ steps:["Sit on the machine with the pads positioned against the outside of your knees or thighs.",
+  "Rest your hands lightly on the side handles or your lap.",
+  "Press your knees apart smoothly against the resistance.",
+  "Squeeze briefly at full range.",
+  "Return under control.",
+  "Repeat for the set."],
+ check:"If you're using momentum or your lower back to help press the legs apart, slow down and isolate the movement to your hips."},
+
+"machine-hip-adduction":{desc:"Seated on the machine with pads against your knees or thighs, you press your legs together against resistance.",
+ steps:["Sit on the machine with the pads positioned against the inside of your knees or thighs, legs starting apart.",
+  "Rest your hands lightly on the side handles or your lap.",
+  "Press your knees together smoothly against the resistance.",
+  "Squeeze briefly at full range.",
+  "Return under control to the starting position.",
+  "Repeat for the set."],
+ check:"If you're rushing through reps without a controlled squeeze, slow down and focus on a deliberate press-and-return each time."},
+
+"machine-calf-raise":{desc:"Standing with the weight resting on your shoulders through the machine's pads, you rise onto your toes and lower back down.",
+ steps:["Position yourself under the shoulder pads, feet flat on the platform, balls of your feet at the edge.",
+  "Rest your hands lightly on the handles for balance only, not for pulling.",
+  "Rise onto your toes as high as comfortable.",
+  "Pause briefly at the top.",
+  "Lower down slowly until you feel a stretch through your calves.",
+  "Repeat for the set."],
+ check:"If you're bouncing at the bottom of each rep instead of pausing and controlling the stretch, slow down — the calves respond better to a controlled range than a fast bounce."},
+
+"machine-leg-press":{desc:"Seated or reclined on the machine, you press a weighted sled away with your legs, then lower it back under control.",
+ steps:["Sit or recline on the machine, feet flat on the platform, roughly shoulder-width apart.",
+  "Rest your hands lightly on the side handles.",
+  "Lower the sled under control until your knees reach a comfortable depth, keeping your lower back flat against the pad.",
+  "Press back up through your heels without locking your knees out hard at the top.",
+  "Repeat for the set."],
+ check:"If your lower back is rounding off the pad as the sled lowers deep, that's a sign the depth is too much right now — reduce the range until your back stays flat throughout."},
+
+"machine-ab-crunch":{desc:"Seated on the machine, you crunch forward against a chest pad, training the abs with minimal hand involvement.",
+ steps:["Sit on the machine with the chest pad positioned against your upper chest or shoulders.",
+  "Rest your hands lightly on the handles or crossed over your chest.",
+  "Crunch forward smoothly, leading with your ribs curling toward your hips.",
+  "Squeeze briefly at the bottom of the crunch.",
+  "Return under control to the starting position.",
+  "Repeat for the set."],
+ check:"If you're using your hip flexors or arms to help pull the weight instead of your abs doing the work, slow down and focus the effort specifically on the crunch."},
+
+"machine-back-extension":{desc:"With your legs secured and hips resting on a pad, you hinge forward and extend back up to a straight line, training the lower back and glutes.",
+ steps:["Position yourself on the bench with your hips resting on the pad and your ankles secured behind you.",
+  "Cross your arms over your chest, or hold the frame lightly if you need extra stability.",
+  "Hinge forward from the hips with a flat back, lowering under control.",
+  "Extend back up to a straight line from your head to your heels — stop there, don't arch further.",
+  "Repeat for the set."],
+ check:"If you're arching past a straight line at the top, that's hyperextension, not the intended movement — stop right at neutral each rep."},
+
 "pancake":{desc:"You sit with your legs wide apart and fold forward with a flat back. It opens the hamstrings and inner thighs, which is where the press handstand starts from.",
  steps:["Sit on the floor and take your legs as wide as is comfortable, kneecaps pointing at the ceiling.","Sit up tall on your sit bones. If you are rolling backward, sit on a folded towel or cushion.","Place your hands on the floor in front of you.","Keeping your back flat, hinge forward from the hips — imagine leading with your chest, not your head.","Walk your hands forward only as far as you can go without your lower back rounding.","Hold, breathing steadily, then walk back up."],
  check:"Flat back beats depth every time. If your lower back is rounding, you have gone too far — come back up until it is flat again."},
@@ -3461,7 +3606,7 @@ function nameCollisions(){
 function renderWorkouts(){
   const all = allWorkoutsList();
   $("#view-library").innerHTML =
-    `<div class="segrow"><button class="seg" id="lib-top-cats">Categories</button><button class="seg on" id="lib-top-work">Workouts</button></div>
+    `<div class="segrow"><button class="seg" id="lib-top-cats">Categories</button><button class="seg on" id="lib-top-work">Workouts</button><button class="seg" id="lib-top-adapt">Adaptations</button></div>
      <div class="row between" style="margin-bottom:12px;gap:10px">
        <div class="eyebrow" style="flex:1;margin:0">Full sessions — exercises, sets, reps</div>
        <button class="btn small primary" id="wk-new">＋ Create</button>
@@ -3491,6 +3636,7 @@ function renderWorkouts(){
          </div>
        </div>`;}).join("")}`;
   $("#lib-top-cats").onclick=()=>{ libTop="cats"; renderLibrary(); };
+  $("#lib-top-adapt").onclick=()=>{ libTop="adapt"; renderLibrary(); };
   $("#wk-new").onclick=()=> openWorkoutEditor();
   $$("#view-library [data-wstart]").forEach(b=> b.onclick=()=>{
     const w = workoutById(b.dataset.wstart);

@@ -2468,6 +2468,156 @@ const EXERCISES = [
   ]},
 
 
+{ id:"mcgill-curlup", name:"McGill curl-up", cats:["rehab"], fatigue:"low", level:1,
+  targets:"Deep abdominal stabilizers, lifting just the head and shoulders off the floor with the lower back deliberately kept still.",
+  why:"Deliberately different from a standard crunch or sit-up — this specifically avoids repeated lumbar flexion, which is the exact loading pattern most consistently linked to disc irritation, while still training the abs to brace effectively.",
+  when:["skill","recovery"], dosage:"Build a small pyramid: 2-3 sets working up to 8-10 reps, holding briefly at the top.",
+  progression:"Extend the hold at the top slightly, or add a few more reps to the pyramid — never chase a bigger range of motion.",
+  regression:"Fewer reps, shorter hold, and a smaller lift if the neck or back feels strained.",
+  mistakes:"Lifting the shoulder blades off the floor and curling the spine — the lift should be minimal, just enough to feel the abs switch on, not a real crunch; letting the lower back flatten or arch instead of staying neutral and still.",
+  cues:"One knee bent, one leg straight. Place your hands under your lower back to monitor that it doesn't move. Lift only your head and shoulders slightly, brace hard, and hold — the lower back underneath your hands should feel completely still throughout.",
+  pairs:"One of the three core exercises this program is built around, alongside side plank and bird dog.",
+  source:"Cross-checked against Squat University's breakdown of Dr. Stuart McGill's Big 3 core-stability protocol — the hands-under-back cue and the emphasis on avoiding spinal flexion are central to the technique as McGill teaches it.",
+  upgrades:[
+    {type:"measurable", label:"Log reps and hold time", detail:"Track the pyramid you build up to over weeks — small, steady increases."},
+    {type:"harder", label:"Extend the hold", detail:"A longer isometric hold at the top trains endurance without adding spinal motion."},
+  ],
+  media:[
+    {t:"article",label:"The McGill Big 3 For Core Stability", src:"Squat University", url:"https://squatuniversity.com/2018/06/21/the-mcgill-big-3-for-core-stability/"},
+  ]},
+
+{ id:"side-plank-hold", name:"Side plank hold", cats:["rehab"], fatigue:"low", level:1,
+  targets:"Obliques and glute medius, holding a static side plank position without any movement.",
+  why:"The static-hold companion to your existing dynamic side plank hip dips — McGill's specific protocol calls for a held isometric position to build endurance, distinct from the repeated-movement version.",
+  when:["skill","recovery"], dosage:"2-3 × 10-20 s each side, building duration gradually over weeks.",
+  progression:"Extend the hold time in small increments, or lift the top leg slightly for an added balance demand once the base hold is solid.",
+  regression:"Keep the bottom knee on the floor for support, reducing the length of the lever.",
+  mistakes:"Letting the hips sag toward the floor or rotate forward — the whole point is a rigid, unmoving line from shoulders to feet.",
+  cues:"Elbow directly under your shoulder. Lift your hips until your body forms a straight line, and hold completely still — no dipping, no rotating.",
+  pairs:"One of the three core exercises this program is built around, alongside McGill curl-up and bird dog.",
+  source:"Cross-checked against Squat University's breakdown of Dr. Stuart McGill's Big 3 core-stability protocol — the static hold (versus repeated movement) is specifically what distinguishes this from a dynamic side plank variation.",
+  upgrades:[
+    {type:"measurable", label:"Log hold time each side", detail:"Track duration and build it gradually — small, steady increases over weeks, not sudden jumps."},
+    {type:"harder", label:"Lift the top leg", detail:"Once the base hold is genuinely solid, lifting the top leg adds real difficulty."},
+  ],
+  media:[
+    {t:"article",label:"The McGill Big 3 For Core Stability", src:"Squat University", url:"https://squatuniversity.com/2018/06/21/the-mcgill-big-3-for-core-stability/"},
+  ]},
+
+
+{ id:"machine-leg-extension", name:"Leg extension machine", cats:["legs"], fatigue:"med", level:1,
+  targets:"Quads, isolated on a seated machine, extending the knees against resistance.",
+  why:"A genuinely hands-free way to load the quads directly — the pads rest against your shins, so grip is never required, even lightly.",
+  when:["skill"], dosage:"3 × 12-15.",
+  progression:"Increase the weight, or slow the lowering phase.",
+  regression:"Lighter weight, or reduce the range of motion.",
+  mistakes:"Using momentum to swing the weight up instead of a controlled extension; locking the knees out hard at the top.",
+  cues:"Extend your knees smoothly until your legs are straight, squeeze briefly, then lower under control.",
+  pairs:"A natural pairing with leg curl for balanced quad and hamstring work in the same session.",
+  source:"Standard gym machine exercise; technique is universal across strength coaching sources.",
+  upgrades:[{type:"measurable", label:"Log the weight used", detail:"Track load and progress it over sessions."},
+    {type:"harder", label:"Slow the tempo", detail:"A slower lowering phase adds real time under tension."}],
+  media:[{t:"article",label:"22 Best At-Home Leg Exercises", src:"Signos", url:"https://www.signoshealth.com/blog/leg-exercises-at-home"}]},
+
+{ id:"machine-leg-curl", name:"Leg curl machine", cats:["legs"], fatigue:"med", level:1,
+  targets:"Hamstrings, isolated on a seated or lying machine, curling the legs against resistance.",
+  why:"Direct hamstring loading with no grip demand at all — the resistance pad rests against your ankles or calves.",
+  when:["skill"], dosage:"3 × 12-15.",
+  progression:"Increase the weight, or slow the curling phase.",
+  regression:"Lighter weight, or reduce the range.",
+  mistakes:"Arching the lower back off the pad to help generate the curl; using momentum instead of a controlled movement.",
+  cues:"Curl your legs smoothly through the full range, squeeze briefly at the top, then lower under control.",
+  pairs:"A natural pairing with leg extension for balanced quad and hamstring work.",
+  source:"Standard gym machine exercise; technique is universal across strength coaching sources.",
+  upgrades:[{type:"measurable", label:"Log the weight used", detail:"Track load and progress it over sessions."},
+    {type:"harder", label:"Slow the tempo", detail:"A slower curling phase adds real time under tension."}],
+  media:[{t:"article",label:"22 Best At-Home Leg Exercises", src:"Signos", url:"https://www.signoshealth.com/blog/leg-exercises-at-home"}]},
+
+{ id:"machine-hip-abduction", name:"Hip abduction machine", cats:["legs"], fatigue:"low", level:1,
+  targets:"Outer hips and glute medius, pressing the legs apart against resistance from a seated machine.",
+  why:"Direct glute medius loading with the resistance pads against your knees or thighs — no hand involvement needed at all.",
+  when:["skill"], dosage:"3 × 15.",
+  progression:"Increase the weight, or add a brief pause at full range.",
+  regression:"Lighter weight, or reduce the range.",
+  mistakes:"Using the lower back to help press the legs apart instead of isolating the movement to the hips.",
+  cues:"Press your knees apart smoothly against the resistance, squeeze briefly, then return under control.",
+  pairs:"A natural pairing with hip adduction for complete inner and outer hip work.",
+  source:"Standard gym machine exercise; technique is universal across strength coaching sources.",
+  upgrades:[{type:"measurable", label:"Log the weight used", detail:"Track load and progress it over sessions."},
+    {type:"harder", label:"Add a pause", detail:"A brief hold at full range adds real time under tension."}],
+  media:[{t:"article",label:"22 Best At-Home Leg Exercises", src:"Signos", url:"https://www.signoshealth.com/blog/leg-exercises-at-home"}]},
+
+{ id:"machine-hip-adduction", name:"Hip adduction machine", cats:["legs"], fatigue:"low", level:1,
+  targets:"Inner thighs, pressing the legs together against resistance from a seated machine.",
+  why:"Direct adductor loading, hands-free — the resistance pads sit against your knees or thighs, no grip required.",
+  when:["skill"], dosage:"3 × 15.",
+  progression:"Increase the weight, or add a brief pause at full range.",
+  regression:"Lighter weight, or reduce the range.",
+  mistakes:"Rushing through reps instead of a controlled squeeze and return.",
+  cues:"Press your knees together smoothly against the resistance, squeeze briefly, then return under control.",
+  pairs:"A natural pairing with hip abduction for complete inner and outer hip work.",
+  source:"Standard gym machine exercise; technique is universal across strength coaching sources.",
+  upgrades:[{type:"measurable", label:"Log the weight used", detail:"Track load and progress it over sessions."},
+    {type:"harder", label:"Add a pause", detail:"A brief hold at full range adds real time under tension."}],
+  media:[{t:"article",label:"22 Best At-Home Leg Exercises", src:"Signos", url:"https://www.signoshealth.com/blog/leg-exercises-at-home"}]},
+
+{ id:"machine-calf-raise", name:"Standing calf raise machine", cats:["legs"], fatigue:"low", level:1,
+  targets:"Calves, rising onto the toes against resistance carried on the shoulders rather than the hands.",
+  why:"The weight rests on your shoulders through the machine's pads, so your hands only rest lightly for balance — genuinely low demand on the grip.",
+  when:["skill"], dosage:"3 × 15-20.",
+  progression:"Increase the weight, or pause briefly at the top of each rep.",
+  regression:"Lighter weight, or reduce the range.",
+  mistakes:"Bouncing at the bottom instead of a controlled stretch and rise; only using a small partial range.",
+  cues:"Rise onto your toes as high as comfortable, pause briefly, then lower until you feel a stretch through the calves.",
+  pairs:"A natural finisher after leg extension and leg curl work.",
+  source:"Standard gym machine exercise; technique is universal across strength coaching sources.",
+  upgrades:[{type:"measurable", label:"Log the weight used", detail:"Track load and progress it over sessions."},
+    {type:"harder", label:"Add a pause", detail:"A brief hold at the top adds real time under tension."}],
+  media:[{t:"article",label:"22 Best At-Home Leg Exercises", src:"Signos", url:"https://www.signoshealth.com/blog/leg-exercises-at-home"}]},
+
+{ id:"machine-leg-press", name:"Leg press machine", cats:["legs"], fatigue:"high", level:2,
+  targets:"Quads and glutes together, pressing a weighted sled away with the legs from a seated or reclined position.",
+  why:"A genuine compound leg movement that loads the legs heavily while keeping the hands mostly passive on the side handles — much lower grip demand than a barbell squat.",
+  when:["skill"], dosage:"3 × 10-12.",
+  progression:"Increase the weight, or slow the lowering phase.",
+  regression:"Lighter weight, or reduce how deep the sled lowers.",
+  mistakes:"Letting the lower back round off the pad as the sled lowers deep — keep it flat throughout; locking the knees out hard at the top.",
+  cues:"Lower the sled under control until your knees reach a comfortable depth, keeping your lower back flat against the pad, then press back up without locking your knees hard.",
+  pairs:"A natural anchor for a leg-focused session, alongside leg extension, leg curl, and calf raise.",
+  source:"Standard gym machine exercise; the flat-back, controlled-depth technique is universal across strength coaching sources.",
+  upgrades:[{type:"measurable", label:"Log the weight used", detail:"Track load and progress it over sessions."},
+    {type:"harder", label:"Slow the lowering phase", detail:"A slower descent adds real time under tension without more weight."}],
+  media:[{t:"article",label:"22 Best At-Home Leg Exercises", src:"Signos", url:"https://www.signoshealth.com/blog/leg-exercises-at-home"}]},
+
+{ id:"machine-ab-crunch", name:"Ab crunch machine", cats:["rib"], fatigue:"low", level:1,
+  targets:"Abs, crunching forward against a chest pad rather than gripping any handles.",
+  why:"Loads the abs directly through a chest pad, keeping the hands essentially uninvolved — a genuinely low-grip way to still train the core.",
+  when:["skill"], dosage:"3 × 15.",
+  progression:"Increase the weight, or slow the crunching phase.",
+  regression:"Lighter weight, or reduce the range.",
+  mistakes:"Using the hip flexors to help pull the weight instead of isolating the crunch to the abs.",
+  cues:"Crunch forward smoothly, leading with your ribs curling toward your hips, then return under control.",
+  pairs:"A natural pairing with back extension for balanced anterior and posterior core work.",
+  source:"Standard gym machine exercise; technique is universal across strength coaching sources.",
+  upgrades:[{type:"measurable", label:"Log the weight used", detail:"Track load and progress it over sessions."},
+    {type:"harder", label:"Slow the tempo", detail:"A slower crunching phase adds real time under tension."}],
+  media:[{t:"article",label:"35 Best Flexibility Exercises", src:"Pliability", url:"https://pliability.com/stories/flexibility-exercises"}]},
+
+{ id:"machine-back-extension", name:"Back extension bench", cats:["rehab"], fatigue:"low", level:1,
+  targets:"Lower back and glutes, hinging forward and extending back up while your legs are secured and hips rest on a pad.",
+  why:"Trains hip-hinge strength with your hands essentially free to cross over your chest — genuinely low grip demand while still loading the posterior chain.",
+  when:["skill"], dosage:"2-3 × 12-15.",
+  progression:"Cross your arms over your chest instead of holding the frame, or hold a light weight at your chest once comfortable.",
+  regression:"A smaller range of motion, keeping the movement gentle and controlled.",
+  mistakes:"Hyperextending past neutral at the top — this should stop at a straight line, not arch further; rounding the lower back on the way down.",
+  cues:"Hinge forward from the hips with a flat back, lowering under control, then extend back up to a straight line — no further.",
+  pairs:"A natural complement to your existing core-stability work — this trains the posterior chain the abs alone don't cover.",
+  source:"Standard gym equipment exercise; the stop-at-neutral cue (not hyperextending) is consistent across strength coaching sources given the lower back context.",
+  upgrades:[{type:"measurable", label:"Log reps with clean range", detail:"Track how many reps stay controlled without hyperextending."},
+    {type:"harder", label:"Add light weight at the chest", detail:"Once bodyweight reps feel easy and controlled."}],
+  media:[{t:"article",label:"35 Best Flexibility Exercises", src:"Pliability", url:"https://pliability.com/stories/flexibility-exercises"}]},
+
+
 /* ---- PRESS-SPECIFIC ---- */
 { id:"press-walks", name:"Press walks (weight-shift drill)", cats:["compression","line"], fatigue:"low", level:2,
   targets:"The shoulder lean and counterbalance that starts every press — without needing to leave the floor.",
@@ -3032,6 +3182,16 @@ const VIDEO = {
   "hammer-curl":             {yt:"", title:"", src:"", status:"missing", why:"No dedicated video confirmed — extremely standard movement, worth finding one anyway."},
   "pike-pushup":             {yt:"", title:"", src:"", status:"missing", why:"No dedicated video confirmed — worth finding one, this is core content for your HSPU skill line."},
   "hanging-leg-raise":       {yt:"", title:"", src:"", status:"missing", why:"No dedicated video confirmed — worth finding one, form here is easy to get subtly wrong with swinging."},
+  "mcgill-curlup":           {yt:"", title:"", src:"", status:"missing", why:"No dedicated video confirmed — worth finding one, the minimal-lift cue is easy to overshoot without seeing it done correctly."},
+  "side-plank-hold":         {yt:"", title:"", src:"", status:"missing", why:"No dedicated video confirmed — standard movement, worth finding one."},
+  "machine-leg-extension":   {yt:"", title:"", src:"", status:"missing", why:"No dedicated video confirmed — extremely standard gym machine, worth finding one anyway."},
+  "machine-leg-curl":        {yt:"", title:"", src:"", status:"missing", why:"No dedicated video confirmed — extremely standard gym machine."},
+  "machine-hip-abduction":   {yt:"", title:"", src:"", status:"missing", why:"No dedicated video confirmed — extremely standard gym machine."},
+  "machine-hip-adduction":   {yt:"", title:"", src:"", status:"missing", why:"No dedicated video confirmed — extremely standard gym machine."},
+  "machine-calf-raise":      {yt:"", title:"", src:"", status:"missing", why:"No dedicated video confirmed — extremely standard gym machine."},
+  "machine-leg-press":       {yt:"", title:"", src:"", status:"missing", why:"No dedicated video confirmed — worth finding one given the flat-back cue matters."},
+  "machine-ab-crunch":       {yt:"", title:"", src:"", status:"missing", why:"No dedicated video confirmed — extremely standard gym machine."},
+  "machine-back-extension":  {yt:"", title:"", src:"", status:"missing", why:"No dedicated video confirmed — worth finding one given the stop-at-neutral cue matters."},
   "side-lying-hip-abduction": {yt:"", title:"", src:"", status:"missing", why:"No dedicated video confirmed — worth finding one, the toes-down detail is easy to miss from text alone."},
   "fingertip-plank":         {yt:"", title:"", src:"", status:"missing", why:"No dedicated video confirmed — worth finding one, form here is easy to get subtly wrong."},
   "straddle-plank":          {yt:"", title:"", src:"", status:"missing", why:"No dedicated video confirmed — worth finding one."},
@@ -3744,7 +3904,37 @@ function routineMuscleMap(routine, h){
    plus anything the user builds. "Start" feeds straight into the
    session builder, so logging and personal bests just work.
 ============================================================ */
+/* Adaptations — temporary, situational workouts for training around an
+   active injury or constraint (a strained wrist, a flare, anything that
+   rules out a normal session without ruling out training entirely). Kept
+   deliberately separate from WORKOUTS so they never get mixed into normal
+   browsing, and deliberately persistent (no auto-archiving) since the same
+   constraint can recur later. Same item shape as WORKOUTS for full
+   compatibility with existing lookup, editor, and backfill machinery. */
+const ADAPTATIONS = [
+ { id:"adapt-wrist-2026-08", name:"Wrist Strain — Hands-Free Gym Session", tax:"legs", seeded:true,
+   blurb:"For when gripping or pressing hurts (thumb-side wrist strain) but you don't want to lose training days entirely — an all-machine session that keeps the hands essentially uninvolved. Built August 2026, kept here to reuse whenever this comes up again.",
+   items:[
+     {ref:"machine-leg-extension", sets:3, reps:"12-15"},
+     {ref:"machine-leg-curl", sets:3, reps:"12-15"},
+     {ref:"machine-leg-press", sets:3, reps:"10-12"},
+     {ref:"machine-hip-abduction", sets:3, reps:"15"},
+     {ref:"machine-hip-adduction", sets:3, reps:"15"},
+     {ref:"machine-calf-raise", sets:3, reps:"15-20"},
+     {ref:"machine-ab-crunch", sets:3, reps:"15"},
+     {ref:"machine-back-extension", sets:2, reps:"12-15"},
+   ]},
+];
+
 const WORKOUTS = [
+ { id:"w-back-stability", name:"Back Stabilization — Core Program", tax:"rehab", seeded:true,
+   blurb:"Direction-neutral core stabilization, safe to run regardless of what your MRI shows — McGill's Big 3 (curl-up, side plank, bird dog) plus dead bug, the same exercises already woven into your evening releases, here as a proper standalone session. Build the reps and hold times gradually over weeks rather than jumping straight to the top of any range.",
+   items:[
+     {ref:"mcgill-curlup", sets:3, reps:"8-10, brief hold"},
+     {ref:"side-plank-hold", sets:3, reps:"10-20s each side"},
+     {ref:"bird-dog", sets:3, reps:"8-10 each side, 2-3s hold"},
+     {ref:"dead-bug", sets:3, reps:"8-10 each side"},
+   ]},
  { id:"w-repssets-1", name:"Reps & Sets — Week 1", tax:"push", seeded:true,
    blurb:"A recurring series — full-body strength work in a straightforward reps-and-sets structure, updated week by week as classes evolve toward broader coverage.",
    items:[
@@ -4065,12 +4255,13 @@ let state = {
   customMoves: [],
   customWorkouts: [],
   hiddenWorkouts: [],   // ids of seeded WORKOUTS entries the user has deleted
+  customAdaptations: [], // user-created adaptations, same shape/override pattern as customWorkouts
   daySwaps: {},   // {"YYYY-MM-DD": {originalExId: replacementExId}} — today only, never edits the routine
   logs: [],            // {date, routineId, done:[exIds], dosage:{}, line, mob, energy, tight:[], pain, notes, mediaNote}
   milestones: [],      // {date, text}
   prefs: { theme:"dark", media:{}, customMedia:{}, favs:[], upgradesInUse:{} },
 };
-const APP_VERSION = "2026.08.15-9";
+const APP_VERSION = "2026.08.15-10";
 const SKEY = "stackline-v1";
 async function loadState(){
   let raw = null;
@@ -4083,6 +4274,7 @@ async function loadState(){
     state.customDrills = d.customDrills||[]; state.meta_drillsU = d.meta_drillsU||0;
     state.deskLogs = d.deskLogs||[]; state.meta_deskU = d.meta_deskU||0;
     state.eveningLogs = d.eveningLogs||[]; state.meta_eveningU = d.meta_eveningU||0;
+    state.customAdaptations = d.customAdaptations||[];
     state.daySwaps = d.daySwaps||{};
     state.classLogs = d.classLogs||[]; state.customMoves = d.customMoves||[]; state.customWorkouts = d.customWorkouts||[]; state.hiddenWorkouts = d.hiddenWorkouts||[]; state.meta_classU = d.meta_classU||0;
     state.schedule = d.schedule||null; state.meta_schedU = d.meta_schedU||0;
@@ -4102,7 +4294,7 @@ async function loadState(){
 function saveLocalOnly(){
   const raw = JSON.stringify({routines:state.routines, logs:state.logs, milestones:state.milestones,
                               prefs:state.prefs, customDrills:state.customDrills, deskLogs:state.deskLogs, meta_deskU:state.meta_deskU, daySwaps:state.daySwaps, classLogs:state.classLogs, customMoves:state.customMoves, customWorkouts:state.customWorkouts, hiddenWorkouts:state.hiddenWorkouts, meta_classU:state.meta_classU,
-                              schedule:state.schedule, meta_schedU:state.meta_schedU, eveningLogs:state.eveningLogs, meta_eveningU:state.meta_eveningU,
+                              schedule:state.schedule, meta_schedU:state.meta_schedU, eveningLogs:state.eveningLogs, meta_eveningU:state.meta_eveningU, customAdaptations:state.customAdaptations,
                               meta_routinesU:state.meta_routinesU, meta_milestonesU:state.meta_milestonesU, meta_drillsU:state.meta_drillsU});
   try{ localStorage.setItem(SKEY, raw); }catch(e){}
   try{ if(window.storage && window.storage.set){ window.storage.set(SKEY, raw).catch(()=>{}); } }catch(e){}
