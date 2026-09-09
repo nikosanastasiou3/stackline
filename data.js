@@ -4250,6 +4250,7 @@ let state = {
   customDrills: [],
   deskLogs: [],
   eveningLogs: [],   // {date, routineId, n, t} — separate from state.logs so it never collides with the morning block's log entry for the same day
+  prLogs: [],        // {date, drillId, value, unit, t} — optional "I hit something notable" entries; the source of truth for real PRs
   schedule: null,   // null = use DEFAULT_SCHEDULE
   classLogs: [],   // {date, cls, items:[{name,variation,assist,numbers}], notes}
   customMoves: [],
@@ -4261,7 +4262,7 @@ let state = {
   milestones: [],      // {date, text}
   prefs: { theme:"dark", media:{}, customMedia:{}, favs:[], upgradesInUse:{} },
 };
-const APP_VERSION = "2026.08.15-10";
+const APP_VERSION = "2026.08.15-11";
 const SKEY = "stackline-v1";
 async function loadState(){
   let raw = null;
@@ -4275,6 +4276,7 @@ async function loadState(){
     state.deskLogs = d.deskLogs||[]; state.meta_deskU = d.meta_deskU||0;
     state.eveningLogs = d.eveningLogs||[]; state.meta_eveningU = d.meta_eveningU||0;
     state.customAdaptations = d.customAdaptations||[];
+    state.prLogs = d.prLogs||[]; state.meta_prU = d.meta_prU||0;
     state.daySwaps = d.daySwaps||{};
     state.classLogs = d.classLogs||[]; state.customMoves = d.customMoves||[]; state.customWorkouts = d.customWorkouts||[]; state.hiddenWorkouts = d.hiddenWorkouts||[]; state.meta_classU = d.meta_classU||0;
     state.schedule = d.schedule||null; state.meta_schedU = d.meta_schedU||0;
@@ -4294,7 +4296,7 @@ async function loadState(){
 function saveLocalOnly(){
   const raw = JSON.stringify({routines:state.routines, logs:state.logs, milestones:state.milestones,
                               prefs:state.prefs, customDrills:state.customDrills, deskLogs:state.deskLogs, meta_deskU:state.meta_deskU, daySwaps:state.daySwaps, classLogs:state.classLogs, customMoves:state.customMoves, customWorkouts:state.customWorkouts, hiddenWorkouts:state.hiddenWorkouts, meta_classU:state.meta_classU,
-                              schedule:state.schedule, meta_schedU:state.meta_schedU, eveningLogs:state.eveningLogs, meta_eveningU:state.meta_eveningU, customAdaptations:state.customAdaptations,
+                              schedule:state.schedule, meta_schedU:state.meta_schedU, eveningLogs:state.eveningLogs, meta_eveningU:state.meta_eveningU, customAdaptations:state.customAdaptations, prLogs:state.prLogs, meta_prU:state.meta_prU,
                               meta_routinesU:state.meta_routinesU, meta_milestonesU:state.meta_milestonesU, meta_drillsU:state.meta_drillsU});
   try{ localStorage.setItem(SKEY, raw); }catch(e){}
   try{ if(window.storage && window.storage.set){ window.storage.set(SKEY, raw).catch(()=>{}); } }catch(e){}

@@ -37,6 +37,7 @@ function metaBlob(){
     customWorkouts:{data: state.customWorkouts, u: state.meta_classU || Date.now()},
     hiddenWorkouts:{data: state.hiddenWorkouts, u: state.meta_classU || Date.now()},
     customAdaptations:{data: state.customAdaptations, u: state.meta_classU || Date.now()},
+    prLogs:{data: state.prLogs, u: state.meta_prU || Date.now()},
     schedule:   {data: state.schedule,    u: state.meta_schedU  || Date.now()}
   };
 }
@@ -91,6 +92,7 @@ async function syncPull(){
       if(cloud.customWorkouts && (cloud.customWorkouts.u||0) > (state.meta_classU||0)) state.customWorkouts = cloud.customWorkouts.data||[];
       if(cloud.hiddenWorkouts && (cloud.hiddenWorkouts.u||0) > (state.meta_classU||0)) state.hiddenWorkouts = cloud.hiddenWorkouts.data||[];
       if(cloud.customAdaptations && (cloud.customAdaptations.u||0) > (state.meta_classU||0)) state.customAdaptations = cloud.customAdaptations.data||[];
+      if(cloud.prLogs && (cloud.prLogs.u||0) > (state.meta_prU||0)){ state.prLogs = cloud.prLogs.data||[]; state.meta_prU = cloud.prLogs.u; }
       if(cloud.schedule && (cloud.schedule.u||0) > (state.meta_schedU||0)){
         state.schedule = cloud.schedule.data||null; state.meta_schedU = cloud.schedule.u; }
       saveLocalOnly(); takeSnapshot(); applyTheme(); render(curView);
@@ -1211,9 +1213,11 @@ function openExercise(id, back){
     ${!HT?`<div class="notice" style="margin-top:14px">${ICONS.info}<span>Step-by-step instructions for this drill haven't been written yet.</span></div>`:""}`,
    `<button class="btn ${state.prefs.favs.includes(id)?"":"ghost"}" id="ex-fav">★</button>
     ${e.custom?'<button class="btn" id="ex-edit">Edit</button>':""}
+    ${prUnitFor(id)?'<button class="btn" id="ex-pr" title="Log a personal best">🏆</button>':""}
     ${pickContext
       ? `<button class="btn primary" style="flex:1" id="ex-addsess">${ICONS.build}${esc(pickContext.label)}</button>`
       : `<button class="btn primary" style="flex:1" id="ex-add">${ICONS.build}Add to routine draft</button>`}`, back);
+  const epr=$("#ex-pr"); if(epr) epr.onclick=()=> openPRPrompt(id);
   $$("#sheet-body [data-acc]").forEach(b=> b.onclick=()=> b.parentElement.classList.toggle("open"));
   $$("#sheet-body .navrow[data-go]").forEach(b=>{ if(b.dataset.go!=="none") b.onclick=()=> openExercise(b.dataset.go, back); });
   const eed=$("#ex-edit"); if(eed) eed.onclick=()=> openDrillEditor(id);
@@ -3244,6 +3248,9 @@ function openClassLog(date, draft){
 /* personal bests across logged class work */
 function personalBests(){
   const best={};
+  // Parsed from class-log "numbers" text — rough, since it just takes the
+  // largest number it can find (so "3x10" reads as 10). Kept as a fallback
+  // for everything logged before explicit PR entries existed.
   (state.classLogs||[]).forEach(cl=> (cl.items||[]).forEach(it=>{
     if(!it.numbers) return;
     const key = it.name + (it.variation? " · "+it.variation : "");
@@ -3251,6 +3258,17 @@ function personalBests(){
     const top = nums.length? Math.max(...nums) : 0;
     if(!best[key] || top > best[key].top) best[key]={top:top, raw:it.numbers, date:cl.date, assist:it.assist};
   }));
+  // Explicit PR entries are the real source of truth and always win, since
+  // they're a number you deliberately entered rather than one parsed out of
+  // free text.
+  (state.prLogs||[]).forEach(p=>{
+    const d = exById(p.drillId); if(!d) return;
+    const key = d.name;
+    if(!best[key] || p.value > best[key].top || !best[key].explicit){
+      if(!best[key] || p.value >= (best[key].explicit? best[key].top : -1))
+        best[key] = {top:p.value, raw:p.value+(p.unit==="s"?" s":" reps"), date:p.date, explicit:true};
+    }
+  });
   return best;
 }
 
@@ -3601,6 +3619,124 @@ function nameCollisions(){
   return bad;
 }
 
+
+/* Deliberately optional and skippable — a mandatory number field after every
+   session turns logging into a chore, which is exactly what kills long-term
+   use. This only appears for drills where a best actually means something,
+   and "Skip" is a first-class button, not a hidden escape hatch. */
+function openPRPrompt(drillId, date){
+  const d = exById(drillId); if(!d) return;
+  const unit = prUnitFor(drillId); if(!unit) return;
+  const cur = prBestFor(drillId);
+  openSheet("Hit something notable?",
+   `<p class="sub" style="margin-bottom:12px;font-size:.85rem">${esc(d.name)} — only log this if today was genuinely a best. Skipping is completely fine.</p>
+    ${cur? `<div class="notice teal" style="margin-bottom:12px">${ICONS.info}<span>Your current best: <b>${cur.value}${unit==="s"?" s":" reps"}</b>, set ${fmtDate(cur.date)}.</span></div>`:""}
+    <label class="f">Today's best ${unit==="s"?"hold (seconds)":"set (reps)"}</label>
+    <input type="number" id="pr-val" inputmode="numeric" placeholder="${unit==="s"?"e.g. 18":"e.g. 12"}">`,
+   `<button class="btn ghost" id="pr-skip">Skip</button>
+    <button class="btn primary" style="flex:1" id="pr-save">Save</button>`);
+  $("#pr-skip").onclick = closeSheet;
+  $("#pr-save").onclick = ()=>{
+    const v = parseFloat($("#pr-val").value);
+    if(!v || v<=0){ toast("Enter a number, or skip"); return; }
+    logPR(drillId, v, unit, date);
+    closeSheet(); render(curView);
+    toast(cur && v>cur.value ? "New personal best 🎉" : "Logged");
+  };
+}
+
+/* ---------- Highlights: volume, PRs, throwback ---------- */
+
+/* Volume is counted in SETS, not minutes. Every logged item has a set count
+   regardless of whether it was dosed in reps or seconds, so sets are the one
+   unit that compares honestly across a 20 s hold and a 10-rep set. Estimating
+   minutes would mean inventing a per-rep duration, which would look precise
+   without being true. Weekly working sets per area is also how strength
+   coaching already reasons about volume, so it's a real metric, not a
+   made-up one. */
+function volumeByArea(days){
+  const since = todayISO(-(days||7));
+  const tally = {}; // taxId -> {sets, drills:Set}
+  const add = (drillId, sets)=>{
+    const d = exById(drillId); if(!d) return;
+    const t = taxOfDrill(d); if(!t) return;
+    if(!tally[t]) tally[t] = {sets:0, drills:new Set()};
+    tally[t].sets += (sets||1);
+    tally[t].drills.add(d.name);
+  };
+  // morning blocks (state.logs) — the routine's own item list gives set counts
+  (state.logs||[]).filter(l=>l.date>=since).forEach(l=>{
+    const r = routineById(l.routineId) || workoutById(l.routineId) || (typeof adaptationById==="function" ? adaptationById(l.routineId) : null);
+    if(!r) return;
+    const items = r.items||[];
+    (l.done||[]).forEach(exId=>{
+      const it = items.find(x=> (x.ex||x.ref)===exId);
+      add(exId, it? (it.sets||1) : 1);
+    });
+  });
+  // evening releases
+  (state.eveningLogs||[]).filter(l=>l.date>=since).forEach(l=>{
+    const r = routineById(l.routineId); if(!r) return;
+    (r.items||[]).forEach(it=> add(it.ex, it.sets||1));
+  });
+  // class logs — itemised entries, parse a leading "3x..." as the set count
+  (state.classLogs||[]).filter(cl=>cl.date>=since).forEach(cl=>{
+    (cl.items||[]).forEach(it=>{
+      const e = EX_ALL().find(x=>x.name.toLowerCase()===(it.name||"").toLowerCase());
+      if(!e) return;
+      const m = (it.numbers||"").match(/^\s*(\d+)\s*[x×]/i);
+      add(e.id, m? +m[1] : 1);
+    });
+  });
+  return Object.keys(tally).map(tid=>({
+    tax: taxById(tid), sets: tally[tid].sets, drills: [...tally[tid].drills]
+  })).filter(x=>x.tax).sort((a,b)=> b.sets-a.sets);
+}
+
+/* Which drills is a personal best actually meaningful for? Holds and max-rep
+   work, not every stretch — prompting for a number after a doorway pec stretch
+   would just be noise. Uses the drill's own dosage text to decide, and to know
+   whether the unit is seconds or reps. */
+function prUnitFor(drillId){
+  const d = exById(drillId); if(!d) return null;
+  const dose = (d.dosage||"").toLowerCase();
+  const name = (d.name||"").toLowerCase();
+  const isStretch = MUSCLES[drillId] && MUSCLES[drillId].stretch && !MUSCLES[drillId].work;
+  if(isStretch) return null;                       // stretches don't get PRs
+  if(/hold|s\/|max/.test(dose) || /hold|plank|lever|handstand|l-sit|flag/.test(name)) return "s";
+  if(/\d+\s*[-–]?\s*\d*\s*reps?|×|x\s*\d/.test(dose)) return "reps";
+  return null;
+}
+function prBestFor(drillId){
+  const rows = (state.prLogs||[]).filter(p=>p.drillId===drillId);
+  if(!rows.length) return null;
+  return rows.reduce((a,b)=> b.value>a.value? b:a);
+}
+function logPR(drillId, value, unit, date){
+  state.prLogs = (state.prLogs||[]).concat([{date:date||todayISO(), drillId, value:+value, unit, t:Date.now()}]);
+  state.meta_prU = Date.now(); save();
+}
+/* A PR counts as "new this week" if it's the best ever AND was set recently. */
+function recentPRs(days){
+  const since = todayISO(-(days||7));
+  const byDrill = {};
+  (state.prLogs||[]).forEach(p=>{ if(!byDrill[p.drillId] || p.value>byDrill[p.drillId].value) byDrill[p.drillId]=p; });
+  return Object.values(byDrill).filter(p=>p.date>=since).map(p=>{
+    const prev = (state.prLogs||[]).filter(x=>x.drillId===p.drillId && x.t<p.t);
+    const prevBest = prev.length? Math.max(...prev.map(x=>x.value)) : null;
+    return {...p, drill:exById(p.drillId), prevBest};
+  }).filter(p=>p.drill).sort((a,b)=> b.t-a.t);
+}
+/* "On this day" — the earliest logged appearance of something you still train. */
+function throwback(){
+  const all = [];
+  (state.classLogs||[]).forEach(cl=> (cl.items||[]).forEach(it=> all.push({date:cl.date, name:it.name, numbers:it.numbers})));
+  if(all.length<2) return null;
+  const oldest = all.reduce((a,b)=> a.date<b.date? a:b);
+  const daysAgo = Math.round((new Date(todayISO()) - new Date(oldest.date))/86400000);
+  if(daysAgo < 30) return null;   // not interesting yet
+  return {...oldest, daysAgo};
+}
 
 /* ---------- Workouts screen ---------- */
 function renderWorkouts(){
@@ -4000,7 +4136,7 @@ function barChart(vals, labels, max, w=560, h=150){
         <text x="${cx}" y="${h-6}" font-size="9" fill="var(--faint)" text-anchor="middle">${labels[i]}</text>`;
     }).join("")}</svg>`;
 }
-let progRange = 30, progTab = "week";
+let progRange = 30, progTab = "highlights";
 
 /* ---- weekly analyzer: what the week actually contained ---- */
 function weekWindow(offset){
@@ -4036,19 +4172,95 @@ function analyseWeek(offset){
   return {days, cls, logs, desk, items, catCount, skillHits, missing, coldCats,
           trainedN:trained.size, rough, feels};
 }
+let hlRange = 7;   // 7 = this week, 30 = this month
+function viewHighlights(){
+  const vol = volumeByArea(hlRange);
+  const totalSets = vol.reduce((n,v)=>n+v.sets,0);
+  const maxSets = vol.length? vol[0].sets : 1;
+  const sessions = new Set([].concat(
+    (state.logs||[]).filter(l=>l.date>=todayISO(-hlRange)).map(l=>l.date),
+    (state.classLogs||[]).filter(l=>l.date>=todayISO(-hlRange)).map(l=>l.date)
+  )).size;
+  const prs = recentPRs(hlRange);
+  const tb = throwback();
+
+  // Aggregate every trained drill into one figure, weighted by set count so
+  // heavier-trained areas read darker.
+  const trained = [];
+  vol.forEach(v=> v.drills.forEach(nm=>{
+    const e = EX_ALL().find(x=>x.name===nm); if(e) trained.push({ex:e.id});
+  }));
+
+  return `<div class="segrow" style="margin-bottom:12px">
+      <button class="seg ${hlRange===7?"on":""}" data-hlr="7">This week</button>
+      <button class="seg ${hlRange===30?"on":""}" data-hlr="30">This month</button></div>
+
+    <div class="eyebrow" style="margin-bottom:9px">${hlRange===7?"This week":"This month"}, in muscles</div>
+    <div class="hl-hero">
+      <div class="figs">${trained.length? routineMuscleMap({items:trained}, 150) : routineMuscleMap({items:[]}, 150)}</div>
+      <div class="txt">
+        <h2>${totalSets} set${totalSets!==1?"s":""}</h2>
+        <div class="sub" style="font-size:.78rem;margin-top:3px">Across ${sessions} session${sessions!==1?"s":""}${vol.length?" — "+esc(vol[0].tax.name.toLowerCase())+" carried the most":""}.</div>
+        <div class="tiny" style="margin-top:9px;line-height:1.5">Counted in sets, not minutes — the one unit that compares honestly across a timed hold and a rep count.</div>
+      </div>
+    </div>
+
+    <div class="eyebrow">Volume by area</div>
+    ${vol.length? vol.map(v=>`
+      <div class="volrow">
+        <div class="nm">${esc(v.tax.name)}</div>
+        <div class="track"><div class="fill" style="width:${Math.round(v.sets/maxSets*100)}%"></div></div>
+        <div class="n">${v.sets}</div>
+      </div>`).join("")
+      : '<p class="tiny">Nothing logged in this range yet.</p>'}
+
+    <div class="eyebrow">Your skill map</div>
+    <div class="skillgrid">${TREES.map(t=>{
+      const p = treeProgress(t);
+      const pct = Math.round((p.current-1)/t.stages.length*100);
+      const circ = 2*Math.PI*15.5;
+      return `<button class="sknode" data-gotree="${t.id}">
+        <div class="ring"><svg viewBox="0 0 36 36">
+          <circle cx="18" cy="18" r="15.5" fill="none" stroke="var(--line)" stroke-width="3.2"/>
+          <circle cx="18" cy="18" r="15.5" fill="none" stroke="${pct>0?"var(--teal)":"var(--line2)"}" stroke-width="3.2"
+            stroke-linecap="round" stroke-dasharray="${circ.toFixed(1)}" stroke-dashoffset="${(circ*(1-pct/100)).toFixed(1)}"/></svg></div>
+        <div class="nm">${esc(t.short||t.name)}</div><div class="pct">${pct}%</div>
+      </button>`;}).join("")}</div>
+
+    <div class="eyebrow">Personal bests${prs.length?" — new "+(hlRange===7?"this week":"this month"):""}</div>
+    ${prs.length? `<div class="scrollrow">${prs.map(p=>`
+      <div class="prcard">
+        <div class="tag">${esc(p.drill.name)}</div>
+        <div class="val">${p.value}${p.unit==="s"?"s":""}</div>
+        <div class="nm">${p.unit==="s"?"Longest hold":"Most reps"}</div>
+        ${p.prevBest!=null? `<div class="delta">↑ ${(p.value-p.prevBest).toFixed(0)}${p.unit==="s"?"s":""} from last best</div>`:'<div class="delta">First one logged</div>'}
+      </div>`).join("")}</div>`
+      : `<div class="notice" style="margin-top:0">${ICONS.info}<span>No new bests logged in this range. Tap 🏆 on any hold or max-rep drill when you hit something worth recording — it's entirely optional.</span></div>`}
+
+    ${tb? `<div class="eyebrow">On this day</div>
+      <div class="throwback">
+        <div class="ic">${ICONS.info}</div>
+        <div><div style="font-weight:700;font-size:.85rem">${tb.daysAgo} days ago</div>
+        <div class="tiny">Your earliest logged session included ${esc(tb.name)}${tb.numbers?" — "+esc(tb.numbers):""}.</div></div>
+      </div>`:""}`;
+}
+
 function renderProgress(){
   const tabs = `<div class="segrow">
-    <button class="seg ${progTab==="week"?"on":""}" data-pt="week">This week</button>
+    <button class="seg ${progTab==="highlights"?"on":""}" data-pt="highlights">Highlights</button>
+    <button class="seg ${progTab==="week"?"on":""}" data-pt="week">Week</button>
     <button class="seg ${progTab==="skills"?"on":""}" data-pt="skills">Skills</button>
     <button class="seg ${progTab==="bests"?"on":""}" data-pt="bests">Bests</button>
     <button class="seg ${progTab==="history"?"on":""}" data-pt="history">History</button></div>`;
   let body="";
-  if(progTab==="week") body = viewWeekAnalysis();
+  if(progTab==="highlights") body = viewHighlights();
+  else if(progTab==="week") body = viewWeekAnalysis();
   else if(progTab==="skills") body = viewSkillProgress();
   else if(progTab==="bests") body = viewBests();
   else body = viewHistory();
   $("#view-progress").innerHTML = tabs + body;
   $$("#view-progress [data-pt]").forEach(b=> b.onclick=()=>{ progTab=b.dataset.pt; renderProgress(); });
+  $$("#view-progress [data-hlr]").forEach(b=> b.onclick=()=>{ hlRange=+b.dataset.hlr; renderProgress(); });
   $$("#view-progress [data-editcl]").forEach(el=> el.onclick=()=> openClassLog(el.dataset.editcl));
   $$("#view-progress [data-editlog]").forEach(el=> el.onclick=()=> openLogForm(el.dataset.editlog));
   $$("#view-progress [data-gotree]").forEach(el=> el.onclick=()=> openTree(el.dataset.gotree));
