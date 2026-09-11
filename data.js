@@ -1661,7 +1661,7 @@ const EXERCISES = [
   why:"Genuinely distinct from arm circles — this isolates the shoulder girdle itself rather than sweeping the whole extended arm, and it's usually where a real handstand warm-up actually starts.",
   when:["before"], dosage:"10 rolls each direction.",
   progression:"Exaggerate the range — really lift the shoulders up before rolling back and down.",
-  regression:"Smaller, gentler rolls.",
+  regression:"Smaller, gentler rolls — keep the range comfortable rather than forcing a big circle first thing.",
   mistakes:"Barely moving the shoulders at all — the point is a genuine lift-back-down circuit, not a small shrug.",
   cues:"Lift the shoulders up toward the ears, roll them back, then down, then let them come forward to complete the circle.",
   pairs:"Pairs directly with arm circles as the first two movements of almost any upper-body warm-up.",
@@ -3017,7 +3017,7 @@ const EXERCISES = [
          {t:"article",label:"12 Desk Stretches",src:"BTOD",url:"https://www.btod.com/blog/12-stretches-back-pain-desk/"}]},
 
 { id:"desk-twist", name:"Seated spinal twist", cats:["thoracic"], fatigue:"low", level:1, desk:true, deskType:"chair",
-  targets:"Thoracic rotation.",
+  targets:"Thoracic rotation — turning through the mid-back while seated, with the lower back and hips staying still.",
   why:"Rotation is the mobility desk work steals quietest. Keeping it stops the mid-back stiffening into one fixed shape.",
   when:["recovery"], dosage:"20 s per side, 2 rounds. Hips stay square and facing forward.",
   progression:"Use the chair arm for gentle leverage at end range.", regression:"Smaller rotation; hands on the thighs.",
@@ -3062,7 +3062,7 @@ const EXERCISES = [
   targets:"Wrist and forearm tissue after sustained typing.",
   why:"Typing holds the wrists in one position for hours. Since your wrists take full bodyweight in handstands, keeping them healthy through the workday is direct protection for training.",
   when:["recovery"], dosage:"10 wrist circles each way, then spread fingers 5 s / fist 5 s × 5.",
-  progression:"Add a gentle prayer stretch and reverse prayer.", regression:"Circles only.",
+  progression:"Add a gentle prayer stretch and reverse prayer.", regression:"Circles only — skip the prayer stretch and tendon glides entirely if the wrists feel irritated that day.",
   mistakes:"Forcing into pain; rushing through it.",
   cues:"Slow circles, full finger spread, chase warmth.",
   pairs:"Pairs with anything — this one costs nothing and can be done mid-sentence.",
@@ -4549,7 +4549,7 @@ let state = {
   milestones: [],      // {date, text}
   prefs: { theme:"dark", media:{}, customMedia:{}, favs:[], upgradesInUse:{} },
 };
-const APP_VERSION = "2026.08.15-15";
+const APP_VERSION = "2026.08.15-16";
 const SKEY = "stackline-v1";
 async function loadState(){
   let raw = null;
