@@ -2268,7 +2268,7 @@ const EXERCISES = [
   why:"A no-equipment chest stretch that works anywhere, distinct from your doorway version since it needs no prop and can be adjusted continuously through the lift.",
   when:["recovery"], dosage:"3 × 20-30 s.",
   progression:"Straighten the arms further and lift slightly higher as the chest opens up over time.",
-  regression:"A bent-elbow grip instead of straight arms, and a smaller lift.",
+  regression:"A bent-elbow grip instead of straight arms, and a smaller lift. Also works seated — same clasp behind the back, just with the legs out in front, which is how it often gets done at the end of a class.",
   mistakes:"Rounding the upper back forward to compensate instead of standing tall — the stretch should come from lifting the arms, not from changing the spine position.",
   cues:"Clasp your hands behind your back, straighten your arms, and lift them gently away from your body while standing tall and keeping your chest open.",
   pairs:"A natural pairing with your existing doorway pec stretch — the two together cover the chest from a fixed and a free-standing angle.",
@@ -2745,6 +2745,87 @@ const EXERCISES = [
     {type:"harder", label:"Grip a higher rung", detail:"A higher hand position increases the lat stretch."},
   ],
   media:[{t:"article",label:"Stall Bar Exercises for Mobility and Flexibility", src:"Vahva Fitness", url:"http://vahvafitness.com/stall-bar-exercises-mobility-flexibility/"}]},
+
+
+{ id:"small-arm-circles", name:"Small arm circles", cats:["scap"], fatigue:"low", level:1,
+  targets:"Shoulder endurance and rotator cuff, arms held out in a cross position doing small, fast circles.",
+  why:"A genuinely different stimulus from big arm circles — holding the arms out horizontally under their own weight while circling fast builds shoulder endurance rather than warming the joint through range. The burn comes from the isometric hold, not the circles.",
+  when:["before"], dosage:"10 each direction.",
+  progression:"More reps, hold the arms out longer between directions, or add very light weights.",
+  regression:"Fewer reps, and drop the arms to rest between directions.",
+  mistakes:"Letting the arms drift down as they fatigue — keeping them level at shoulder height is what makes this work; making the circles too large, which turns it back into a mobility drill.",
+  cues:"Hold your arms straight out to the sides in a cross, level with your shoulders. Make small, fast circles forward, then reverse — keep the arms up the whole time.",
+  pairs:"A natural follow-on after big arm circles in any handstand warm-up.",
+  source:"Standard shoulder endurance warm-up; the small-circle, arms-held-level technique is consistent across gymnastics and handstand warm-up sources.",
+  upgrades:[
+    {type:"measurable", label:"Log reps before the arms drop", detail:"Track how many you get before the arms start sagging below shoulder height."},
+    {type:"harder", label:"Add light weights", detail:"Even very light weights significantly increase the endurance demand."},
+  ],
+  media:[{t:"article",label:"25 Best Upper Body Warm Up Exercises", src:"Pliability", url:"https://pliability.com/stories/upper-body-warm-up-exercises"}]},
+
+{ id:"single-arm-shrug", name:"Single-arm shrug", cats:["scap"], fatigue:"low", level:1,
+  targets:"Scapular elevation trained one side at a time, standing with no weight.",
+  why:"Isolating one side at a time exposes asymmetries that a two-arm shrug hides — useful before handstand work specifically, where an uneven shoulder position shows up directly in your line.",
+  when:["before"], dosage:"10 each side.",
+  progression:"Slow the tempo, pause at the top, or add light weight once the pattern feels even.",
+  regression:"Smaller range, focusing purely on the movement pattern.",
+  mistakes:"Letting the torso lean toward the shrugging side to help — stand tall and let the shoulder do the work alone.",
+  cues:"Stand tall, arms relaxed at your sides. Shrug one shoulder straight up toward your ear, hold briefly, then lower under control. Keep your torso still.",
+  pairs:"A natural pairing with shoulder rolls and arm circles in a handstand warm-up.",
+  source:"Standard unilateral scapular elevation drill; the straight-up, torso-still technique is consistent across shoulder-prep sources.",
+  upgrades:[
+    {type:"measurable", label:"Note any side difference", detail:"If one side feels noticeably weaker or stiffer, that's worth tracking over time."},
+    {type:"harder", label:"Add a pause", detail:"A 2-second hold at the top adds real time under tension."},
+  ],
+  media:[{t:"article",label:"The 5 Best Dumbbell Shoulder Exercises", src:"Peloton", url:"https://www.onepeloton.com/blog/dumbbell-shoulder-exercises"}]},
+
+{ id:"wall-straddle-stack", name:"Wall straddle hip stack", cats:["line"], fatigue:"med", level:3,
+  targets:"Handstand alignment, facing the wall and using an open straddle to actively push the hips over the shoulders.",
+  why:"The straddle lowers your centre of mass, which makes it far easier to feel and correct the hip-over-shoulder stack that a straight handstand demands — you're training alignment in a position where you can actually hold it long enough to notice.",
+  when:["skill"], dosage:"3 × 20 s.",
+  progression:"Narrow the straddle gradually while keeping the stack, or extend the hold.",
+  regression:"A wider straddle and a shorter hold.",
+  mistakes:"Letting the hips sit behind the shoulders in a banana shape — the whole point is stacking them directly over; pushing through the shoulders passively rather than actively.",
+  cues:"Kick up facing the wall, then open your legs into a straddle. Actively push the floor away and drive your hips forward until they stack over your shoulders. Hold that stacked position.",
+  pairs:"A natural alignment drill alongside your chest-to-wall holds and toe pulls.",
+  source:"Standard wall handstand alignment drill; using a straddle to lower the centre of mass while training the hip-over-shoulder stack is a recognised coaching approach.",
+  upgrades:[
+    {type:"measurable", label:"Log hold time with a clean stack", detail:"Track how long you hold before the hips drift back out of position."},
+    {type:"harder", label:"Narrow the straddle", detail:"A narrower straddle raises the centre of mass, making the stack harder to hold."},
+  ],
+  media:[{t:"article",label:"31 Best Handstand Drills and Progressions", src:"Balance Addicts", url:"https://balanceaddicts.com/blogs/handstands/handstand-drills-for-beginners"}]},
+
+{ id:"wall-straddle-snap", name:"Wall straddle leg snap", cats:["line","compression"], fatigue:"high", level:3,
+  targets:"Explosive leg closure from a straddle into a full handstand, hips staying against the wall.",
+  why:"Trains the fast adductor snap that closes a straddle into a straight handstand — the same action a straddle press finishes with, but isolated and practised with the wall taking the balance out of the equation.",
+  when:["skill"], dosage:"5 reps.",
+  progression:"More reps, or move to the freestanding version once the closure feels sharp.",
+  regression:"Slower, smaller closures, or a narrower starting straddle.",
+  mistakes:"Letting the hips drift off the wall as the legs close, which turns it into a different drill; closing slowly, which misses the explosive quality this is for.",
+  cues:"Back to the wall, kick up into a straddle with your hips touching the wall. Snap your legs together explosively into a full handstand, then reopen to the straddle under control.",
+  pairs:"A direct feeder for your press handstand work — this is the closure half of a straddle press.",
+  source:"Standard handstand shaping drill; the explosive adductor closure with the wall removing balance demand is a recognised way to isolate this specific action.",
+  upgrades:[
+    {type:"measurable", label:"Log sharp reps", detail:"Track how many closures stay genuinely explosive before they slow down."},
+    {type:"harder", label:"Move away from the wall", detail:"The freestanding version adds a real balance demand to the same closure."},
+  ],
+  media:[{t:"article",label:"31 Best Handstand Drills and Progressions", src:"Balance Addicts", url:"https://balanceaddicts.com/blogs/handstands/handstand-drills-for-beginners"}]},
+
+{ id:"straddle-balance-snap", name:"Straddle to balance, explosive close", cats:["line"], fatigue:"high", level:4,
+  targets:"The full sequence — straddle off the wall, find freestanding balance, then explosively close into a straight handstand.",
+  why:"The freestanding version of the wall snap, and a genuinely harder skill: closing the legs shifts your centre of mass mid-balance, so you have to correct for it in real time rather than relying on the wall.",
+  when:["skill"], dosage:"10 reps.",
+  progression:"Hold the straight handstand longer after the close, or start from a narrower straddle.",
+  regression:"Stay closer to the wall so you can catch yourself, or return to the wall-supported version.",
+  mistakes:"Closing before the straddle balance is genuinely stable — the close should happen from a controlled position, not as a rescue attempt.",
+  cues:"Kick up into a straddle, push off the wall and find your balance there first. Once stable, snap your legs together into a straight handstand and hold.",
+  pairs:"The natural progression after the wall-supported snap, and a direct bridge toward straddle press work.",
+  source:"Standard handstand progression; moving a wall-supported shaping drill to freestanding once the shape is reliable is consistent across hand-balancing coaching.",
+  upgrades:[
+    {type:"measurable", label:"Log how long you hold after closing", detail:"The hold after the close is the real marker here, not the close itself."},
+    {type:"harder", label:"Start from a narrower straddle", detail:"Less straddle means a bigger balance shift when the legs close."},
+  ],
+  media:[{t:"article",label:"31 Best Handstand Drills and Progressions", src:"Balance Addicts", url:"https://balanceaddicts.com/blogs/handstands/handstand-drills-for-beginners"}]},
 
 
 /* ---- PRESS-SPECIFIC ---- */
@@ -3321,6 +3402,11 @@ const VIDEO = {
   "stallbar-side-stretch":   {yt:"", title:"", src:"", status:"missing", why:"No dedicated video confirmed — worth finding one."},
   "stallbar-chest-opener":   {yt:"", title:"", src:"", status:"missing", why:"No dedicated video confirmed — worth finding one."},
   "stallbar-hip-hang":       {yt:"", title:"", src:"", status:"missing", why:"No dedicated video confirmed — worth finding one."},
+  "small-arm-circles":       {yt:"", title:"", src:"", status:"missing", why:"No dedicated video confirmed — simple movement, worth finding one."},
+  "single-arm-shrug":        {yt:"", title:"", src:"", status:"missing", why:"No dedicated video confirmed — simple movement."},
+  "wall-straddle-stack":     {yt:"", title:"", src:"", status:"missing", why:"No dedicated video confirmed for this specific alignment drill."},
+  "wall-straddle-snap":      {yt:"", title:"", src:"", status:"missing", why:"No dedicated video confirmed — worth finding one, the explosive quality matters."},
+  "straddle-balance-snap":   {yt:"", title:"", src:"", status:"missing", why:"No dedicated video confirmed for the freestanding version."},
   "machine-leg-extension":   {yt:"", title:"", src:"", status:"missing", why:"No dedicated video confirmed — extremely standard gym machine, worth finding one anyway."},
   "machine-leg-curl":        {yt:"", title:"", src:"", status:"missing", why:"No dedicated video confirmed — extremely standard gym machine."},
   "machine-hip-abduction":   {yt:"", title:"", src:"", status:"missing", why:"No dedicated video confirmed — extremely standard gym machine."},
@@ -3494,7 +3580,7 @@ const TREES = [
     match:["Chest-to-wall handstand","Wall walk","Back-to-wall handstand"],
     crit:"30 s chest-to-wall, hips and ribs close to the wall, shoulders pushing tall.",
     why:"The wall gives honest feedback. This is where your shoulder line actually gets built.",
-    drills:["wf-hold","wf-shrugs","pike-shrugs","wall-slides","oh-lat-stretch","scap-wall-slides","bench-lat-opener","wrist-prep"]},
+    drills:["wf-hold","wf-shrugs","pike-shrugs","wall-straddle-stack","wall-slides","oh-lat-stretch","scap-wall-slides","bench-lat-opener","wrist-prep"]},
    {n:3, name:"Find the balance point", target:"Toe pulls and heel pulls held 3–5 s", pass:{type:"min",value:3},
     match:["Toe pulls","Heel pulls","Handstand kick-up"],
     crit:"Pull the heels off the wall with your fingers and hold 3–5 s, repeatedly and on purpose.",
@@ -3504,7 +3590,7 @@ const TREES = [
     match:["Freestanding handstand hold","Handstand kick-up","Tuck handstand"],
     crit:"Catch balance 8 times out of 10 attempts, and hold 10 s or more without a wall.",
     why:"Entry consistency is what turns practice time into handstand time rather than kick-up time.",
-    drills:["freestanding-holds","kickup-practice","finger-balance","wf-shrugs","hollow-line","wrist-prep","bodyline-drill"]},
+    drills:["freestanding-holds","kickup-practice","straddle-balance-snap","finger-balance","wf-shrugs","hollow-line","wrist-prep","bodyline-drill"]},
    {n:5, name:"Own it", target:"30 s freestanding, straight line, calm", pass:{type:"min",value:30},
     match:["Freestanding handstand hold","Handstand walk","Handstand pirouette","Straddle handstand"],
     crit:"30 s held with a straight line and relaxed breathing, most attempts.",
@@ -3530,7 +3616,7 @@ const TREES = [
     match:["Straddle lift-off","Press walk","L-sit","Straddle L-sit"],
     crit:"Lift both feet off the floor from a straddle and hold 5 s with straight arms.",
     why:"This is the press takeoff isolated. The forward shoulder lean does the work, not the legs.",
-    drills:["straddle-liftoffs","press-walks","lsit-parallettes","seated-pike-lifts","pancake","scapular-pushups"]},
+    drills:["straddle-liftoffs","wall-straddle-snap","press-walks","lsit-parallettes","seated-pike-lifts","pancake","scapular-pushups"]},
    {n:3, name:"Control the descent", target:"4+ second straddle negative, 3×3", pass:{type:"min",value:4},
     match:["Straddle press negative","Stalder press negative","Skin the cat straddle negative"],
     crit:"Lower from handstand to floor in 4 seconds or more with locked arms, repeatedly.",
@@ -4088,6 +4174,28 @@ const ADAPTATIONS = [
 ];
 
 const WORKOUTS = [
+ { id:"w-hs-straddle", name:"Handstand Class — Straddle Shaping", tax:"handstand", seeded:true,
+   blurb:"Full standing and floor warm-up, then straddle-focused wall work — hip stacking, explosive leg closures, and freestanding practice.",
+   items:[
+     {ref:"neck-rotations", sets:1, reps:"10 each direction"},
+     {ref:"shoulder-rolls", sets:1, reps:"10 each direction"},
+     {ref:"arm-circles", sets:1, reps:"10 each direction"},
+     {ref:"small-arm-circles", sets:1, reps:"10 each direction"},
+     {ref:"single-arm-shrug", sets:1, reps:"10 each side"},
+     {ref:"wrist-prep", sets:1, reps:"full circuit"},
+     {ref:"reverse-wrist-pushups", sets:1, reps:"10"},
+     {ref:"floor-catcow", sets:1, reps:"15"},
+     {ref:"kneeling-chest-floor", sets:1, reps:"10"},
+     {ref:"pike-shrugs", sets:1, reps:"10"},
+     {ref:"wall-straddle-stack", sets:3, reps:"20s hold"},
+     {ref:"wall-straddle-snap", sets:1, reps:"5"},
+     {ref:"straddle-balance-snap", sets:1, reps:"10"},
+     {ref:"freestanding-holds", sets:1, reps:"10 min free practice"},
+     {ref:"childspose-handsback", sets:1, reps:"—"},
+     {ref:"childspose-side", sets:1, reps:"each side"},
+     {ref:"standing-chest-opener", sets:1, reps:"seated variant"},
+     {ref:"cobra-pose", sets:1, reps:"—"},
+   ]},
  { id:"w-flag-class", name:"Calisthenics Class — Human Flag Focus", tax:"core", seeded:true,
    blurb:"A flag-focused class: lateral warm-up, then the full flag progression from vertical hold through spotted straddle, plus loaded oblique work and a stall bar stretch sequence.",
    items:[
@@ -4441,7 +4549,7 @@ let state = {
   milestones: [],      // {date, text}
   prefs: { theme:"dark", media:{}, customMedia:{}, favs:[], upgradesInUse:{} },
 };
-const APP_VERSION = "2026.08.15-14";
+const APP_VERSION = "2026.08.15-15";
 const SKEY = "stackline-v1";
 async function loadState(){
   let raw = null;
