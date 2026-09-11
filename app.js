@@ -1409,7 +1409,10 @@ function openBlockBackfill(date, presetId){
         <optgroup label="Workouts">${workoutOpts.map(x=>`<option value="${x.id}" ${x.id===blockId?"selected":""}>${esc(x.name)}</option>`).join("")}</optgroup>
         <optgroup label="Adaptations">${adaptOpts.map(x=>`<option value="${x.id}" ${x.id===blockId?"selected":""}>${esc(x.name)}</option>`).join("")}</optgroup>
       </select>
-      <label class="f" style="margin-top:14px">Which drills did you actually do?</label>
+      <div class="row between" style="margin-top:14px;align-items:center">
+        <label class="f" style="margin:0">Which drills did you actually do?</label>
+        <button class="btn small ghost" id="bb-all">${doneSet.size===items.length && items.length? "Clear all":"Select all"}</button>
+      </div>
       <div class="exl">${items.map(e=>`
         <div class="exi" data-bbtick="${e.id}">
           <div class="check ${doneSet.has(e.id)?"on":""}">${ICONS.check}</div>
@@ -1418,6 +1421,11 @@ function openBlockBackfill(date, presetId){
      `<button class="btn ghost" id="bb-cancel">Cancel</button>
       <button class="btn primary" style="flex:1" id="bb-next">Next</button>`);
     $("#bb-routine").onchange=e=>{ blockId=e.target.value; doneSet=new Set(); draw(); };
+    $("#bb-all").onclick=()=>{
+      // Logging a full class you actually completed shouldn't take 14 taps.
+      doneSet = (doneSet.size===items.length) ? new Set() : new Set(items.map(e=>e.id));
+      draw();
+    };
     $$("#sheet-body [data-bbtick]").forEach(el=> el.onclick=()=>{
       const id=el.dataset.bbtick;
       doneSet.has(id)?doneSet.delete(id):doneSet.add(id);
@@ -3234,6 +3242,7 @@ function openClassLog(date, draft){
       ${recents.length? `<div class="tiny" style="margin:10px 0 6px">Recently used</div>
         <div class="wrap">${recents.map(r=>`<button class="chip" data-add="${esc(r.name)}">${esc(r.name)}</button>`).join("")}</div>`:""}
       <div class="row" style="margin-top:10px;gap:8px">
+        <button class="btn small" id="cl-fromwk">📋 Import a workout</button>
         <button class="btn small" id="cl-unnamed">＋ Add one I can't name</button>
       </div>
     </div>`}
@@ -3293,6 +3302,32 @@ function openClassLog(date, draft){
     b.classList.toggle("on"); L.focus=[...focusSet]; });
   const clq=$("#cl-q"); if(clq) clq.oninput = showResults;
   $$("#sheet-body [data-add]").forEach(b=> b.onclick=()=> add(b.dataset.add));
+  const cfw=$("#cl-fromwk");
+  if(cfw) cfw.onclick = ()=>{
+    // Most classes get logged from a template you've already built, so pulling
+    // every movement in at once beats searching for each one individually.
+    const opts = allWorkoutsList().concat(ADAPTATIONS, state.customAdaptations||[]);
+    openSheet("Import a workout",
+      `<p class="sub" style="margin-bottom:10px;font-size:.85rem">Adds every movement from it to this class log. You can edit or remove any of them afterwards.</p>
+       <div class="exl">${opts.map(w=>`
+         <button class="exi" data-impw="${w.id}">
+           <div class="bd"><div class="nm">${esc(w.name)}</div>
+           <div class="mt">${w.items.length} movement${w.items.length!==1?"s":""}</div></div>
+         </button>`).join("")}</div>`,
+      `<button class="btn ghost block" id="imp-cancel">Cancel</button>`);
+    $("#imp-cancel").onclick = ()=> openClassLog(date, L);
+    $$("#sheet-body [data-impw]").forEach(b=> b.onclick=()=>{
+      const w = opts.find(x=>x.id===b.dataset.impw); if(!w) return;
+      w.items.forEach(it=>{
+        const r = workoutRef(it.ref);
+        const reps = it.reps && it.reps!=="—" ? (it.sets>1? it.sets+"x"+it.reps : String(it.reps)) : "";
+        if(!L.items.some(x=>x.name===r.name))
+          L.items.push({name:r.name, numbers:reps, assist:"none", variation:""});
+      });
+      openClassLog(date, L);
+      toast(w.items.length+" movements added");
+    });
+  };
   const cun=$("#cl-unnamed"); if(cun) cun.onclick = ()=> add("Unnamed drill — describe in notes", true);
   $$("#sheet-body [data-rm]").forEach(b=> b.onclick=()=>{ L.items.splice(+b.dataset.rm,1); rerender(); });
   $$("#sheet-body [data-num]").forEach(inp=> inp.oninput=e=> L.items[+inp.dataset.num].numbers=e.target.value);
@@ -4297,7 +4332,11 @@ function viewHighlights(){
     <div class="eyebrow">Your skill map</div>
     <div class="skillgrid">${TREES.map(t=>{
       const p = treeProgress(t);
-      const pct = Math.round((p.current-1)/t.stages.length*100);
+      // Count stages actually cleared rather than deriving from p.current —
+      // p.current means "highest stage cleared" and floors at 1, so clearing
+      // stage 1 would otherwise still read as 0%.
+      const cleared = p.stages.filter(s=>s.passed).length;
+      const pct = Math.round(cleared/t.stages.length*100);
       const circ = 2*Math.PI*15.5;
       return `<button class="sknode" data-gotree="${t.id}">
         <div class="ring"><svg viewBox="0 0 36 36">
