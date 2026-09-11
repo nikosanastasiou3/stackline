@@ -3857,13 +3857,37 @@ const treeById = id => TREES.find(t=>t.id===id);
 /* Position on a ladder, derived from logged evidence rather than self-report. */
 function stageEvidence(tree, stage){
   const names = (stage.match||[]).map(s=>s.toLowerCase());
+  const stageDrills = stage.drills||[];
   const hits = [];
+  // 1. Class logs, matched by movement name — carries real numbers.
   (state.classLogs||[]).forEach(cl=> (cl.items||[]).forEach(it=>{
     if(names.includes((it.name||"").toLowerCase())) hits.push({date:cl.date, it:it});
   }));
+  // 2. Explicit skill metrics recorded on a check-in.
   (state.logs||[]).forEach(l=> (l.skills||[]).forEach(s=>{
     if(s.skill===tree.id && s.metric) hits.push({date:l.date, it:{name:tree.name, numbers:String(s.metric)}});
   }));
+  // 3. Drills ticked off in a logged block, workout or adaptation. Previously
+  //    invisible here, which meant logging a whole workout contributed nothing
+  //    to skill progress. These count as ATTEMPTS (no number attached), so they
+  //    move a stage into "tried" but can't clear a numeric bar on their own —
+  //    which is correct: ticking a box doesn't prove you held it for 15 s.
+  (state.logs||[]).forEach(l=>{
+    (l.done||[]).forEach(exId=>{
+      if(stageDrills.includes(exId)){
+        const e = exById(exId);
+        hits.push({date:l.date, it:{name:(e&&e.name)||exId, numbers:""}});
+      }
+    });
+  });
+  // 4. Explicit personal bests on a drill this stage depends on — the real
+  //    numeric evidence, and the intended way to actually clear a "min" bar.
+  (state.prLogs||[]).forEach(p=>{
+    if(stageDrills.includes(p.drillId)){
+      const e = exById(p.drillId);
+      hits.push({date:p.date, it:{name:(e&&e.name)||p.drillId, numbers:String(p.value)}});
+    }
+  });
   return hits;
 }
 /* A stage is only "reached" when the evidence actually clears its bar, not
@@ -4417,7 +4441,7 @@ let state = {
   milestones: [],      // {date, text}
   prefs: { theme:"dark", media:{}, customMedia:{}, favs:[], upgradesInUse:{} },
 };
-const APP_VERSION = "2026.08.15-12";
+const APP_VERSION = "2026.08.15-14";
 const SKEY = "stackline-v1";
 async function loadState(){
   let raw = null;
