@@ -1803,23 +1803,22 @@ const EXERCISES = [
     {t:"article",label:"35 Best Flexibility Exercises", src:"Pliability", url:"https://pliability.com/stories/flexibility-exercises"},
   ]},
 
-{ id:"handstand-kick-switch", name:"Handstand kick switch", cats:["line"], fatigue:"med", level:3,
-  targets:"Handstand balance and entry control, wall-facing, alternating which leg leads as you pass briefly through a full handstand shape.",
-  why:"A genuine bridge between wall-assisted and freestanding practice — the switch forces you to briefly find balance in the middle of the movement rather than just holding a static position, which is exactly the skill freestanding handstands demand.",
+{ id:"handstand-kick-switch", name:"Wall-facing handstand leg switches", cats:["line"], fatigue:"med", level:3,
+  targets:"Handstand line and control, held chest-to-wall while alternating which foot rests on the wall, passing through a full handstand shape between each switch.",
+  why:"You stay inverted the whole set, so each switch happens under real fatigue — and the brief moment where both legs are together is a genuine full handstand shape you have to hold on your own. That combination builds line control and shoulder endurance a static hold doesn't.",
   when:["skill"], dosage:"5 switches each leg × 4 rounds.",
-  progression:"Slow the switch down, pausing briefly in full balance before switching, or move further from the wall.",
-  regression:"Keep the switch small and fast, staying close enough to the wall to catch yourself easily.",
-  mistakes:"Leading with the top (extended) leg instead of driving the movement from the hands and kicking leg — the lift should come from pressing the floor away, not from the legs pulling you up.",
-  cues:"Drive up through your hands and kicking leg. Meet briefly in a balanced handstand shape, then come back down leading with the opposite leg from the one that kicked up.",
-  pairs:"A natural next step once wall-facing holds and basic kick-ups both feel controlled.",
-  source:"Cross-checked against YogaSlackers' dedicated kick-switch tutorial and Balance Addicts' handstand drill guide — both name this exact drill and describe the same lift-from-the-hands cue.",
+  progression:"Pause longer in the legs-together position between switches, or move your hands slightly further from the wall.",
+  regression:"Fewer switches per round, and keep the pause between them short.",
+  mistakes:"Letting the hips sag or the back arch as fatigue builds — the line matters more than the number of switches; rushing the switch so there's no real moment where both legs are together and holding on their own.",
+  cues:"Get into a chest-to-wall handstand with one foot resting on the wall. Switch which foot is on the wall, passing through a full legs-together handstand shape in between. Keep pushing the floor away the whole time and don't let the hips drop as you tire.",
+  pairs:"A natural progression once your chest-to-wall holds feel solid — same position, with added control demand.",
+  source:"Technique taken directly from your own class and a coaching video you supplied, rather than a general tutorial — this specific wall-facing switching variation isn't well covered under a consistent name online.",
   upgrades:[
     {type:"measurable", label:"Log clean switches per round", detail:"Track how many switches feel controlled and balanced versus rushed."},
     {type:"harder", label:"Move away from the wall", detail:"Once switches feel reliable near the wall, the same drill works freestanding."},
   ],
   media:[
-    {t:"article",label:"Kick Switch Into Handstand", src:"YogaSlackers", url:"https://yogaslackers.com/online-traiing/handstand-training/kick-switch-into-handstand-12-days-of-handstands-mar-2026/"},
-    {t:"article",label:"31 Best Handstand Drills and Progressions", src:"Balance Addicts", url:"https://balanceaddicts.com/blogs/handstands/handstand-drills-for-beginners"},
+    {t:"video", label:"Wall-facing handstand leg switches", src:"YouTube", url:"https://www.youtube.com/watch?v=FdOs1-NalgQ"},
   ]},
 
 
@@ -3379,7 +3378,7 @@ const VIDEO = {
   "wall-pike-push":         {yt:"", title:"", src:"", status:"missing", why:"No dedicated video confirmed for this specific wall-assisted variant."},
   "weighted-pullover-stretch": {yt:"", title:"", src:"", status:"missing", why:"No dedicated video confirmed — worth finding one given the loading detail matters for safety."},
   "loaded-hollow-extension": {yt:"", title:"", src:"", status:"missing", why:"No dedicated video confirmed for this specific loaded box variant."},
-  "handstand-kick-switch":   {yt:"", title:"", src:"", status:"missing", why:"No embeddable video confirmed despite strong article sourcing — worth finding one given this is a coordination-heavy skill best seen, not just read."},
+  "handstand-kick-switch":   {yt:"FdOs1-NalgQ", title:"Wall-facing handstand leg switches", src:"YouTube", status:"ok"},
   "dead-bug":                {yt:"g5XKMzr5gUs", title:"Deadbug Tutorial - Proper Form and Technique", src:"YouTube", status:"ok"},
   "bird-dog":                {yt:"", title:"", src:"", status:"missing", why:"No dedicated video confirmed — worth finding one, hip rotation is easy to miss without seeing it done correctly."},
   "cobra-pose":              {yt:"", title:"", src:"", status:"missing", why:"No dedicated video confirmed — worth finding one."},
@@ -3394,19 +3393,19 @@ const VIDEO = {
   "hanging-leg-raise":       {yt:"", title:"", src:"", status:"missing", why:"No dedicated video confirmed — worth finding one, form here is easy to get subtly wrong with swinging."},
   "mcgill-curlup":           {yt:"", title:"", src:"", status:"missing", why:"No dedicated video confirmed — worth finding one, the minimal-lift cue is easy to overshoot without seeing it done correctly."},
   "side-plank-hold":         {yt:"", title:"", src:"", status:"missing", why:"No dedicated video confirmed — standard movement, worth finding one."},
-  "stallbar-side-kicks":     {yt:"", title:"", src:"", status:"missing", why:"No dedicated video confirmed — simple movement, worth finding one."},
-  "vertical-flag-hold":      {yt:"", title:"", src:"", status:"missing", why:"No dedicated video confirmed — worth finding one, this is the entry point to the whole flag line."},
-  "chamber-to-extended-flag":{yt:"", title:"", src:"", status:"missing", why:"No dedicated video confirmed for this specific combined variant."},
-  "straddle-flag-spotted":   {yt:"", title:"", src:"", status:"missing", why:"No dedicated video confirmed for the spotted version specifically."},
-  "side-lying-oblique-raise":{yt:"", title:"", src:"", status:"missing", why:"No dedicated video confirmed for the box/spotter setup."},
+  "stallbar-side-kicks":     {yt:"K8U3uQEejyE", title:"Standing side kicks", src:"YouTube", status:"ok"},
+  "vertical-flag-hold":      {yt:"nG3AXwam26o", title:"Vertical flag hold", src:"YouTube", status:"ok", start:14},
+  "chamber-to-extended-flag":{yt:"AwXMa49_yoo", title:"Chamber hold to extended flag", src:"YouTube", status:"ok"},
+  "straddle-flag-spotted":   {yt:"JRBhagAkWAQ", title:"Straddle flag", src:"YouTube", status:"ok"},
+  "side-lying-oblique-raise":{yt:"drl80IYMVW8", title:"Side-lying oblique raise", src:"YouTube", status:"ok"},
   "stallbar-side-stretch":   {yt:"", title:"", src:"", status:"missing", why:"No dedicated video confirmed — worth finding one."},
   "stallbar-chest-opener":   {yt:"", title:"", src:"", status:"missing", why:"No dedicated video confirmed — worth finding one."},
   "stallbar-hip-hang":       {yt:"", title:"", src:"", status:"missing", why:"No dedicated video confirmed — worth finding one."},
   "small-arm-circles":       {yt:"", title:"", src:"", status:"missing", why:"No dedicated video confirmed — simple movement, worth finding one."},
   "single-arm-shrug":        {yt:"", title:"", src:"", status:"missing", why:"No dedicated video confirmed — simple movement."},
-  "wall-straddle-stack":     {yt:"", title:"", src:"", status:"missing", why:"No dedicated video confirmed for this specific alignment drill."},
-  "wall-straddle-snap":      {yt:"", title:"", src:"", status:"missing", why:"No dedicated video confirmed — worth finding one, the explosive quality matters."},
-  "straddle-balance-snap":   {yt:"", title:"", src:"", status:"missing", why:"No dedicated video confirmed for the freestanding version."},
+  "wall-straddle-stack":     {yt:"AedG7CX1tn0", title:"Wall straddle hip stack", src:"YouTube", status:"ok"},
+  "wall-straddle-snap":      {yt:"MJ7uGTwlbBI", title:"Wall straddle leg snap", src:"YouTube", status:"ok"},
+  "straddle-balance-snap":   {yt:"MJ7uGTwlbBI", title:"Wall straddle to freestanding, explosive close", src:"YouTube", status:"ok"},
   "machine-leg-extension":   {yt:"", title:"", src:"", status:"missing", why:"No dedicated video confirmed — extremely standard gym machine, worth finding one anyway."},
   "machine-leg-curl":        {yt:"", title:"", src:"", status:"missing", why:"No dedicated video confirmed — extremely standard gym machine."},
   "machine-hip-abduction":   {yt:"", title:"", src:"", status:"missing", why:"No dedicated video confirmed — extremely standard gym machine."},
@@ -3423,7 +3422,7 @@ const VIDEO = {
   "stallbar-hollow-kicks":   {yt:"7XiRYlOpi0A", title:"Stall Bar Exercises for Compression and Press Handstand", src:"YouTube", status:"ok"},
   "weighted-shrugs":         {yt:"", title:"", src:"", status:"missing", why:"No dedicated video confirmed — extremely standard movement, worth finding one anyway."},
   "hollow-rocks":            {yt:"", title:"", src:"", status:"missing", why:"No single clean video confirmed despite extensive article sourcing — worth finding one given the smoothness cue matters."},
-  "wall-straddle-open":      {yt:"", title:"", src:"", status:"missing", why:"No dedicated video confirmed for this specific transition — worth finding one."},
+  "wall-straddle-open":      {yt:"MJ7uGTwlbBI", title:"Wall straddle open to freestanding", src:"YouTube", status:"ok"},
   "childspose-handsback":    {yt:"", title:"", src:"", status:"missing", why:"No dedicated video confirmed for this specific variant."},
   "childspose-side":         {yt:"", title:"", src:"", status:"missing", why:"No dedicated video confirmed for this specific variant."},
   "standing-chest-opener":   {yt:"", title:"", src:"", status:"missing", why:"No dedicated video confirmed — worth finding one."},
@@ -3448,7 +3447,7 @@ const VIDEO = {
   "middle-split":         {yt:"", title:"", src:"", status:"missing", why:"No dedicated video confirmed — worth finding one, article sourcing is thorough."},
   "front-split":          {yt:"", title:"", src:"", status:"missing", why:"No dedicated video confirmed — worth finding one."},
   "bridge-backbend":      {yt:"", title:"", src:"", status:"missing", why:"GMB Fitness's article likely has an embedded video worth linking directly once checked."},
-  "neck-bridge":          {yt:"", title:"", src:"", status:"missing", why:"No dedicated video confirmed for this specifically — given the injury risk here, worth finding a careful, reputable one before relying on it."},
+  "neck-bridge":          {yt:"5gHu6By2GMA", title:"Safer Neck Bridge Variations for Strength and Injury Prevention", src:"YouTube", status:"ok", why:"Deliberately chose a video that addresses the nerve-risk debate and shows lower-risk alternatives, rather than a plain technique demo — sources genuinely disagree on whether standard neck bridges are advisable."},
   "forearm-plank":        {yt:"", title:"", src:"", status:"missing", why:"No dedicated video confirmed — extremely standard movement, worth finding one anyway."},
   "wrist-curls":          {yt:"", title:"", src:"", status:"missing", why:"No dedicated bodyweight/light-load video confirmed — most results were barbell-focused."},
   "pull-up":              {yt:"RvT3beYzPrI", title:"The Complete Strict Pull-Up Guide", src:"YouTube", status:"ok"},
@@ -3469,7 +3468,10 @@ function vidFor(exId){
   const ov = (state.prefs.videoOverride||{})[exId];
   const yt = ov || base.yt;
   if(!yt) return Object.assign({}, base, {yt:""});
-  const start = ((state.prefs.videoStart||{})[exId]) || 0;
+  // Fall back to any start time baked into the VIDEO entry itself — a user
+  // override wins, but without one we shouldn't discard a timestamp that was
+  // deliberately set because the useful part of the clip starts partway in.
+  const start = ((state.prefs.videoStart||{})[exId]) || base.start || 0;
   const confirmed = !!(state.prefs.videoConfirmed||{})[exId];
   return Object.assign({}, base, {yt:yt, start:start, confirmed:confirmed,
     status: (confirmed || ov) ? "ok" : base.status});
@@ -4549,7 +4551,7 @@ let state = {
   milestones: [],      // {date, text}
   prefs: { theme:"dark", media:{}, customMedia:{}, favs:[], upgradesInUse:{} },
 };
-const APP_VERSION = "2026.08.15-16";
+const APP_VERSION = "2026.08.15-18";
 const SKEY = "stackline-v1";
 async function loadState(){
   let raw = null;
